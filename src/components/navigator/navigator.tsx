@@ -5,10 +5,11 @@ function Navigator() {
   return (
     <Routes>
       <Route index element={<div>index</div>} />
-      <Route path='hello' element={<HelloWorld />} />
+      <Route path='hello'>
+        <Route index element={<HelloWorld />} />
+      </Route>
     </Routes>
   )
 }
-
 
 export default Navigator
