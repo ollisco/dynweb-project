@@ -7,6 +7,9 @@ interface CoordsObj {
   originCoordLong: string
   destCoordLat: string
   destCoordLong: string
+  date: string // YYYY-MM-DD, today if empty
+  time: string // HH:MM, now if empty
+  searchForArrival: number // 1 if time of arrival instead of departure
 }
 
 function getTrafficInfo(coordsObj: CoordsObj) {
@@ -14,7 +17,8 @@ function getTrafficInfo(coordsObj: CoordsObj) {
 
   const params = new URLSearchParams() // uses URLSearchParams to build URL with the given information
   for (const key in coordsObj) {
-    params.append(key, coordsObj[key as keyof CoordsObj])
+    if (coordsObj[key as keyof CoordsObj])
+      params.append(key, String(coordsObj[key as keyof CoordsObj]))
   }
   apiUrl += params.toString()
 
@@ -22,6 +26,7 @@ function getTrafficInfo(coordsObj: CoordsObj) {
     .get(apiUrl)
     .then((response) => {
       console.log(response.data) // just logging response to terminal for now
+      return response.data
     })
     .catch((error) => {
       console.error(error)
