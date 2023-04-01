@@ -1,4 +1,4 @@
-import { calAuth, calSignOut, getFirstEventData } from "../../calendar";
+import { calAuth, calSignOut, getUpcomingEvents } from "../../calendar";
 
 function Main() {
 
@@ -10,8 +10,8 @@ function Main() {
             <button onClick={calSignOut}>
                 Revoke
             </button>
-            <button onClick={(e) => getFirstEventData().then(console.log)}>
-                Get First Events
+            <button onClick={(e) => getUpcomingEvents(20).then(console.log)}>
+                Get Upcoming Events
             </button>
         </div>
 

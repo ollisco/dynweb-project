@@ -4,23 +4,20 @@ import { GCAL_API_KEY, GCAL_CLIENT_ID, MAPS_API_KEY } from "./apiconf";
 const gcal = new ApiCalendar({
   clientId: GCAL_CLIENT_ID,
   apiKey: GCAL_API_KEY,
-  scope: "https://www.googleapis.com/auth/calendar",
-  discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",],
+  scope: "https://www.googleapis.com/auth/calendar.readonly",
+  discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
 });
 
-function calAuth() {
-  gcal.handleAuthClick()
-}
+function calAuth() {gcal.handleAuthClick()}
 
-function calSignOut() {
-  gcal.handleSignoutClick()
-}
+function calSignOut() {gcal.handleSignoutClick()}
 
-function getFirstEventData() {
+function getUpcomingEvents(amount: number) {
 
   function extractData(result: any) {
     return result.result.items.map((event: any) => {
       return {
+        'title': event.summary,
         'start': event.start.dateTime,
         'location': event.location
       }
@@ -30,17 +27,18 @@ function getFirstEventData() {
   function convertToCoords(events: any) {
     events.map((event: any) => {
       convertAddressToCoords(event.location)
-      .then((coords) => {event.location = coords})
+      ?.then((coords) => {event.location = coords})
     })
     return events
   }
 
-  return gcal.listUpcomingEvents(10).then(extractData).then(convertToCoords);
+  return gcal.listUpcomingEvents(amount).then(extractData).then(convertToCoords);
 }
 
 function convertAddressToCoords(address: string) {
+  if (address == undefined) return null
   return (
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${MAPS_API_KEY}`)
+    fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + encodeURIComponent(address) + "&key=" + MAPS_API_KEY)
     .then(response => response.json())
     .then(data => {
       const coords = data.results[0].geometry.location;
@@ -50,10 +48,10 @@ function convertAddressToCoords(address: string) {
       }
     })
     .catch(error => {
-      console.error(`Error calling Geocoding API: ${error}`);
+      console.error("Error calling Geocoding API: " + error);
       return null;
     })
   )
 }
 
-export {calAuth, calSignOut, getFirstEventData, convertAddressToCoords}
+export {calAuth, calSignOut, getUpcomingEvents}
