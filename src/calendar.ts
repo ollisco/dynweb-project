@@ -8,12 +8,17 @@ const gcal = new ApiCalendar({
   discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
 });
 
+interface event {
+  'title': string,
+  'start': string,
+  'location': string
+}
+
 function calAuth() {gcal.handleAuthClick()}
 
 function calSignOut() {gcal.handleSignoutClick()}
 
-function getUpcomingEvents(amount: number) {
-
+function getUpcomingEvents(amountToFetch: number, calendar: string | undefined = undefined) {
   function extractData(result: any) {
     return result.result.items.map((event: any) => {
       return {
@@ -24,15 +29,15 @@ function getUpcomingEvents(amount: number) {
     })
   }
 
-  function convertToCoords(events: any) {
-    events.map((event: any) => {
-      convertAddressToCoords(event.location)
-      ?.then((coords) => {event.location = coords})
-    })
-    return events
+  return gcal.listUpcomingEvents(amountToFetch, calendar).then(extractData);
+}
+
+function getFirstEvent() {
+  function findFirstWithLocation(events: [event]) {
+    return events.find((event: event) => {return event.location});
   }
 
-  return gcal.listUpcomingEvents(amount).then(extractData).then(convertToCoords);
+  return getUpcomingEvents(10).then(findFirstWithLocation);
 }
 
 function convertAddressToCoords(address: string) {
@@ -54,4 +59,4 @@ function convertAddressToCoords(address: string) {
   )
 }
 
-export {calAuth, calSignOut, getUpcomingEvents}
+export {calAuth, calSignOut, getFirstEvent}
