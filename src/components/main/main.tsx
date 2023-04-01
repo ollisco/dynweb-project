@@ -1,17 +1,17 @@
-import { calAuth, calSignOut, getFirstEventData } from "../../gcalSource";
+import { calAuth, calSignOut, getFirstEventData } from "../../calendar";
 
 function Main() {
 
     return (
         <div>
             <button onClick={calAuth}>
-                Sign In
+                Auth
             </button>
             <button onClick={calSignOut}>
-                Sign Out
+                Revoke
             </button>
             <button onClick={(e) => getFirstEventData().then(console.log)}>
-                Get First Event
+                Get First Events
             </button>
         </div>
 
