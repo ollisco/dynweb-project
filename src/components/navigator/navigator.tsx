@@ -7,10 +7,9 @@ function Navigator() {
     <Routes>
       <Route index element={<div>index</div>} />
       <Route path='hello' element={<HelloWorld />} />
-      <Route path='login' element={<Login/>}/>
+      <Route path='login' element={<Login />} />
     </Routes>
   )
 }
-
 
 export default Navigator
