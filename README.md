@@ -8,16 +8,17 @@
 - You can test the build localy using `yarn preview` after building.
 
 ## Commands (See package.json)
+
 - `lint`: check for problems
 - `lint:fix`: run eslint and try to fix potiential problems
 - `prettier`: format the code
 - `prettier:check`: dry run formatting
 
 Technologies:
+
 - yarn: like npm (Yet Another Resource Neotiatior)
 - vite: like webpack
 - react-router-dom: handles all the routes but nicer than in the course. Se `navigator.tsx`
 - [mantine](https://mantine.dev): Third party component library, also see [mantine ui](https://ui.mantine.dev):
 - eslint: checks syntax and findes problems in the code
-- prettier: enforces code style and formatting 
-
+- prettier: enforces code style and formatting

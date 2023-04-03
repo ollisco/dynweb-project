@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './hello-world.css'
 
 function HelloWorld() {
   const [count, setCount] = useState(0)
