@@ -1,12 +1,16 @@
 import Navigator from './components/navigator/navigator'
 import { MantineProvider } from '@mantine/core'
 import { UserProvider } from './components/login/user-context'
+import Model from './Model'
+
+const model = new Model()
 
 function App() {
+  console.log(model)
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <UserProvider>
-        <Navigator />
+        <Navigator model={model} />
       </UserProvider>
     </MantineProvider>
   )
