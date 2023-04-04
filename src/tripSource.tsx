@@ -12,7 +12,7 @@ interface CoordsObj {
   searchForArrival: number // 1 if time of arrival instead of departure
 }
 
-function getTrafficInfo(coordsObj: CoordsObj) {
+async function getTrafficInfo(coordsObj: CoordsObj) {
   let apiUrl = `https://api.resrobot.se/v2.1/trip?format=json&accessId=${trafikLabKey}&showPassingPoints=true&`
 
   const params = new URLSearchParams() // uses URLSearchParams to build URL with the given information
@@ -22,16 +22,25 @@ function getTrafficInfo(coordsObj: CoordsObj) {
   }
   apiUrl += params.toString()
 
-  axios
-    .get(apiUrl)
-    .then((response) => {
-      console.log(response.data) // just logging response to terminal for now
-      return response.data
-    })
-    .catch((error) => {
-      console.error(error)
-    })
+  try {
+    const response = await axios.get(apiUrl)
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+
+function getRelevantInfo(data: any) {
+  function getStartAndArrivalTimes(trip: any) {
+    return {
+      origin: { date: trip.Origin.date, time: trip.Origin.time },
+      destination: { date: trip.Destination.date, time: trip.Destination.time },
+    }
+  }
+  return data.Trip.map(getStartAndArrivalTimes) // Add more if needed
 }
 
 export type { CoordsObj }
-export { getTrafficInfo }
+export { getTrafficInfo, getRelevantInfo }
