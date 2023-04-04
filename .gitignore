@@ -25,3 +25,4 @@ dist-ssr
 
 # API-keys
 keys.tsx
+apiconf.ts

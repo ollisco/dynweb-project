@@ -1,4 +1,4 @@
-import Navigator from "./components/navigator/navigator"
+import Navigator from './components/navigator/navigator'
 
 function App() {
   return (
