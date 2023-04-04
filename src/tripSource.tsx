@@ -31,7 +31,6 @@ async function getTrafficInfo(coordsObj: CoordsObj) {
   }
 }
 
-
 function getRelevantInfo(data: any) {
   function getStartAndArrivalTimes(trip: any) {
     return {
