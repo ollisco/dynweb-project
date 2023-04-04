@@ -23,7 +23,6 @@ export function UserProvider(props: UserContextProviderProps) {
   }
 
   useEffect(onLoginSideEffect, [user])
-
   return (
     <UserContext.Provider value={{ user, setUser, isLoggedIn }}>
       {props.children}
