@@ -15,7 +15,7 @@ import {
 } from '@mantine/core'
 import BG from '../../assets/bg.jpg'
 import { useNavigate } from 'react-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IconAlertCircle } from '@tabler/icons-react'
 import { UserCredential } from '@firebase/auth'
 import useAuth from './user-context'
@@ -26,11 +26,10 @@ function Login() {
 
   const navigate = useNavigate()
 
-  const { setUser } = useAuth()
+  const { user, setUser } = useAuth()
 
   function onLogin(user: UserCredential) {
     setUser(user)
-    navigate('/hello')
   }
 
   function onError(message?: unknown) {
@@ -38,6 +37,11 @@ function Login() {
     else setErrorMessage('Something went wrong when authenticating with Google')
   }
 
+  useEffect(() => {
+    if (user) {
+      navigate('/hello')
+    }
+  }, [user])
   return (
     <Box mih='100vh'>
       <Box pos='relative'>
