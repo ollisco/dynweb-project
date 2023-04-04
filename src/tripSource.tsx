@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { trafikLabKey } from './keys'
+import { TRAFFICLAB_API_KEY } from './apiconf'
 
 // Structure on parameter object in getTrafficInfo.
 interface CoordsObj {
@@ -13,7 +13,7 @@ interface CoordsObj {
 }
 
 async function getTrafficInfo(coordsObj: CoordsObj) {
-  let apiUrl = `https://api.resrobot.se/v2.1/trip?format=json&accessId=${trafikLabKey}&showPassingPoints=true&`
+  let apiUrl = `https://api.resrobot.se/v2.1/trip?format=json&accessId=${TRAFFICLAB_API_KEY}&showPassingPoints=true&`
 
   const params = new URLSearchParams() // uses URLSearchParams to build URL with the given information
   for (const key in coordsObj) {

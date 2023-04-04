@@ -24,5 +24,4 @@ dist-ssr
 *.sw?
 
 # API-keys
-keys.tsx
 apiconf.ts
