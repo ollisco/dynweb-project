@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# API keys
+# API-keys
+keys.tsx
 apiconf.ts
