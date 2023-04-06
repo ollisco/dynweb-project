@@ -13,7 +13,6 @@ import {
   Overlay,
   Alert,
 } from '@mantine/core'
-import BG from '../../assets/bg.jpg'
 import { useNavigate } from 'react-router'
 import { useEffect, useState } from 'react'
 import { IconAlertCircle } from '@tabler/icons-react'
@@ -21,17 +20,28 @@ import { UserCredential } from '@firebase/auth'
 import useAuth from './user-context'
 import LoginView from './login-view'
 import Model from '../../Model'
+import { observer } from 'mobx-react'
 
 interface LoginPresenterProps {
   model: Model
 }
 
-function LoginPresenter({ model }: LoginPresenterProps) {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  console.log(model, 'm')
-  const navigate = useNavigate()
+const LoginPresenter = observer(({ model }: LoginPresenterProps) => {
+  //const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const { user, setUser } = useAuth()
+  useEffect(() => {
+    if (model.user) {
+      setUser(model.user)
+    }
+  }, [model.user, setUser])
 
-  return <LoginView signIn={model.signIn} user={model.user} />
-}
+  function onSignInACB(){
+    model.signIn()
+  }
+  
+
+  return <LoginView onSignIn={onSignInACB} user={user} />
+  //return <LoginView model={model}/>
+})
 
 export default LoginPresenter

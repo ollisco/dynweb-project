@@ -15,6 +15,7 @@ import {
   Alert,
 } from '@mantine/core'
 import BG from '../../assets/bg.jpg'
+import { useNavigate } from 'react-router'
 import { IconAlertCircle } from '@tabler/icons-react'
 import { UserCredential } from '@firebase/auth'
 import Model from '../../Model'
@@ -22,15 +23,24 @@ import GoogleIcon from '../basic/googleicon'
 import { observer } from 'mobx-react'
 
 interface LoginViewProps {
-  signIn: () => void
+  onSignIn: () => void
   user: UserCredential | null
+  //model: Model
 }
 
-const LoginView = observer(({ user, signIn }: LoginViewProps) => {
+function LoginView ({ onSignIn, user }: LoginViewProps) {
   //const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const navigate = useNavigate()
   useEffect(() => {
-    console.log('user changed', user)
+    console.log("current user", user)
+    if (user) {
+      navigate('/hello')
+    }
   }, [user])
+
+  function onSignInACB(){
+    onSignIn()
+  }
 
   return (
     <Box mih='100vh'>
@@ -64,13 +74,13 @@ const LoginView = observer(({ user, signIn }: LoginViewProps) => {
                   </Alert>
                 )} */}
             <Group grow mb='md' mt='md'>
-              <Button onClick={signIn} leftIcon={<GoogleIcon />} variant='default' color='gray' />
+              <Button onClick={onSignInACB} leftIcon={<GoogleIcon />} variant='default' color='gray' />
             </Group>
           </Stack>
         </Paper>
       </Box>
     </Box>
   )
-})
+}
 
 export default LoginView

@@ -1,10 +1,12 @@
 import { UserCredential } from '@firebase/auth'
 import { signInWithGoogle } from './Firebase'
 import { makeAutoObservable } from 'mobx'
+import useAuth from './components/login/user-context'
+
 
 class Model {
   user: UserCredential | null
-  //user: UserCredential | null = null
+  
 
   constructor(user: UserCredential | null = null) {
     makeAutoObservable(this)
@@ -15,13 +17,14 @@ class Model {
 
   onLogin(user: UserCredential | null) {
     this.user = user
+    console.log("has user changed?", user)
   }
 
   signIn () {
     const onError = (error: unknown) => null
     console.log('logging in')
     signInWithGoogle(this.onLogin, onError)
-}
+  }
 
 }
 

@@ -4,7 +4,7 @@ import { signInWithGoogle } from '../../Firebase'
 import { UserCredential } from '@firebase/auth'
 
 interface GoogleButtonProps extends ButtonProps {
-  onLogin: (user: UserCredential) => void
+  onLogin: (user: UserCredential) => UserCredential
   onError: (error: unknown) => void
 }
 

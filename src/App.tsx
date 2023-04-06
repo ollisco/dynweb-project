@@ -6,7 +6,6 @@ import Model from './Model'
 const model = new Model()
 
 function App() {
-  console.log(model)
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <UserProvider>
