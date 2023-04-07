@@ -1,5 +1,5 @@
 import ApiCalendar from 'react-google-calendar-api'
-import { GCAL_API_KEY, GCAL_CLIENT_ID, MAPS_API_KEY } from './apiconf'
+import { GCAL_API_KEY, GCAL_CLIENT_ID } from './apiconf'
 
 const gcal = new ApiCalendar({
   clientId: GCAL_CLIENT_ID,
@@ -43,29 +43,8 @@ function getFirstEvent() {
     })
   }
 
-  return getUpcomingEvents(10).then(findFirstWithLocation)
+  return getUpcomingEvents(25).then(findFirstWithLocation)
 }
 
-function convertAddressToCoords(address: string) {
-  if (address == undefined) return null
-  return fetch(
-    'https://maps.googleapis.com/maps/api/geocode/json?address=' +
-      encodeURIComponent(address) +
-      '&key=' +
-      MAPS_API_KEY,
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      const coords = data.results[0].geometry.location
-      return {
-        latitude: coords.lat,
-        longitude: coords.lng,
-      }
-    })
-    .catch((error) => {
-      console.error('Error calling Geocoding API: ' + error)
-      return null
-    })
-}
-
+export type { event }
 export { calAuth, calSignOut, getFirstEvent }
