@@ -14,7 +14,8 @@ import {
   Overlay,
   Alert,
 } from '@mantine/core'
-import BG from '../../assets/bg.jpg'
+//import BG from '../../assets/bg.jpg'
+
 import { useNavigate } from 'react-router'
 import { IconAlertCircle } from '@tabler/icons-react'
 import { UserCredential } from '@firebase/auth'
@@ -42,10 +43,15 @@ function LoginView ({ onSignIn, user }: LoginViewProps) {
     onSignIn()
   }
 
+  // function onError(message?: unknown) {
+  //   if (typeof message === 'string') setErrorMessage(message)
+  //   else setErrorMessage('Something went wrong when authenticating with Google')
+  // }
+
   return (
     <Box mih='100vh'>
       <Box pos='relative'>
-        <Image src={BG} height='100vh' w='100vw' fit='cover' sx={{ filter: 'blur(2px)' }} />
+        {/* <Image src={BG} height='100vh' w='100vw' fit='cover' sx={{ filter: 'blur(2px)' }} /> */}
         <Paper
           top='50%'
           left='50%'

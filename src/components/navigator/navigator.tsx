@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Model from '../../Model'
 import HelloWorld from '../hello-world/hello-world'
-import Login from '../login/login'
 import LoginPresenter from '../login/login-presenter'
 import RequireAuth from './require-auth'
 import {observer} from 'mobx-react'
