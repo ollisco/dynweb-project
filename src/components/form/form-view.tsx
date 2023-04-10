@@ -24,7 +24,7 @@ const FormView = ({
         <TextInput
           label="Address"
           name="address"
-          placeholder="Armégatan 32 C"
+          placeholder="Drottning Kristinas väg 13"
           required
           value={address}
           onChange={onChange}
