@@ -1,9 +1,13 @@
 import Model from "../../Model";
 
 
-function InformationView(model:Model) {
+function InformationView() {
   return (
-    <h2>Your commute:</h2>
-    <div>You should leave at {temp} in order to arrive at {temp} at {temp}</div>
+    <div>
+      <h2>Your commute:</h2>
+      <div>You should leave at * in order to arrive at * at *</div>
+    </div>
   )
 }
+
+export default InformationView
