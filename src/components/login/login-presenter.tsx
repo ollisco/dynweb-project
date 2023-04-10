@@ -27,7 +27,7 @@ interface LoginPresenterProps {
 }
 
 const LoginPresenter = observer(({ model }: LoginPresenterProps) => {
-  //const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  // const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const { user, setUser } = useAuth()
   useEffect(() => {
     if (model.user) {
@@ -35,13 +35,12 @@ const LoginPresenter = observer(({ model }: LoginPresenterProps) => {
     }
   }, [model.user, setUser])
 
-  function onSignInACB(){
+  function onSignInACB() {
     model.signIn()
   }
-  
 
   return <LoginView onSignIn={onSignInACB} user={user} />
-  //return <LoginView model={model}/>
+  // return <LoginView model={model}/>
 })
 
 export default LoginPresenter

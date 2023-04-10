@@ -29,17 +29,17 @@ interface LoginViewProps {
   //model: Model
 }
 
-function LoginView ({ onSignIn, user }: LoginViewProps) {
-  //const [errorMessage, setErrorMessage] = useState<string | null>(null)
+function LoginView({ onSignIn, user }: LoginViewProps) {
+  // const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const navigate = useNavigate()
   useEffect(() => {
-    console.log("current user", user)
+    console.log('current user', user)
     if (user) {
-      navigate('/hello')
+      navigate('/form')
     }
   }, [user])
 
-  function onSignInACB(){
+  function onSignInACB() {
     onSignIn()
   }
 
@@ -80,7 +80,12 @@ function LoginView ({ onSignIn, user }: LoginViewProps) {
                   </Alert>
                 )} */}
             <Group grow mb='md' mt='md'>
-              <Button onClick={onSignInACB} leftIcon={<GoogleIcon />} variant='default' color='gray' />
+              <Button
+                onClick={onSignInACB}
+                leftIcon={<GoogleIcon />}
+                variant='default'
+                color='gray'
+              />
             </Group>
           </Stack>
         </Paper>
