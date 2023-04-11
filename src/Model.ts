@@ -23,12 +23,10 @@ class Model {
 
   onLogin(user: UserCredential | null) {
     this.user = user
-    console.log('has user changed?', user)
   }
 
   signIn() {
     const onError = (error: unknown) => null
-    console.log('logging in')
     signInWithGoogle(this.onLogin, onError)
   }
 

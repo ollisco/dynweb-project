@@ -33,7 +33,6 @@ function LoginView({ onSignIn, user }: LoginViewProps) {
   // const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const navigate = useNavigate()
   useEffect(() => {
-    console.log('current user', user)
     if (user) {
       navigate('/form')
     }
