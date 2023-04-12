@@ -3,16 +3,12 @@ import { Button, TextInput, useMantineTheme } from "@mantine/core";
 
 type FormProps = {
   address: string;
-  latitude: string | undefined;
-  longitude: string | undefined;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const FormView = ({
   address,
-  latitude,
-  longitude,
   onSubmit,
   onChange,
 }: FormProps) => {
@@ -34,9 +30,6 @@ const FormView = ({
           Submit
         </Button>
       </form>
-      <div>
-        Home coordinates: {latitude}, {longitude}.
-      </div>
     </div>
   );
 };

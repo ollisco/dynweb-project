@@ -2,6 +2,7 @@ import axios from 'axios'
 import { MAPS_API_KEY } from './apiconf'
 import { event } from './calendarSource'
 import { CoordsObj } from './tripSource'
+import { Coordinates } from './Model'
 
 async function addressToCoords(address: string) {
   if (address === undefined) return null
@@ -24,16 +25,16 @@ async function addressToCoords(address: string) {
   }
 }
 
-async function eventToCoordsObj(event: event) {
+async function eventToCoordsObj(event: event, homeCoords: Coordinates) {
   let coords = await addressToCoords(event.location)
   const coordsObj: CoordsObj = {
-    originCoordLat: '59.329124',
-    originCoordLong: '18.068834',
+    originCoordLat: homeCoords.latitude,
+    originCoordLong: homeCoords.longitude,
     destCoordLat: coords?.latitude,
     destCoordLong: coords?.longitude,
     date: event.start.substring(0, 10),
     time: event.start.substring(11, 16),
-    searchForArrival: 0,
+    searchForArrival: 1,
   }
   return coordsObj
 }

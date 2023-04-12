@@ -1,10 +1,8 @@
 import { UserCredential } from '@firebase/auth'
 import { signInWithGoogle } from './Firebase'
 import { makeAutoObservable } from 'mobx'
-import useAuth from './components/login/user-context'
-import { CoordsObj } from './tripSource'
 
-interface Coordinates {
+export interface Coordinates {
   latitude: string
   longitude: string
 }
@@ -12,6 +10,7 @@ interface Coordinates {
 class Model {
   user: UserCredential | null
   homeCoords: Coordinates | null
+  homeAddress: string | null
 
   constructor(user: UserCredential | null = null) {
     makeAutoObservable(this)
@@ -19,6 +18,7 @@ class Model {
     this.onLogin = this.onLogin.bind(this)
     this.signIn = this.signIn.bind(this)
     this.homeCoords = null
+    this.homeAddress = null
   }
 
   onLogin(user: UserCredential | null) {
@@ -30,7 +30,8 @@ class Model {
     signInWithGoogle(this.onLogin, onError)
   }
 
-  setHomeCoords(coords: Coordinates) {
+  setHomeAddress(address: string, coords: Coordinates) {
+    this.homeAddress = address
     this.homeCoords = coords
   }
 }

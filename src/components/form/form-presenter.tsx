@@ -15,14 +15,14 @@ const FormPresenter = observer(({ model }: FormPresenterProps) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const coords = await addressToCoords(address)
-    if (coords !== null) model.setHomeCoords(coords)
+    if (coords !== null) model.setHomeAddress(address, coords)
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(event.target.value)
   }
 
-  return <FormView address={address} latitude={model.homeCoords?.latitude} longitude={model.homeCoords?.longitude} onSubmit={handleSubmit} onChange={handleChange} />
+  return <FormView address={address} onSubmit={handleSubmit} onChange={handleChange} />
 })
 
 export default FormPresenter

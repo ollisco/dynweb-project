@@ -22,7 +22,7 @@ function calSignOut() {
   gcal.handleSignoutClick()
 }
 
-function getUpcomingEvents(amountToFetch: number, calendar: string | undefined = undefined) {
+function getDaysEvents(date: Date, calendar: string | undefined = undefined) {
   function extractData(result: any) {
     return result.result.items.map((event: any) => {
       return {
@@ -33,17 +33,29 @@ function getUpcomingEvents(amountToFetch: number, calendar: string | undefined =
     })
   }
 
-  return gcal.listUpcomingEvents(amountToFetch, calendar).then(extractData)
+  function addDays(date: Date, days: number) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+  
+  return gcal
+    .listEvents({
+      timeMin: date.toISOString(),
+      timeMax: addDays(date, 1).toISOString(),
+      maxResults: 20,
+    })
+    .then(extractData)
 }
 
-function getFirstEvent() {
+function getFirstEvent(date: Date) {
   function findFirstWithLocation(events: [event]) {
     return events.find((event: event) => {
       return event.location
     })
   }
 
-  return getUpcomingEvents(25).then(findFirstWithLocation)
+  return getDaysEvents(date).then(findFirstWithLocation)
 }
 
 export type { event }
