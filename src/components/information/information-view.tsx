@@ -2,7 +2,7 @@ import { DateInput } from '@mantine/dates'
 import Model from '../../Model'
 import { useEffect, useState } from 'react';
 import { Button } from '@mantine/core';
-import { calAuth } from '../../calendarSource';
+import { calAuth, calIsAuthed } from '../../calendarSource';
 
 type InformationViewProps = {
   originAddress: string | null
@@ -44,6 +44,11 @@ const InformationView = ({
         onClick={searchClicked}
         >
         Perform Search
+      </Button>
+      <Button
+        onClick={(e) => {console.log(calIsAuthed())}}
+        >
+        Is authed?
       </Button>
       <h2>Your commute:</h2>
       <div>You should leave {originAddress} at {leaveTime} in order to arrive at {destinationAddress} at {arriveTime}</div>

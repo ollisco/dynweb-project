@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router'
 import Model, { Coordinates } from '../../Model';
 import InformationView from './information-view'
-import { getFirstEvent } from '../../calendarSource';
+import { calAuth, getFirstEvent } from '../../calendarSource';
 import { eventToCoordsObj } from '../../eventToTrip';
 import { getTrafficInfo } from '../../tripSource';
 import { useState } from 'react';
@@ -21,12 +21,9 @@ export function InformationPresenter(props: InformationPresenterProps) {
     console.log("day:", day)
     console.log("homeCoords:" , props.homeCoords)
     if (day && props.homeCoords) {
-      console.log(day)
       const event = await getFirstEvent(day)
       const coordsObj = await eventToCoordsObj(event, props.homeCoords)
       const trafficInfo = await getTrafficInfo(coordsObj)
-      console.log("yes")
-      console.log(trafficInfo)
       setDestinationAddress(event.location);
       setLeaveTime(trafficInfo.Trip.pop().Origin.time);
       setArriveTime(trafficInfo.Trip.pop().Destination.time);

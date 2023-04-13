@@ -1,4 +1,4 @@
-import ApiCalendar from 'react-google-calendar-api'
+import ApiCalendar from './ApiCalendar'
 import { GCAL_API_KEY, GCAL_CLIENT_ID } from './apiconf'
 
 const gcal = new ApiCalendar({
@@ -12,6 +12,10 @@ interface event {
   title: string
   start: string
   location: string
+}
+
+function calIsAuthed() {
+  return !!gcal.getToken()
 }
 
 function calAuth() {
@@ -59,4 +63,4 @@ function getFirstEvent(date: Date) {
 }
 
 export type { event }
-export { calAuth, calSignOut, getFirstEvent }
+export { calAuth, calIsAuthed, calSignOut, getFirstEvent }
