@@ -1,9 +1,9 @@
 import Model from '../../Model'
-import { useForm } from '@mantine/form'
 import { addressToCoords } from '../../eventToTrip'
 import { observer } from 'mobx-react'
-import React from 'react'
+import React, { useState } from 'react'
 import FormView from './form-view'
+import { getSuggestions } from '../../autocompleteSrc'
 
 interface FormPresenterProps {
   model: Model
@@ -11,6 +11,8 @@ interface FormPresenterProps {
 
 const FormPresenter = observer(({ model }: FormPresenterProps) => {
   const [address, setAddress] = React.useState('')
+  const [loading, setLoading] = useState(false)
+  const [data, setData] = useState<string[]>([])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -18,11 +20,27 @@ const FormPresenter = observer(({ model }: FormPresenterProps) => {
     if (coords !== null) model.setHomeAddress(address, coords)
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAddress(event.target.value)
+  const handleChange = async (value: string) => {
+    setAddress(value)
+    if (value.trim().length < 3) {
+      // may result in bug
+      setLoading(false)
+    } else {
+      setLoading(true)
+      const newdata: string[]|null = await getSuggestions(value)
+      setData(newdata)
+    }
   }
 
-  return <FormView address={address} onSubmit={handleSubmit} onChange={handleChange} />
+  return (
+    <FormView
+      address={address}
+      onSubmit={handleSubmit}
+      onChange={handleChange}
+      autocompleteData={data}
+      loading={loading}
+    />
+  )
 })
 
 export default FormPresenter
