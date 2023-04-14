@@ -1,5 +1,6 @@
-import axios from 'axios'
 import { TRAFFICLAB_API_KEY } from './apiconf'
+import axios from 'axios'
+import { addressToCoords } from './mapsSource'
 
 // Structure on parameter object in getTrafficInfo.
 interface CoordsObj {
@@ -10,6 +11,27 @@ interface CoordsObj {
   date: string // YYYY-MM-DD, today if empty
   time: string // HH:MM, now if empty
   searchForArrival: number // 1 if time of arrival instead of departure
+}
+
+async function createCoordsObj(
+  originAddress: string,
+  destinationAddress: string,
+  date: Date,
+  time: string,
+  searchForArrival: number,
+) {
+  let originCoords = await addressToCoords(originAddress)
+  let destinationCoords = await addressToCoords(destinationAddress)
+  const coordsObj: CoordsObj = {
+    originCoordLat: originCoords?.latitude,
+    originCoordLong: originCoords?.longitude,
+    destCoordLat: destinationCoords?.latitude,
+    destCoordLong: destinationCoords?.longitude,
+    date: date.toISOString().substring(0, 10),
+    time: time.substring(0, 5),
+    searchForArrival: searchForArrival,
+  }
+  return coordsObj
 }
 
 async function getTrafficInfo(coordsObj: CoordsObj) {
@@ -42,4 +64,4 @@ function getRelevantInfo(data: any) {
 }
 
 export type { CoordsObj }
-export { getTrafficInfo, getRelevantInfo }
+export { createCoordsObj, getTrafficInfo, getRelevantInfo }

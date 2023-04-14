@@ -22,11 +22,8 @@ const Navigator = observer(({ model }: NavigatorProps) => {
           path='info'
           element={
             <div>
-              <FormPresenter model={model} />{' '}
-              <InformationPresenter
-                homeAddress={model.homeAddress}
-                homeCoords={model.homeCoords}
-              />
+              <FormPresenter model={model} />
+              <InformationPresenter homeAddress={model.homeAddress} />
             </div>
           }
         />

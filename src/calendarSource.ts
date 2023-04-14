@@ -1,5 +1,5 @@
-import ApiCalendar from './ApiCalendar'
 import { GCAL_API_KEY, GCAL_CLIENT_ID } from './apiconf'
+import ApiCalendar from './ApiCalendar'
 
 const gcal = new ApiCalendar({
   clientId: GCAL_CLIENT_ID,
@@ -15,11 +15,11 @@ interface event {
 }
 
 function calIsAuthed() {
-  return !!gcal.getToken()
+  return !!gcal.getToken() && !!gcal.getToken().access_token
 }
 
 function calAuth() {
-  gcal.handleAuthClick()
+  return gcal.handleAuthClick()
 }
 
 function calSignOut() {
@@ -38,11 +38,11 @@ function getDaysEvents(date: Date, calendar: string | undefined = undefined) {
   }
 
   function addDays(date: Date, days: number) {
-    var result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
+    var result = new Date(date)
+    result.setDate(result.getDate() + days)
+    return result
   }
-  
+
   return gcal
     .listEvents({
       timeMin: date.toISOString(),

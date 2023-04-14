@@ -1,57 +1,71 @@
-import { DateInput } from '@mantine/dates'
-import Model from '../../Model'
-import { useEffect, useState } from 'react';
-import { Button } from '@mantine/core';
-import { calAuth, calIsAuthed } from '../../calendarSource';
+import { DateInput, TimeInput } from '@mantine/dates'
+import { Button, TextInput } from '@mantine/core'
 
 type InformationViewProps = {
   originAddress: string | null
   destinationAddress: string
-  day: Date | null
+  date: Date | null
   leaveTime: string
   arriveTime: string
   searchClicked: React.MouseEventHandler<HTMLButtonElement>
-  setDay: (value: Date) => void
+  setDate: (value: Date) => void
+  setDestinationAddress: (value: string) => void
+  setArriveTime: (value: string) => void
+  useCal: React.MouseEventHandler<HTMLButtonElement>
 }
 
 const InformationView = ({
   originAddress,
   destinationAddress,
-  day,
+  date,
   leaveTime,
   arriveTime,
-  setDay,
+  setDate,
+  useCal,
   searchClicked,
+  setDestinationAddress,
+  setArriveTime,
 }: InformationViewProps) => {
-
   return (
     <div>
       <DateInput
-        value={day}
-        onChange={setDay}
+        value={date}
+        onChange={setDate}
         required
-        label="Day of travel"
-        placeholder="Select day"
+        label='Day of travel'
+        placeholder='Select date'
         maw={400}
         minDate={new Date()}
       />
-      <Button
-        onClick={calAuth}
-        >
-        Allow Google Calendar access
-      </Button>
+      <Button onClick={useCal}>Use Google Calendar</Button>
+      <TextInput
+        label='Destination address'
+        required
+        placeholder='Drottning Kristinas väg 13'
+        value={destinationAddress}
+        onChange={(e) => {
+          setDestinationAddress(e.target.value)
+        }}
+      />
+      <TimeInput
+        label='Desired arrival time'
+        required
+        value={arriveTime}
+        onChange={(e) => {
+          setArriveTime(e.target.value)
+        }}
+      />
       <Button
         onClick={searchClicked}
-        >
-        Perform Search
-      </Button>
-      <Button
-        onClick={(e) => {console.log(calIsAuthed())}}
-        >
-        Is authed?
+        disabled={!(originAddress && date && arriveTime && destinationAddress)}
+      >
+        Search
       </Button>
       <h2>Your commute:</h2>
-      <div>You should leave {originAddress} at {leaveTime} in order to arrive at {destinationAddress} at {arriveTime}</div>
+      <div>
+        You should leave {originAddress} at {leaveTime} in order to arrive at {destinationAddress}{' '}
+        at {arriveTime}
+      </div>
     </div>
   )
 }

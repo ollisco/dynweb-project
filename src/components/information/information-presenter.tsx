@@ -1,32 +1,39 @@
-import { useNavigate } from 'react-router'
-import Model, { Coordinates } from '../../Model';
+import { Coordinates } from '../../Model'
 import InformationView from './information-view'
-import { calAuth, getFirstEvent } from '../../calendarSource';
-import { eventToCoordsObj } from '../../eventToTrip';
-import { getTrafficInfo } from '../../tripSource';
-import { useState } from 'react';
+import { calAuth, calIsAuthed, getFirstEvent } from '../../calendarSource'
+import { createCoordsObj, getTrafficInfo } from '../../tripSource'
+import { useState } from 'react'
 
 interface InformationPresenterProps {
   homeAddress: string | null
-  homeCoords: Coordinates | null
 }
 
 export function InformationPresenter(props: InformationPresenterProps) {
-  const [destinationAddress, setDestinationAddress] = useState<string>('');
-  const [day, setDay] = useState<Date | null>(null);
-  const [leaveTime, setLeaveTime] = useState<string>('');
-  const [arriveTime, setArriveTime] = useState<string>('');
+  const [destinationAddress, setDestinationAddress] = useState<string>('')
+  const [date, setDate] = useState<Date | null>(null)
+  const [leaveTime, setLeaveTime] = useState<string>('')
+  const [arriveTime, setArriveTime] = useState<string>('')
+
+  async function useCal() {
+    await calAuth()
+    if (calIsAuthed() && date) {
+      const event = await getFirstEvent(date)
+      setDestinationAddress(event.location)
+      setArriveTime(event.start.substring(11, 16))
+    }
+  }
 
   async function performSearch() {
-    console.log("day:", day)
-    console.log("homeCoords:" , props.homeCoords)
-    if (day && props.homeCoords) {
-      const event = await getFirstEvent(day)
-      const coordsObj = await eventToCoordsObj(event, props.homeCoords)
+    if (props.homeAddress && destinationAddress && date && arriveTime) {
+      const coordsObj = await createCoordsObj(
+        props.homeAddress,
+        destinationAddress,
+        date,
+        arriveTime,
+        1,
+      )
       const trafficInfo = await getTrafficInfo(coordsObj)
-      setDestinationAddress(event.location);
-      setLeaveTime(trafficInfo.Trip.pop().Origin.time);
-      setArriveTime(trafficInfo.Trip.pop().Destination.time);
+      setLeaveTime(trafficInfo.Trip.pop().Origin.time.substring(0, 5))
     }
   }
 
@@ -34,11 +41,14 @@ export function InformationPresenter(props: InformationPresenterProps) {
     <InformationView
       originAddress={props.homeAddress}
       destinationAddress={destinationAddress}
-      day={day}
-      setDay={setDay}
+      setDestinationAddress={setDestinationAddress}
+      date={date}
+      setDate={setDate}
       leaveTime={leaveTime}
       arriveTime={arriveTime}
+      setArriveTime={setArriveTime}
+      useCal={useCal}
       searchClicked={performSearch}
     />
-  );
+  )
 }

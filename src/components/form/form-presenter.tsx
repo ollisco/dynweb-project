@@ -1,6 +1,6 @@
 import Model from '../../Model'
 import { useForm } from '@mantine/form'
-import { addressToCoords } from '../../eventToTrip'
+import { addressToCoords } from '../../mapsSource'
 import { observer } from 'mobx-react'
 import React from 'react'
 import FormView from './form-view'
