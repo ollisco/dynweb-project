@@ -22,12 +22,11 @@ const FormPresenter = observer(({ model }: FormPresenterProps) => {
 
   const handleChange = async (value: string) => {
     setAddress(value)
-    if (value.trim().length < 3) {
-      // may result in bug
+    if (value.trim().length < 3) { // may result in bugs
       setLoading(false)
     } else {
       setLoading(true)
-      const newdata: string[]|null = await getSuggestions(value)
+      const newdata: string[] = await getSuggestions(value)
       setData(newdata)
     }
   }
