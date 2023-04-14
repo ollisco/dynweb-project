@@ -1,9 +1,10 @@
 import Model from '../../Model'
 import { addressToCoords } from '../../eventToTrip'
 import { observer } from 'mobx-react'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import FormView from './form-view'
 import { getSuggestions } from '../../autocompleteSrc'
+import { debounce } from 'lodash'
 
 interface FormPresenterProps {
   model: Model
@@ -20,14 +21,23 @@ const FormPresenter = observer(({ model }: FormPresenterProps) => {
     if (coords !== null) model.setHomeAddress(address, coords)
   }
 
+  const debouncedSave = useCallback(
+    debounce(async (newValue) => {
+      const rep = await getSuggestions(newValue)
+      setData(rep)
+      setLoading(false)
+    }, 1000),
+    [],
+  )
+
   const handleChange = async (value: string) => {
     setAddress(value)
-    if (value.trim().length < 3) { // may result in bugs
-      setLoading(false)
-    } else {
+    console.log('test')
+    if (value) {
       setLoading(true)
-      const newdata: string[] = await getSuggestions(value)
-      setData(newdata)
+      debouncedSave(value)
+    } else {
+      setData([])
     }
   }
 
