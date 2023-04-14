@@ -1,4 +1,3 @@
-import { Coordinates } from '../../Model'
 import InformationView from './information-view'
 import { calAuth, calIsAuthed, getFirstEvent } from '../../calendarSource'
 import { createCoordsObj, getTrafficInfo } from '../../tripSource'
@@ -10,9 +9,10 @@ interface InformationPresenterProps {
 
 export function InformationPresenter(props: InformationPresenterProps) {
   const [destinationAddress, setDestinationAddress] = useState<string>('')
-  const [date, setDate] = useState<Date | null>(null)
-  const [leaveTime, setLeaveTime] = useState<string>('')
+  const [date, setDate] = useState<Date>(new Date())
   const [arriveTime, setArriveTime] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
+  const [message, setMessage] = useState<string>('')
 
   async function useCal() {
     await calAuth()
@@ -25,6 +25,7 @@ export function InformationPresenter(props: InformationPresenterProps) {
 
   async function performSearch() {
     if (props.homeAddress && destinationAddress && date && arriveTime) {
+      setLoading(true)
       const coordsObj = await createCoordsObj(
         props.homeAddress,
         destinationAddress,
@@ -33,7 +34,19 @@ export function InformationPresenter(props: InformationPresenterProps) {
         1,
       )
       const trafficInfo = await getTrafficInfo(coordsObj)
-      setLeaveTime(trafficInfo.Trip.pop().Origin.time.substring(0, 5))
+      const originTime = trafficInfo.Trip.pop().Origin.time.substring(0, 5)
+      setLoading(false)
+      setMessage(
+        'You should leave ' +
+          props.homeAddress +
+          ' at ' +
+          originTime +
+          ' in order to arrive at ' +
+          destinationAddress +
+          ' at ' +
+          arriveTime +
+          '.',
+      ) // very temporary
     }
   }
 
@@ -44,11 +57,12 @@ export function InformationPresenter(props: InformationPresenterProps) {
       setDestinationAddress={setDestinationAddress}
       date={date}
       setDate={setDate}
-      leaveTime={leaveTime}
       arriveTime={arriveTime}
       setArriveTime={setArriveTime}
       useCal={useCal}
       searchClicked={performSearch}
+      message={message}
+      loading={loading}
     />
   )
 }
