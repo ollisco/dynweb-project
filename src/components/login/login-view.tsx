@@ -34,7 +34,7 @@ function LoginView({ onSignIn, user }: LoginViewProps) {
   const navigate = useNavigate()
   useEffect(() => {
     if (user) {
-      navigate('/info')
+      navigate('/')
     }
   }, [user])
 

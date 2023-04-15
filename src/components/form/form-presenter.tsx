@@ -1,5 +1,5 @@
 import Model from '../../Model'
-import { addressToCoords } from '../../eventToTrip'
+import { addressToCoords } from '../../mapsSource'
 import { observer } from 'mobx-react'
 import React, { useCallback, useState } from 'react'
 import FormView from './form-view'

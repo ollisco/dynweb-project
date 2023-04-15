@@ -1306,6 +1306,23 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/gapi.calendar@^3.0.6":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@types/gapi.calendar/-/gapi.calendar-3.0.6.tgz#8ff854204056f2b0396283155fef8c10654a7e26"
+  integrity sha512-5POp+QFcJh7yHHOaOc3pkvEZq99u8EzaHuAL+0XcrNKQpN6EM9T6guQ2Q2O39KWkxGvAKdshDv2ZwB7I+v+t3A==
+  dependencies:
+    "@types/gapi" "*"
+
+"@types/gapi@*", "@types/gapi@^0.0.44":
+  version "0.0.44"
+  resolved "https://registry.yarnpkg.com/@types/gapi/-/gapi-0.0.44.tgz#f097f7a0f59d63a59098a08a62a560ca168426fb"
+  integrity sha512-hsgJMfZ/pMwI15UlAYHMNwj8DRoigo1odhbPwEXdp19ZQwQAXbcRrpzaDsfc+9XM6RtGpvl4Ja7uW8A+KPCa7w==
+
+"@types/google.accounts@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@types/google.accounts/-/google.accounts-0.0.7.tgz#d9f20f29f3d14336967c905bddb2d89dc2bfc709"
+  integrity sha512-AAA2+/s/Oa9ETgaWY6JM2P3h8RiQ1FkdyI7QYKMY3hbIkwGbjEBLX0L6FpazVxHnq68ruDyl8Fi5v0tEwSyfeg==
+
 "@types/http-proxy@^1.17.8":
   version "1.17.10"
   resolved "https://registry.yarnpkg.com/@types/http-proxy/-/http-proxy-1.17.10.tgz#e576c8e4a0cc5c6a138819025a88e167ebb38d6c"
@@ -4331,11 +4348,6 @@ react-dom@^18.2.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
-
-react-google-calendar-api@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/react-google-calendar-api/-/react-google-calendar-api-2.2.2.tgz#c639ba356d653dbfd8352f3c68bfecd6fa5729f3"
-  integrity sha512-JpDbAUaPUklAkotxvs4FbEUomweu5tMG206wfJh80HmzegVxCylZjzpIEng2eh3phqJjPzznwneNA0ep1vbefQ==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"

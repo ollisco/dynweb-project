@@ -1,5 +1,5 @@
-import ApiCalendar from 'react-google-calendar-api'
 import { GCAL_API_KEY, GCAL_CLIENT_ID } from './apiconf'
+import ApiCalendar from './ApiCalendar'
 
 const gcal = new ApiCalendar({
   clientId: GCAL_CLIENT_ID,
@@ -14,8 +14,12 @@ interface event {
   location: string
 }
 
+function calIsAuthed() {
+  return !!gcal.getToken() && !!gcal.getToken().access_token
+}
+
 function calAuth() {
-  gcal.handleAuthClick()
+  return gcal.handleAuthClick()
 }
 
 function calSignOut() {
@@ -34,11 +38,11 @@ function getDaysEvents(date: Date, calendar: string | undefined = undefined) {
   }
 
   function addDays(date: Date, days: number) {
-    var result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
+    var result = new Date(date)
+    result.setDate(result.getDate() + days)
+    return result
   }
-  
+
   return gcal
     .listEvents({
       timeMin: date.toISOString(),
@@ -59,4 +63,4 @@ function getFirstEvent(date: Date) {
 }
 
 export type { event }
-export { calAuth, calSignOut, getFirstEvent }
+export { calAuth, calIsAuthed, calSignOut, getFirstEvent }

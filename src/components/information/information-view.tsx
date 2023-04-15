@@ -1,52 +1,70 @@
-import { DateInput } from '@mantine/dates'
-import Model from '../../Model'
-import { useEffect, useState } from 'react';
-import { Button } from '@mantine/core';
-import { calAuth } from '../../calendarSource';
+import { DateInput, TimeInput } from '@mantine/dates'
+import { Button, Loader, TextInput } from '@mantine/core'
 
 type InformationViewProps = {
   originAddress: string | null
   destinationAddress: string
-  day: Date | null
-  leaveTime: string
+  date: Date
   arriveTime: string
+  message: string
+  loading: boolean
   searchClicked: React.MouseEventHandler<HTMLButtonElement>
-  setDay: (value: Date) => void
+  setDate: (value: Date) => void
+  setDestinationAddress: (value: string) => void
+  setArriveTime: (value: string) => void
+  useCal: React.MouseEventHandler<HTMLButtonElement>
 }
 
 const InformationView = ({
   originAddress,
   destinationAddress,
-  day,
-  leaveTime,
+  date,
   arriveTime,
-  setDay,
+  message,
+  loading,
+  setDate,
+  useCal,
   searchClicked,
+  setDestinationAddress,
+  setArriveTime,
 }: InformationViewProps) => {
-
   return (
     <div>
       <DateInput
-        value={day}
-        onChange={setDay}
+        label='Day of travel'
+        placeholder='Select date'
         required
-        label="Day of travel"
-        placeholder="Select day"
+        value={date}
+        onChange={setDate}
         maw={400}
         minDate={new Date()}
       />
-      <Button
-        onClick={calAuth}
-        >
-        Allow Google Calendar access
-      </Button>
+      <Button onClick={useCal}>Use Google Calendar</Button>
+      <TextInput
+        label='Destination address'
+        placeholder='Drottning Kristinas väg 13'
+        required
+        value={destinationAddress}
+        onChange={(e) => {
+          setDestinationAddress(e.target.value)
+        }}
+      />
+      <TimeInput
+        label='Desired arrival time'
+        required
+        value={arriveTime}
+        onChange={(e) => {
+          setArriveTime(e.target.value)
+        }}
+      />
       <Button
         onClick={searchClicked}
-        >
-        Perform Search
+        disabled={!(originAddress && destinationAddress && date && arriveTime)}
+      >
+        Search
       </Button>
       <h2>Your commute:</h2>
-      <div>You should leave {originAddress} at {leaveTime} in order to arrive at {destinationAddress} at {arriveTime}</div>
+      <div>{loading ? <Loader /> : message}</div>
     </div>
   )
 }
