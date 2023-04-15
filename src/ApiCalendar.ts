@@ -35,9 +35,12 @@ interface TimeCalendarType {
   dateTime?: string
   timeZone: string
 }
+interface ExtendedTokenClient extends google.accounts.oauth2.TokenClient {
+  callback?: (resp: any) => void
+}
 
 class ApiCalendar {
-  tokenClient: google.accounts.oauth2.TokenClient | null = null
+  tokenClient: ExtendedTokenClient | null = null
   onLoadCallback: any = null
   calendar: string = 'primary'
 
@@ -128,10 +131,10 @@ class ApiCalendar {
    */
   public handleAuthClick() {
     return new Promise((resolve, _) => {
-      this.tokenClient.callback = (resp: any) => {
-        resolve(resp)
-      }
       if (gapi && this.tokenClient) {
+        this.tokenClient.callback = (resp: any) => {
+          resolve(resp)
+        }
         if (gapi.client.getToken() === null) {
           this.tokenClient.requestAccessToken({ prompt: 'consent' })
         } else {
