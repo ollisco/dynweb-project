@@ -1,55 +1,112 @@
-import Model from '../../Model'
-import { addressToCoords } from '../../mapsSource'
-import { observer } from 'mobx-react'
-import React, { useCallback, useState } from 'react'
 import FormView from './form-view'
-import { getSuggestions } from '../../autocompleteSrc'
+import { calAuth, calIsAuthed, getFirstEvent } from '../../calendarSource'
+import { createCoordsObj, getTrafficInfo } from '../../tripSource'
+import { useCallback, useState } from 'react'
+import { getSuggestions } from '../../mapsSource'
 import { debounce } from 'lodash'
 
 interface FormPresenterProps {
-  model: Model
+  homeAddress: string | undefined
+  setHomeAddress: (value: string) => void
+  setRoute: (destionationAddress: string, leaveTime: string, arriveTime: string) => void
+  setRouteLoading: (value: boolean) => void
 }
 
-const FormPresenter = observer(({ model }: FormPresenterProps) => {
-  const [address, setAddress] = React.useState('')
-  const [loading, setLoading] = useState(false)
-  const [data, setData] = useState<string[]>([])
+function FormPresenter(props: FormPresenterProps) {
+  const [originAddress, setOriginAddress] = useState<string>('')
+  const [originAddressLoading, setOriginAddressLoading] = useState(false)
+  const [originAddressAutocompleteData, setOriginAddressAutocompleteData] = useState<string[]>([])
+  const [destinationAddress, setDestinationAddress] = useState<string>('')
+  const [destinationAddressLoading, setDestinationAddressLoading] = useState(false)
+  const [destinationAddressAutocompleteData, setDestinationAddressAutocompleteData] = useState<
+    string[]
+  >([])
+  const [date, setDate] = useState<Date>(new Date())
+  const [arriveTime, setArriveTime] = useState<string>('')
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const coords = await addressToCoords(address)
-    if (coords !== null) model.setHomeAddress(address, coords)
+  const handleOriginAddressChange = async (value: string) => {
+    setOriginAddress(value)
+    if (value) {
+      setOriginAddressLoading(true)
+      originAddressDebouncedSave(value)
+    } else {
+      setOriginAddressAutocompleteData([])
+    }
   }
 
-  const debouncedSave = useCallback(
+  const originAddressDebouncedSave = useCallback(
     debounce(async (newValue) => {
       const rep = await getSuggestions(newValue)
-      setData(rep)
-      setLoading(false)
+      setOriginAddressAutocompleteData(rep)
+      setOriginAddressLoading(false)
     }, 1000),
     [],
   )
 
-  const handleChange = async (value: string) => {
-    setAddress(value)
-    console.log('test')
+  const handleDestinationAddressChange = async (value: string) => {
+    setDestinationAddress(value)
     if (value) {
-      setLoading(true)
-      debouncedSave(value)
+      setDestinationAddressLoading(true)
+      destinationAddressDebouncedSave(value)
     } else {
-      setData([])
+      setDestinationAddressAutocompleteData([])
+    }
+  }
+
+  const destinationAddressDebouncedSave = useCallback(
+    debounce(async (newValue) => {
+      const rep = await getSuggestions(newValue)
+      setDestinationAddressAutocompleteData(rep)
+      setDestinationAddressLoading(false)
+    }, 1000),
+    [],
+  )
+
+  async function useCal() {
+    if (!calIsAuthed()) await calAuth()
+    if (calIsAuthed() && date) {
+      const event = await getFirstEvent(date)
+      setDestinationAddress(event.location)
+      setArriveTime(event.start.substring(11, 16))
+    }
+  }
+
+  async function performSearch() {
+    if (originAddress && destinationAddress && date && arriveTime) {
+      props.setRouteLoading(true)
+      const coordsObj = await createCoordsObj(
+        originAddress,
+        destinationAddress,
+        date,
+        arriveTime,
+        1,
+      )
+      const trafficInfo = await getTrafficInfo(coordsObj)
+      const originTime = trafficInfo.Trip.pop().Origin.time.substring(0, 5)
+      props.setHomeAddress(originAddress)
+      props.setRoute(destinationAddress, originTime, arriveTime)
+      props.setRouteLoading(false)
     }
   }
 
   return (
     <FormView
-      address={address}
-      onSubmit={handleSubmit}
-      onChange={handleChange}
-      autocompleteData={data}
-      loading={loading}
+      originAddress={originAddress}
+      onChangeOriginAddress={handleOriginAddressChange}
+      originAddressAutocompleteData={originAddressAutocompleteData}
+      originAddressLoading={originAddressLoading}
+      destinationAddress={destinationAddress}
+      onChangeDestinationAddress={handleDestinationAddressChange}
+      destinationAddressAutocompleteData={destinationAddressAutocompleteData}
+      destinationAddressLoading={destinationAddressLoading}
+      date={date}
+      setDate={setDate}
+      arriveTime={arriveTime}
+      setArriveTime={setArriveTime}
+      useCal={useCal}
+      searchClicked={performSearch}
     />
   )
-})
+}
 
 export default FormPresenter

@@ -1,70 +1,38 @@
-import { DateInput, TimeInput } from '@mantine/dates'
-import { Button, Loader, TextInput } from '@mantine/core'
+import { Loader, useMantineTheme } from '@mantine/core'
 
-type InformationViewProps = {
-  originAddress: string | null
-  destinationAddress: string
-  date: Date
-  arriveTime: string
-  message: string
+interface InformationViewProps {
+  originAddress: string | undefined
+  originTime: string | undefined
+  destinationAddress: string | undefined
+  destinationTime: string | undefined
   loading: boolean
-  searchClicked: React.MouseEventHandler<HTMLButtonElement>
-  setDate: (value: Date) => void
-  setDestinationAddress: (value: string) => void
-  setArriveTime: (value: string) => void
-  useCal: React.MouseEventHandler<HTMLButtonElement>
 }
 
-const InformationView = ({
+function InformationView({
   originAddress,
+  originTime,
   destinationAddress,
-  date,
-  arriveTime,
-  message,
+  destinationTime,
   loading,
-  setDate,
-  useCal,
-  searchClicked,
-  setDestinationAddress,
-  setArriveTime,
-}: InformationViewProps) => {
+}: InformationViewProps) {
   return (
     <div>
-      <DateInput
-        label='Day of travel'
-        placeholder='Select date'
-        required
-        value={date}
-        onChange={setDate}
-        maw={400}
-        minDate={new Date()}
-      />
-      <Button onClick={useCal}>Use Google Calendar</Button>
-      <TextInput
-        label='Destination address'
-        placeholder='Drottning Kristinas väg 13'
-        required
-        value={destinationAddress}
-        onChange={(e) => {
-          setDestinationAddress(e.target.value)
-        }}
-      />
-      <TimeInput
-        label='Desired arrival time'
-        required
-        value={arriveTime}
-        onChange={(e) => {
-          setArriveTime(e.target.value)
-        }}
-      />
-      <Button
-        onClick={searchClicked}
-        disabled={!(originAddress && destinationAddress && date && arriveTime)}
-      >
-        Search
-      </Button>
       <h2>Your commute:</h2>
-      <div>{loading ? <Loader /> : message}</div>
+      <div>
+        {loading ? (
+          <Loader />
+        ) : (
+          'You should leave ' +
+          originAddress +
+          ' at ' +
+          originTime +
+          ' in order to arrive at ' +
+          destinationAddress +
+          ' at ' +
+          destinationTime +
+          '.'
+        )}
+      </div>
     </div>
   )
 }

@@ -5,7 +5,7 @@ import LoginPresenter from '../login/login-presenter'
 import RequireAuth from './require-auth'
 import { observer } from 'mobx-react'
 import FormPresenter from '../form/form-presenter'
-import { InformationPresenter } from '../information/information-presenter'
+import InformationPresenter from '../information/information-presenter'
 
 interface NavigatorProps {
   model: Model
@@ -21,8 +21,19 @@ const Navigator = observer(({ model }: NavigatorProps) => {
           path=''
           element={
             <div>
-              <FormPresenter model={model} />
-              <InformationPresenter homeAddress={model.homeAddress} />
+              <FormPresenter
+                homeAddress={model.homeAddress}
+                setHomeAddress={model.setHomeAddress}
+                setRoute={model.setRoute}
+                setRouteLoading={model.setRouteLoading}
+              />
+              <InformationPresenter
+                originAddress={model.homeAddress}
+                originTime={model.leaveTime}
+                destinationAddress={model.destinationAddress}
+                destinationTime={model.arriveTime}
+                loading={model.routeLoading}
+              />
             </div>
           }
         />
