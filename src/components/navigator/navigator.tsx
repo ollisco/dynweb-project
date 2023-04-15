@@ -3,19 +3,40 @@ import Model from '../../Model'
 import HelloWorld from '../hello-world/hello-world'
 import LoginPresenter from '../login/login-presenter'
 import RequireAuth from './require-auth'
-import {observer} from 'mobx-react'
+import { observer } from 'mobx-react'
+import FormPresenter from '../form/form-presenter'
+import InformationPresenter from '../information/information-presenter'
 
 interface NavigatorProps {
   model: Model
 }
 
-const Navigator = observer(({model}: NavigatorProps) => {
+const Navigator = observer(({ model }: NavigatorProps) => {
   return (
     <Routes>
-      <Route index element={<Navigate to='hello' />} />
       <Route path='login' element={<LoginPresenter model={model} />} />
       <Route element={<RequireAuth />}>
         <Route path='hello' element={<HelloWorld />} />
+        <Route
+          path=''
+          element={
+            <div>
+              <FormPresenter
+                homeAddress={model.homeAddress}
+                setHomeAddress={model.setHomeAddress}
+                setRoute={model.setRoute}
+                setRouteLoading={model.setRouteLoading}
+              />
+              <InformationPresenter
+                originAddress={model.homeAddress}
+                originTime={model.leaveTime}
+                destinationAddress={model.destinationAddress}
+                destinationTime={model.arriveTime}
+                loading={model.routeLoading}
+              />
+            </div>
+          }
+        />
       </Route>
       <Route path='*' element={<div>404</div>} />
     </Routes>
