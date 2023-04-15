@@ -52,15 +52,11 @@ function getDaysEvents(date: Date, calendar: string | undefined = undefined) {
     .then(extractData)
 }
 
-function getFirstEvent(date: Date) {
-  function findFirstWithLocation(events: [event]) {
-    return events.find((event: event) => {
-      return event.location
-    })
-  }
-
-  return getDaysEvents(date).then(findFirstWithLocation)
+async function getFirstEvent(date: Date) {
+  const events = await getDaysEvents(date)
+  if (events) return events[0]
+  else return null
 }
 
 export type { event }
-export { calAuth, calIsAuthed, calSignOut, getFirstEvent }
+export { calAuth, calIsAuthed, calSignOut, getFirstEvent, gcal }

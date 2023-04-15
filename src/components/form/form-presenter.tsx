@@ -21,8 +21,9 @@ function FormPresenter(props: FormPresenterProps) {
   const [destinationAddressAutocompleteData, setDestinationAddressAutocompleteData] = useState<
     string[]
   >([])
-  const [date, setDate] = useState<Date>(new Date())
+  const [date, setDate] = useState<Date>(new Date(new Date().setHours(0, 0, 0, 0)))
   const [arriveTime, setArriveTime] = useState<string>('')
+  const [calLoading, setCalLoading] = useState<boolean>(false)
 
   const handleOriginAddressChange = async (value: string) => {
     setOriginAddress(value)
@@ -63,12 +64,22 @@ function FormPresenter(props: FormPresenterProps) {
   )
 
   async function useCal() {
-    if (!calIsAuthed()) await calAuth()
+    setCalLoading(true)
+    if (!calIsAuthed()) {
+      try {
+        await calAuth()
+      } catch (error) {
+        console.error('Authentication failed')
+      }
+    }
     if (calIsAuthed() && date) {
       const event = await getFirstEvent(date)
-      setDestinationAddress(event.location)
-      setArriveTime(event.start.substring(11, 16))
+      if (event) {
+        setArriveTime(event.start.substring(11, 16))
+        if (event.location) setDestinationAddress(event.location)
+      } else console.error('No events found in calendar this day')
     }
+    setCalLoading(false)
   }
 
   async function performSearch() {
@@ -104,6 +115,7 @@ function FormPresenter(props: FormPresenterProps) {
       arriveTime={arriveTime}
       setArriveTime={setArriveTime}
       useCal={useCal}
+      calLoading={calLoading}
       searchClicked={performSearch}
     />
   )

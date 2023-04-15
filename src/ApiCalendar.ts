@@ -37,6 +37,7 @@ interface TimeCalendarType {
 }
 interface ExtendedTokenClient extends google.accounts.oauth2.TokenClient {
   callback?: (resp: any) => void
+  error_callback?: (resp: any) => void
 }
 
 class ApiCalendar {
@@ -130,10 +131,13 @@ class ApiCalendar {
    * Sign in Google user account
    */
   public handleAuthClick() {
-    return new Promise((resolve, _) => {
+    return new Promise((resolve, reject) => {
       if (gapi && this.tokenClient) {
         this.tokenClient.callback = (resp: any) => {
           resolve(resp)
+        }
+        this.tokenClient.error_callback = (resp: any) => {
+          reject(resp)
         }
         if (gapi.client.getToken() === null) {
           this.tokenClient.requestAccessToken({ prompt: 'consent' })

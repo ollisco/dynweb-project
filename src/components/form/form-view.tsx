@@ -1,5 +1,6 @@
 import { DateInput, TimeInput } from '@mantine/dates'
 import { Autocomplete, Button, Loader, useMantineTheme } from '@mantine/core'
+import { gcal } from '../../calendarSource'
 
 interface FormViewProps {
   originAddress: string | undefined
@@ -15,6 +16,7 @@ interface FormViewProps {
   arriveTime: string
   setArriveTime: (value: string) => void
   useCal: React.MouseEventHandler<HTMLButtonElement>
+  calLoading: boolean
   searchClicked: React.MouseEventHandler<HTMLButtonElement>
 }
 
@@ -32,6 +34,7 @@ function FormView({
   arriveTime,
   setArriveTime,
   useCal,
+  calLoading,
   searchClicked,
 }: FormViewProps) {
   const theme = useMantineTheme()
@@ -57,7 +60,7 @@ function FormView({
         maw={400}
         minDate={new Date()}
       />
-      <Button onClick={useCal}>Use Google Calendar</Button>
+      <Button onClick={useCal} loading={calLoading}>Use Google Calendar</Button>
       <Autocomplete
         value={destinationAddress}
         data={destinationAddressAutocompleteData}
