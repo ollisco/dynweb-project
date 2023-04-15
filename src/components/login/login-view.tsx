@@ -29,8 +29,9 @@ interface LoginViewProps {
   //model: Model
 }
 
-function LoginView({ onSignIn, user }: LoginViewProps) {
-  // const [errorMessage, setErrorMessage] = useState<string | null>(null)
+function LoginView ({ onSignIn, user }: LoginViewProps) {
+  const bgLink = "https://arga.ae/assets/uploads/content/_2000xAUTO_crop_center-center_none/iStock-1186679390.jpg"
+  //const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const navigate = useNavigate()
   useEffect(() => {
     if (user) {
@@ -50,7 +51,7 @@ function LoginView({ onSignIn, user }: LoginViewProps) {
   return (
     <Box mih='100vh'>
       <Box pos='relative'>
-        {/* <Image src={BG} height='100vh' w='100vw' fit='cover' sx={{ filter: 'blur(2px)' }} /> */}
+        <Image src={bgLink} height='100vh' w='100vw' fit='cover' sx={{ filter: 'blur(2px)' }} />
         <Paper
           top='50%'
           left='50%'

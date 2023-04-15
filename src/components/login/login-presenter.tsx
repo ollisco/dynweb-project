@@ -40,7 +40,6 @@ const LoginPresenter = observer(({ model }: LoginPresenterProps) => {
   }
 
   return <LoginView onSignIn={onSignInACB} user={user} />
-  // return <LoginView model={model}/>
 })
 
 export default LoginPresenter
