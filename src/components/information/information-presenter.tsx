@@ -15,7 +15,7 @@ export function InformationPresenter(props: InformationPresenterProps) {
   const [message, setMessage] = useState<string>('')
 
   async function useCal() {
-    await calAuth()
+    if (!calIsAuthed()) await calAuth()
     if (calIsAuthed() && date) {
       const event = await getFirstEvent(date)
       setDestinationAddress(event.location)

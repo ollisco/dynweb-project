@@ -14,12 +14,11 @@ interface NavigatorProps {
 const Navigator = observer(({ model }: NavigatorProps) => {
   return (
     <Routes>
-      <Route index element={<Navigate to='hello' />} />
       <Route path='login' element={<LoginPresenter model={model} />} />
       <Route element={<RequireAuth />}>
         <Route path='hello' element={<HelloWorld />} />
         <Route
-          path='info'
+          path=''
           element={
             <div>
               <FormPresenter model={model} />
