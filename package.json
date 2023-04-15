@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
+    "@googlemaps/google-maps-services-js": "^3.3.28",
     "@mantine/core": "^6.0.7",
     "@mantine/dates": "^6.0.7",
     "@mantine/form": "^6.0.6",
@@ -35,6 +36,8 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.32.2",
     "firebase": "^9.19.1",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "mobx": "^6.9.0",
     "mobx-react": "^7.6.0",
     "prettier": "^2.8.4",
@@ -44,6 +47,7 @@
     "vite-tsconfig-paths": "^4.0.7"
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.7",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",
