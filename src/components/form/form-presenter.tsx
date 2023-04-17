@@ -1,9 +1,10 @@
 import FormView from './form-view'
 import { calAuth, calIsAuthed, getFirstEvent } from '../../calendarSource'
 import { createCoordsObj, getTrafficInfo } from '../../tripSource'
-import { useCallback, useState } from 'react'
+import { Key, LegacyRef, forwardRef, useCallback, useState } from 'react'
 import { getSuggestions } from '../../mapsSource'
 import { debounce } from 'lodash'
+import { Group, Text, SelectItemProps, MantineColor } from '@mantine/core'
 
 interface FormPresenterProps {
   homeAddress: string | undefined
@@ -11,6 +12,29 @@ interface FormPresenterProps {
   setRoute: (destionationAddress: string, leaveTime: string, arriveTime: string) => void
   setRouteLoading: (value: boolean) => void
 }
+
+// Items used in autocorrect
+export interface ItemProps extends SelectItemProps {
+  color: MantineColor;
+  index: number,
+  postcodeAndCity: string
+}
+
+const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+  ({value, postcodeAndCity, ...others }: ItemProps, ref: LegacyRef<HTMLDivElement> | undefined) => {
+    return (
+    <div ref={ref} {...others}>
+      <Group>
+        <Text size='sm' key={'0'}>{value}</Text>
+        <Text size='xs' opacity={0.65} key={'1'}>
+          {postcodeAndCity}
+        </Text>
+      </Group>
+    </div>
+  )},
+)
+
+SelectItem.displayName = 'SelectItem'
 
 function FormPresenter(props: FormPresenterProps) {
   const [originAddress, setOriginAddress] = useState<string>('')
@@ -24,6 +48,7 @@ function FormPresenter(props: FormPresenterProps) {
   const [date, setDate] = useState<Date>(new Date())
   const [arriveTime, setArriveTime] = useState<string>('')
 
+
   const handleOriginAddressChange = async (value: string) => {
     setOriginAddress(value)
     if (value) {
@@ -36,7 +61,8 @@ function FormPresenter(props: FormPresenterProps) {
 
   const originAddressDebouncedSave = useCallback(
     debounce(async (newValue) => {
-      const rep = await getSuggestions(newValue)
+      let rep = await getSuggestions(newValue)
+      rep = rep.map((item: { street: string }) => ({ ...item, value: item.street }));
       setOriginAddressAutocompleteData(rep)
       setOriginAddressLoading(false)
     }, 1000),
@@ -55,7 +81,8 @@ function FormPresenter(props: FormPresenterProps) {
 
   const destinationAddressDebouncedSave = useCallback(
     debounce(async (newValue) => {
-      const rep = await getSuggestions(newValue)
+      let rep = await getSuggestions(newValue)
+      rep = rep.map((item: { street: string }) => ({ ...item, value: item.street }));
       setDestinationAddressAutocompleteData(rep)
       setDestinationAddressLoading(false)
     }, 1000),
@@ -105,6 +132,7 @@ function FormPresenter(props: FormPresenterProps) {
       setArriveTime={setArriveTime}
       useCal={useCal}
       searchClicked={performSearch}
+      itemComponent={SelectItem}
     />
   )
 }

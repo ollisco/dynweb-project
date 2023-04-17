@@ -1,5 +1,6 @@
 import { DateInput, TimeInput } from '@mantine/dates'
 import { Autocomplete, Button, Loader, useMantineTheme } from '@mantine/core'
+import { ItemProps } from './form-presenter'
 
 interface FormViewProps {
   originAddress: string | undefined
@@ -16,6 +17,7 @@ interface FormViewProps {
   setArriveTime: (value: string) => void
   useCal: React.MouseEventHandler<HTMLButtonElement>
   searchClicked: React.MouseEventHandler<HTMLButtonElement>
+  itemComponent:React.ForwardRefExoticComponent<ItemProps & React.RefAttributes<HTMLDivElement>>
 }
 
 function FormView({
@@ -33,6 +35,7 @@ function FormView({
   setArriveTime,
   useCal,
   searchClicked,
+  itemComponent
 }: FormViewProps) {
   const theme = useMantineTheme()
   return (
@@ -46,6 +49,8 @@ function FormView({
         placeholder='Drottning Kristinas väg 13'
         name='address'
         required
+        filter={() => true} // API filters the data instead of this component
+        itemComponent={itemComponent}
         style={{ marginTop: theme.spacing.xs }}
       />
       <DateInput
@@ -67,6 +72,8 @@ function FormView({
         placeholder='Drottning Kristinas väg 13'
         name='address'
         required
+        filter={() => true} // API filters the data instead of this component
+        itemComponent={itemComponent}
         style={{ marginTop: theme.spacing.xs }}
       />
       <TimeInput
