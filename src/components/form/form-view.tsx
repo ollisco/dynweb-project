@@ -17,7 +17,7 @@ interface FormViewProps {
   setArriveTime: (value: string) => void
   useCal: React.MouseEventHandler<HTMLButtonElement>
   searchClicked: React.MouseEventHandler<HTMLButtonElement>
-  itemComponent:React.ForwardRefExoticComponent<ItemProps & React.RefAttributes<HTMLDivElement>>
+  itemComponent: React.ForwardRefExoticComponent<ItemProps & React.RefAttributes<HTMLDivElement>>
 }
 
 function FormView({
