@@ -1,11 +1,14 @@
 import FormView from './form-view'
 import { calAuth, calIsAuthed, getFirstEvent } from '../../calendarSource'
 import { createCoordsObj, getTrafficInfo } from '../../tripSource'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { getSuggestions } from '../../mapsSource'
 import { debounce } from 'lodash'
+import { db } from '../../Firebase'
+import { UserCredential } from 'firebase/auth'
 
 interface FormPresenterProps {
+  user: UserCredential | null
   homeAddress: string | undefined
   setHomeAddress: (value: string) => void
   setRoute: (destionationAddress: string, leaveTime: string, arriveTime: string) => void
@@ -24,6 +27,16 @@ function FormPresenter(props: FormPresenterProps) {
   const [date, setDate] = useState<Date>(new Date())
   const [arriveTime, setArriveTime] = useState<string>('')
 
+  useEffect(() => {
+    db.collection('users').doc(props.user!.user.uid).get().then(doc => {
+    const data = doc.data();
+    if (data) {
+      setOriginAddress(data.homeAddress)
+    }
+  })
+  }, []);
+  
+
   const handleOriginAddressChange = async (value: string) => {
     setOriginAddress(value)
     if (value) {
@@ -33,6 +46,10 @@ function FormPresenter(props: FormPresenterProps) {
       setOriginAddressAutocompleteData([])
     }
   }
+
+  useEffect(() => {
+    handleDestinationAddressChange
+  }, [setOriginAddress]);
 
   const originAddressDebouncedSave = useCallback(
     debounce(async (newValue) => {
@@ -109,4 +126,4 @@ function FormPresenter(props: FormPresenterProps) {
   )
 }
 
-export default FormPresenter
+export default FormPresenter 

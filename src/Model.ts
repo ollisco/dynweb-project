@@ -1,6 +1,7 @@
 import { UserCredential } from '@firebase/auth'
 import { signInWithGoogle } from './Firebase'
 import { makeAutoObservable } from 'mobx'
+import { db } from './Firebase';
 
 export interface Coordinates {
   latitude: string
@@ -14,6 +15,7 @@ class Model {
   leaveTime: string | undefined
   arriveTime: string | undefined
   routeLoading: boolean
+
 
   constructor(user: UserCredential | null = null) {
     makeAutoObservable(this)
@@ -30,6 +32,7 @@ class Model {
     this.routeLoading = false
   }
 
+
   onLogin(user: UserCredential | null) {
     this.user = user
   }
@@ -41,6 +44,9 @@ class Model {
 
   setHomeAddress(address: string) {
     this.homeAddress = address
+    db.collection('users').doc(this.user?.user.uid).set({
+      homeAddress: this.homeAddress
+    })
   }
 
   setRoute(destionationAddress: string, leaveTime: string, arriveTime: string) {
