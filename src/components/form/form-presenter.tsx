@@ -1,13 +1,14 @@
 import FormView from './form-view'
 import { calAuth, calIsAuthed, getFirstEvent } from '../../calendarSource'
 import { createCoordsObj, getTrafficInfo } from '../../tripSource'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { getSuggestions } from '../../mapsSource'
 import { debounce } from 'lodash'
 
 interface FormPresenterProps {
   homeAddress: string | undefined
   setHomeAddress: (value: string) => void
+  saveHomeAddress: (value: string) => void
   setRoute: (destionationAddress: string, leaveTime: string, arriveTime: string) => void
   setRouteLoading: (value: boolean) => void
 }
@@ -28,6 +29,10 @@ function FormPresenter(props: FormPresenterProps) {
   const [calLoading, setCalLoading] = useState<boolean>(false)
   const [calError, setCalError] = useState<string>('')
   const [calMessage, setCalMessage] = useState<string>('')
+
+  useEffect(() => {
+    if (props.homeAddress) setOriginAddress(props.homeAddress)
+  }, [props.homeAddress])
 
   const handleOriginAddressChange = async (value: string) => {
     setOriginAddress(value)
@@ -102,6 +107,7 @@ function FormPresenter(props: FormPresenterProps) {
       const trafficInfo = await getTrafficInfo(coordsObj)
       const originTime = trafficInfo.Trip.pop().Origin.time.substring(0, 5)
       props.setHomeAddress(originAddress)
+      props.saveHomeAddress(originAddress)
       props.setRoute(destinationAddress, originTime, arriveTime)
       props.setRouteLoading(false)
     }

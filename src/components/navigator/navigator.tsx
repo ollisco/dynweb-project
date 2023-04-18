@@ -24,6 +24,7 @@ const Navigator = observer(({ model }: NavigatorProps) => {
               <FormPresenter
                 homeAddress={model.homeAddress}
                 setHomeAddress={model.setHomeAddress}
+                saveHomeAddress={model.saveHomeAddress}
                 setRoute={model.setRoute}
                 setRouteLoading={model.setRouteLoading}
               />
