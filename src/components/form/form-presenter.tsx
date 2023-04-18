@@ -4,13 +4,11 @@ import { createCoordsObj, getTrafficInfo } from '../../tripSource'
 import { useCallback, useEffect, useState } from 'react'
 import { getSuggestions } from '../../mapsSource'
 import { debounce } from 'lodash'
-import { db } from '../../Firebase'
-import { UserCredential } from 'firebase/auth'
 
 interface FormPresenterProps {
-  user: UserCredential | null
   homeAddress: string | undefined
   setHomeAddress: (value: string) => void
+  saveHomeAddress: (value: string) => void
   setRoute: (destionationAddress: string, leaveTime: string, arriveTime: string) => void
   setRouteLoading: (value: boolean) => void
 }
@@ -28,14 +26,8 @@ function FormPresenter(props: FormPresenterProps) {
   const [arriveTime, setArriveTime] = useState<string>('')
 
   useEffect(() => {
-    db.collection('users').doc(props.user!.user.uid).get().then(doc => {
-    const data = doc.data();
-    if (data) {
-      setOriginAddress(data.homeAddress)
-    }
-  })
-  }, []);
-  
+    if (props.homeAddress) setOriginAddress(props.homeAddress)
+  }, [props.homeAddress])
 
   const handleOriginAddressChange = async (value: string) => {
     setOriginAddress(value)
@@ -46,10 +38,6 @@ function FormPresenter(props: FormPresenterProps) {
       setOriginAddressAutocompleteData([])
     }
   }
-
-  useEffect(() => {
-    handleDestinationAddressChange
-  }, [setOriginAddress]);
 
   const originAddressDebouncedSave = useCallback(
     debounce(async (newValue) => {
@@ -101,6 +89,7 @@ function FormPresenter(props: FormPresenterProps) {
       const trafficInfo = await getTrafficInfo(coordsObj)
       const originTime = trafficInfo.Trip.pop().Origin.time.substring(0, 5)
       props.setHomeAddress(originAddress)
+      props.saveHomeAddress(originAddress)
       props.setRoute(destinationAddress, originTime, arriveTime)
       props.setRouteLoading(false)
     }
@@ -126,4 +115,4 @@ function FormPresenter(props: FormPresenterProps) {
   )
 }
 
-export default FormPresenter 
+export default FormPresenter
