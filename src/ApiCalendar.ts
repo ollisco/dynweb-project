@@ -35,6 +35,7 @@ interface TimeCalendarType {
   dateTime?: string
   timeZone: string
 }
+
 interface ExtendedTokenClient extends google.accounts.oauth2.TokenClient {
   callback?: (resp: any) => void
   error_callback?: (resp: any) => void
@@ -49,7 +50,6 @@ class ApiCalendar {
     try {
       this.initGapiClient = this.initGapiClient.bind(this)
       this.handleSignoutClick = this.handleSignoutClick.bind(this)
-      this.setToken = this.setToken.bind(this)
       this.getToken = this.getToken.bind(this)
       this.handleAuthClick = this.handleAuthClick.bind(this)
       this.createEvent = this.createEvent.bind(this)
@@ -117,10 +117,6 @@ class ApiCalendar {
         callback: (): void => {},
       })
     }
-  }
-
-  public setToken(token: gapi.client.TokenObject) {
-    gapi.client.setToken(token)
   }
 
   public getToken() {
