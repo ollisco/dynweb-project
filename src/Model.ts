@@ -1,5 +1,5 @@
 import { UserCredential } from '@firebase/auth'
-import { signInWithGoogle } from './Firebase'
+import { signInWithGoogle, loadData, saveData } from './Firebase'
 import { makeAutoObservable } from 'mobx'
 
 export interface Coordinates {
@@ -15,14 +15,15 @@ class Model {
   arriveTime: string | undefined
   routeLoading: boolean
 
-  constructor(user: UserCredential | null = null) {
+  constructor() {
     makeAutoObservable(this)
-    this.user = user
-    this.onLogin = this.onLogin.bind(this)
     this.signIn = this.signIn.bind(this)
+    this.setUser = this.setUser.bind(this)
     this.setHomeAddress = this.setHomeAddress.bind(this)
+    this.saveHomeAddress = this.saveHomeAddress.bind(this)
     this.setRoute = this.setRoute.bind(this)
     this.setRouteLoading = this.setRouteLoading.bind(this)
+    this.user = null
     this.homeAddress = undefined
     this.destinationAddress = undefined
     this.leaveTime = undefined
@@ -30,17 +31,27 @@ class Model {
     this.routeLoading = false
   }
 
-  onLogin(user: UserCredential | null) {
-    this.user = user
+  async signIn() {
+    try {
+      const user = await signInWithGoogle()
+      this.setUser(user)
+      const data = await loadData(user)
+      if (data) this.setHomeAddress(data.homeAddress)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
-  signIn() {
-    const onError = (error: unknown) => null
-    signInWithGoogle(this.onLogin, onError)
+  setUser(user: UserCredential) {
+    this.user = user
   }
 
   setHomeAddress(address: string) {
     this.homeAddress = address
+  }
+
+  saveHomeAddress(address: string) {
+    if (this.user) saveData(this.user, { homeAddress: address })
   }
 
   setRoute(destionationAddress: string, leaveTime: string, arriveTime: string) {

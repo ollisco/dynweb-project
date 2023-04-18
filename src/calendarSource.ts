@@ -37,30 +37,27 @@ function getDaysEvents(date: Date, calendar: string | undefined = undefined) {
     })
   }
 
-  function addDays(date: Date, days: number) {
-    const result = new Date(date)
-    result.setDate(result.getDate() + days)
-    return result
+  function removeBadEvents(events: [event]) {
+    return events.filter((event: event) => {
+      return event.start && event.start.substring(0, 10) == date.toISOString().substring(0, 10)
+    })
   }
 
   return gcal
     .listEvents({
       timeMin: date.toISOString(),
-      timeMax: addDays(date, 1).toISOString(),
-      maxResults: 20,
+      timeMax: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, date.getHours()).toISOString(),
+      maxResults: 10,
     })
     .then(extractData)
+    .then(removeBadEvents)
 }
 
-function getFirstEvent(date: Date) {
-  function findFirstWithLocation(events: [event]) {
-    return events.find((event: event) => {
-      return event.location
-    })
-  }
-
-  return getDaysEvents(date).then(findFirstWithLocation)
+async function getFirstEvent(date: Date) {
+  const events = await getDaysEvents(date)
+  if (events) return events[0]
+  else return null
 }
 
 export type { event }
-export { calAuth, calIsAuthed, calSignOut, getFirstEvent }
+export { calAuth, calIsAuthed, getFirstEvent }

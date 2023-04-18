@@ -1,7 +1,7 @@
 import FormView from './form-view'
 import { calAuth, calIsAuthed, getFirstEvent } from '../../calendarSource'
 import { createCoordsObj, getTrafficInfo } from '../../tripSource'
-import { LegacyRef, forwardRef, useCallback, useState } from 'react'
+import { LegacyRef, forwardRef, useCallback, useEffect, useState } from 'react'
 import { getSuggestions } from '../../mapsSource'
 import { debounce } from 'lodash'
 import { Group, Text, SelectItemProps, MantineColor } from '@mantine/core'
@@ -9,6 +9,7 @@ import { Group, Text, SelectItemProps, MantineColor } from '@mantine/core'
 interface FormPresenterProps {
   homeAddress: string | undefined
   setHomeAddress: (value: string) => void
+  saveHomeAddress: (value: string) => void
   setRoute: (destionationAddress: string, leaveTime: string, arriveTime: string) => void
   setRouteLoading: (value: boolean) => void
 }
@@ -42,7 +43,9 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 SelectItem.displayName = 'SelectItem'
 
 function FormPresenter(props: FormPresenterProps) {
-  const [originAddress, setOriginAddress] = useState<string>('')
+  const [originAddress, setOriginAddress] = useState<string>(
+    props.homeAddress ? props.homeAddress : '',
+  )
   const [originAddressLoading, setOriginAddressLoading] = useState(false)
   const [originAddressAutocompleteData, setOriginAddressAutocompleteData] = useState<string[]>([])
   const [destinationAddress, setDestinationAddress] = useState<string>('')
@@ -50,8 +53,15 @@ function FormPresenter(props: FormPresenterProps) {
   const [destinationAddressAutocompleteData, setDestinationAddressAutocompleteData] = useState<
     string[]
   >([])
-  const [date, setDate] = useState<Date>(new Date())
+  const [date, setDate] = useState<Date>(new Date(new Date().setUTCHours(0, 0, 0, 0)))
   const [arriveTime, setArriveTime] = useState<string>('')
+  const [calLoading, setCalLoading] = useState<boolean>(false)
+  const [calError, setCalError] = useState<string>('')
+  const [calMessage, setCalMessage] = useState<string>('')
+
+  useEffect(() => {
+    if (props.homeAddress) setOriginAddress(props.homeAddress)
+  }, [props.homeAddress])
 
   const handleOriginAddressChange = async (value: string) => {
     setOriginAddress(value)
@@ -100,12 +110,25 @@ function FormPresenter(props: FormPresenterProps) {
   )
 
   async function useCal() {
-    if (!calIsAuthed()) await calAuth()
-    if (calIsAuthed() && date) {
-      const event = await getFirstEvent(date)
-      setDestinationAddress(event.location)
-      setArriveTime(event.start.substring(11, 16))
+    setCalLoading(true)
+    setCalError('')
+    setCalMessage('')
+    if (!calIsAuthed()) {
+      try {
+        await calAuth()
+      } catch (error) {
+        setCalError('Authentication failed, please try again.')
+      }
     }
+    if (calIsAuthed()) {
+      const event = await getFirstEvent(date)
+      if (event) {
+        setArriveTime(event.start.substring(11, 16))
+        if (event.location) setDestinationAddress(event.location)
+        setCalMessage(event.title)
+      } else setCalError('No events found in the calendar this day.')
+    } else setCalError('Authentication failed, please try again.')
+    setCalLoading(false)
   }
 
   async function performSearch() {
@@ -121,6 +144,7 @@ function FormPresenter(props: FormPresenterProps) {
       const trafficInfo = await getTrafficInfo(coordsObj)
       const originTime = trafficInfo.Trip.pop().Origin.time.substring(0, 5)
       props.setHomeAddress(originAddress)
+      props.saveHomeAddress(originAddress)
       props.setRoute(destinationAddress, originTime, arriveTime)
       props.setRouteLoading(false)
     }
@@ -141,6 +165,9 @@ function FormPresenter(props: FormPresenterProps) {
       arriveTime={arriveTime}
       setArriveTime={setArriveTime}
       useCal={useCal}
+      calLoading={calLoading}
+      calError={calError}
+      calMessage={calMessage}
       searchClicked={performSearch}
       itemComponent={SelectItem}
     />

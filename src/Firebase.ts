@@ -1,22 +1,31 @@
-import { initializeApp } from 'firebase/app'
 import { getAuth, GoogleAuthProvider, signInWithPopup, UserCredential } from 'firebase/auth'
 import { firebaseConfig } from './apiconf'
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/firestore'
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig)
-export const auth = getAuth(app)
+const app = firebase.initializeApp(firebaseConfig)
+const auth = getAuth(app)
+const db = firebase.firestore()
 
 const provider = new GoogleAuthProvider()
 
-export const signInWithGoogle = (
-  onLogin: (user: UserCredential) => void,
-  onError: (error: unknown) => void,
-) => {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      onLogin(result)
-    })
-    .catch((error) => {
-      onError(error)
+function signInWithGoogle() {
+  return signInWithPopup(auth, provider)
+}
+
+function loadData(user: UserCredential) {
+  return db
+    .collection('users')
+    .doc(user.user.uid)
+    .get()
+    .then((doc) => {
+      return doc.data()
     })
 }
+
+function saveData(user: UserCredential, data: any) {
+  db.collection('users').doc(user.user.uid).set(data)
+}
+
+export { signInWithGoogle, loadData, saveData }
