@@ -72,7 +72,7 @@ function FormPresenter(props: FormPresenterProps) {
       }))
       setOriginAddressAutocompleteData(rep)
       setOriginAddressLoading(false)
-    }, 1000),
+    }, 500, {'maxWait': 2000}),
     [],
   )
 
@@ -95,7 +95,7 @@ function FormPresenter(props: FormPresenterProps) {
       }))
       setDestinationAddressAutocompleteData(rep)
       setDestinationAddressLoading(false)
-    }, 1000),
+    }, 500, {'maxWait': 2000}),
     [],
   )
 
