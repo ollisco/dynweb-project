@@ -13,7 +13,9 @@ interface FormPresenterProps {
 }
 
 function FormPresenter(props: FormPresenterProps) {
-  const [originAddress, setOriginAddress] = useState<string>('')
+  const [originAddress, setOriginAddress] = useState<string>(
+    props.homeAddress ? props.homeAddress : '',
+  )
   const [originAddressLoading, setOriginAddressLoading] = useState(false)
   const [originAddressAutocompleteData, setOriginAddressAutocompleteData] = useState<string[]>([])
   const [destinationAddress, setDestinationAddress] = useState<string>('')
@@ -21,8 +23,11 @@ function FormPresenter(props: FormPresenterProps) {
   const [destinationAddressAutocompleteData, setDestinationAddressAutocompleteData] = useState<
     string[]
   >([])
-  const [date, setDate] = useState<Date>(new Date())
+  const [date, setDate] = useState<Date>(new Date(new Date().setUTCHours(0, 0, 0, 0)))
   const [arriveTime, setArriveTime] = useState<string>('')
+  const [calLoading, setCalLoading] = useState<boolean>(false)
+  const [calError, setCalError] = useState<string>('')
+  const [calMessage, setCalMessage] = useState<string>('')
 
   const handleOriginAddressChange = async (value: string) => {
     setOriginAddress(value)
@@ -63,12 +68,25 @@ function FormPresenter(props: FormPresenterProps) {
   )
 
   async function useCal() {
-    if (!calIsAuthed()) await calAuth()
-    if (calIsAuthed() && date) {
-      const event = await getFirstEvent(date)
-      setDestinationAddress(event.location)
-      setArriveTime(event.start.substring(11, 16))
+    setCalLoading(true)
+    setCalError('')
+    setCalMessage('')
+    if (!calIsAuthed()) {
+      try {
+        await calAuth()
+      } catch (error) {
+        setCalError('Authentication failed, please try again.')
+      }
     }
+    if (calIsAuthed()) {
+      const event = await getFirstEvent(date)
+      if (event) {
+        setArriveTime(event.start.substring(11, 16))
+        if (event.location) setDestinationAddress(event.location)
+        setCalMessage(event.title)
+      } else setCalError('No events found in the calendar this day.')
+    } else setCalError('Authentication failed, please try again.')
+    setCalLoading(false)
   }
 
   async function performSearch() {
@@ -104,6 +122,9 @@ function FormPresenter(props: FormPresenterProps) {
       arriveTime={arriveTime}
       setArriveTime={setArriveTime}
       useCal={useCal}
+      calLoading={calLoading}
+      calError={calError}
+      calMessage={calMessage}
       searchClicked={performSearch}
     />
   )

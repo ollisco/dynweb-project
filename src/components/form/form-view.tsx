@@ -1,8 +1,9 @@
 import { DateInput, TimeInput } from '@mantine/dates'
-import { Autocomplete, Button, Loader, useMantineTheme } from '@mantine/core'
+import { Alert, Autocomplete, Button, Loader, useMantineTheme } from '@mantine/core'
+import { IconAlertCircle } from '@tabler/icons-react'
 
 interface FormViewProps {
-  originAddress: string | undefined
+  originAddress: string
   onChangeOriginAddress: (value: string) => void
   originAddressAutocompleteData: string[]
   originAddressLoading: boolean
@@ -15,6 +16,9 @@ interface FormViewProps {
   arriveTime: string
   setArriveTime: (value: string) => void
   useCal: React.MouseEventHandler<HTMLButtonElement>
+  calLoading: boolean
+  calError: string
+  calMessage: string
   searchClicked: React.MouseEventHandler<HTMLButtonElement>
 }
 
@@ -32,6 +36,9 @@ function FormView({
   arriveTime,
   setArriveTime,
   useCal,
+  calLoading,
+  calError,
+  calMessage,
   searchClicked,
 }: FormViewProps) {
   const theme = useMantineTheme()
@@ -57,7 +64,17 @@ function FormView({
         maw={400}
         minDate={new Date()}
       />
-      <Button onClick={useCal}>Use Google Calendar</Button>
+      <Button onClick={useCal} loading={calLoading}>Use Google Calendar</Button>
+      {calError ?
+        <Alert icon={<IconAlertCircle size="1rem" />} title="Bummer!" color="red">
+          {calError}
+        </Alert> : null
+      }
+      {calMessage ?
+        <Alert icon={<IconAlertCircle size="1rem" />} title="Event:" color="blue">
+          {calMessage}
+        </Alert> : null
+      }
       <Autocomplete
         value={destinationAddress}
         data={destinationAddressAutocompleteData}
