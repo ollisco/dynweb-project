@@ -1,5 +1,6 @@
 import { MAPS_API_KEY, GEOAPIFY_KEY } from './apiconf'
 import axios from 'axios'
+import { ItemProps } from './components/form/form-presenter'
 
 async function addressToCoords(address: string) {
   try {
@@ -32,8 +33,12 @@ async function getSuggestions(value: string) {
       },
     })
     console.log(response)
-    return response.data.results.map((item: { formatted: string }) => {
-      return item.formatted
+    return response.data.results.map((item: { address_line1: string; address_line2: string }, index: number) => {
+      const returnObj = {
+        street: item.address_line1,
+        postcodeAndCity: item.address_line2,
+      }
+      return returnObj
     })
   } catch (error) {
     console.error(error)

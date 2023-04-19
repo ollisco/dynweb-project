@@ -1,4 +1,5 @@
 import { DateInput, TimeInput } from '@mantine/dates'
+import { ItemProps } from './form-presenter'
 import { Alert, Autocomplete, Button, Loader, useMantineTheme } from '@mantine/core'
 import { IconAlertCircle } from '@tabler/icons-react'
 
@@ -20,6 +21,7 @@ interface FormViewProps {
   calError: string
   calMessage: string
   searchClicked: React.MouseEventHandler<HTMLButtonElement>
+  itemComponent: React.ForwardRefExoticComponent<ItemProps & React.RefAttributes<HTMLDivElement>>
 }
 
 function FormView({
@@ -40,6 +42,7 @@ function FormView({
   calError,
   calMessage,
   searchClicked,
+  itemComponent
 }: FormViewProps) {
   const theme = useMantineTheme()
   return (
@@ -53,6 +56,8 @@ function FormView({
         placeholder='Drottning Kristinas väg 13'
         name='address'
         required
+        filter={() => true} // API filters the data instead of this component
+        itemComponent={itemComponent}
         style={{ marginTop: theme.spacing.xs }}
       />
       <DateInput
@@ -84,6 +89,8 @@ function FormView({
         placeholder='Drottning Kristinas väg 13'
         name='address'
         required
+        filter={() => true} // API filters the data instead of this component
+        itemComponent={itemComponent}
         style={{ marginTop: theme.spacing.xs }}
       />
       <TimeInput
