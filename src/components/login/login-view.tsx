@@ -1,57 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import GoogleButton from '../basic/googlebutton'
-import {
-  Text,
-  Paper,
-  Group,
-  PaperProps,
-  Center,
-  Box,
-  Button,
-  Stack,
-  BackgroundImage,
-  Image,
-  Overlay,
-  Alert,
-} from '@mantine/core'
-//import BG from '../../assets/bg.jpg'
-
-import { useNavigate } from 'react-router'
-import { IconAlertCircle } from '@tabler/icons-react'
-import { UserCredential } from '@firebase/auth'
-import Model from '../../Model'
+import { Text, Paper, Group, Box, Button, Stack, Image } from '@mantine/core'
 import GoogleIcon from '../basic/googleicon'
-import { observer } from 'mobx-react'
 
 interface LoginViewProps {
   onSignIn: () => void
-  user: UserCredential | null
-  //model: Model
 }
 
-function LoginView ({ onSignIn, user }: LoginViewProps) {
-  const bgLink = "https://arga.ae/assets/uploads/content/_2000xAUTO_crop_center-center_none/iStock-1186679390.jpg"
-  //const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const navigate = useNavigate()
-  useEffect(() => {
-    if (user) {
-      navigate('/')
-    }
-  }, [user])
-
-  function onSignInACB() {
-    onSignIn()
-  }
-
-  // function onError(message?: unknown) {
-  //   if (typeof message === 'string') setErrorMessage(message)
-  //   else setErrorMessage('Something went wrong when authenticating with Google')
-  // }
-
+function LoginView({ onSignIn }: LoginViewProps) {
   return (
     <Box mih='100vh'>
       <Box pos='relative'>
-        <Image src={bgLink} height='100vh' w='100vw' fit='cover' sx={{ filter: 'blur(2px)' }} />
+        <Image
+          src={'/assets/background.jpg'}
+          width='100vw'
+          height='100vh'
+          fit='cover'
+          sx={{ filter: 'blur(5px)' }}
+        />
         <Paper
           top='50%'
           left='50%'
@@ -65,27 +29,13 @@ function LoginView ({ onSignIn, user }: LoginViewProps) {
           withBorder
         >
           <Stack justify='space-between' h='100%'>
-            <Text size='lg' weight={500}>
-              Welcome to Komitid, please login with Google
+            <Text size='lg' weight={500} ta='center' fz="xl" fw={700}>
+              Welcome back to Komitid!
             </Text>
-            {/* {props.errorMessage && (
-                  <Alert
-                    title='Login Failed'
-                    color='red'
-                    withCloseButton
-                    icon={<IconAlertCircle size={16} />}
-                    onClose={() => setErrorMessage(null)}
-                  >
-                    {errorMessage}
-                  </Alert>
-                )} */}
             <Group grow mb='md' mt='md'>
-              <Button
-                onClick={onSignInACB}
-                leftIcon={<GoogleIcon />}
-                variant='default'
-                color='gray'
-              />
+              <Button onClick={onSignIn} leftIcon={<GoogleIcon />} variant='default' color='gray' radius="xl">
+                Continue with Google
+              </Button>
             </Group>
           </Stack>
         </Paper>

@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Model from '../../Model'
-import HelloWorld from '../hello-world/hello-world'
 import LoginPresenter from '../login/login-presenter'
 import RequireAuth from './require-auth'
 import { observer } from 'mobx-react'
@@ -14,9 +13,8 @@ interface NavigatorProps {
 const Navigator = observer(({ model }: NavigatorProps) => {
   return (
     <Routes>
-      <Route path='login' element={<LoginPresenter model={model} />} />
+      <Route path='login' element={<LoginPresenter user={model.user} signIn={model.signIn} />} />
       <Route element={<RequireAuth />}>
-        <Route path='hello' element={<HelloWorld />} />
         <Route
           path=''
           element={

@@ -1,45 +1,31 @@
-import { useToggle, upperFirst } from '@mantine/hooks'
-import GoogleButton from '../basic/googlebutton'
-import {
-  Text,
-  Paper,
-  Group,
-  PaperProps,
-  Center,
-  Box,
-  Stack,
-  BackgroundImage,
-  Image,
-  Overlay,
-  Alert,
-} from '@mantine/core'
+import { observer } from 'mobx-react'
+import { UserCredential } from 'firebase/auth'
 import { useNavigate } from 'react-router'
-import { useEffect, useState } from 'react'
-import { IconAlertCircle } from '@tabler/icons-react'
-import { UserCredential } from '@firebase/auth'
+import { useEffect } from 'react'
 import useAuth from './user-context'
 import LoginView from './login-view'
-import Model from '../../Model'
-import { observer } from 'mobx-react'
 
 interface LoginPresenterProps {
-  model: Model
+  user: UserCredential | null
+  signIn: () => void
 }
 
-const LoginPresenter = observer(({ model }: LoginPresenterProps) => {
-  // const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const { user, setUser } = useAuth()
+const LoginPresenter = observer((props: LoginPresenterProps) => {
+  const { setUser } = useAuth()
+  const navigate = useNavigate()
+
   useEffect(() => {
-    if (model.user) {
-      setUser(model.user)
+    if (props.user) {
+      setUser(props.user)
+      navigate('/')
     }
-  }, [model.user, setUser])
+  }, [props.user])
 
-  function onSignInACB() {
-    model.signIn()
-  }
-
-  return <LoginView onSignIn={onSignInACB} user={user} />
+  return (
+    <LoginView
+      onSignIn={props.signIn}
+    />
+  )
 })
 
 export default LoginPresenter
