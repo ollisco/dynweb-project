@@ -20,8 +20,8 @@ async function createCoordsObj(
   time: string,
   searchForArrival: number,
 ) {
-  let originCoords = await addressToCoords(originAddress)
-  let destinationCoords = await addressToCoords(destinationAddress)
+  const originCoords = await addressToCoords(originAddress)
+  const destinationCoords = await addressToCoords(destinationAddress)
   const coordsObj: CoordsObj = {
     originCoordLat: originCoords?.latitude,
     originCoordLong: originCoords?.longitude,
