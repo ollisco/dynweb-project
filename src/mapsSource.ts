@@ -22,6 +22,7 @@ async function addressToCoords(address: string) {
 }
 
 async function getSuggestions(value: string) {
+  if (value.trim().length < 3) return []  // API won't give results for strings shorter than 3 letters
   try {
     const response = await axios.get('https://api.geoapify.com/v1/geocode/autocomplete', {
       params: {
@@ -33,13 +34,15 @@ async function getSuggestions(value: string) {
       },
     })
     console.log(response)
-    return response.data.results.map((item: { address_line1: string; address_line2: string }, index: number) => {
-      const returnObj = {
-        street: item.address_line1,
-        postcodeAndCity: item.address_line2,
-      }
-      return returnObj
-    })
+    return response.data.results.map(
+      (item: { address_line1: string; address_line2: string }) => {
+        const returnObj = {
+          street: item.address_line1,
+          postcodeAndCity: item.address_line2,
+        }
+        return returnObj
+      },
+    )
   } catch (error) {
     console.error(error)
     return []

@@ -22,6 +22,7 @@ export interface ItemProps extends SelectItemProps {
   postcodeAndCity: string
 }
 
+// Style search results
 const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
   (
     { street, postcodeAndCity, ...others }: ItemProps,
@@ -59,55 +60,57 @@ function FormPresenter(props: FormPresenterProps) {
   const [calError, setCalError] = useState<string>('')
   const [calMessage, setCalMessage] = useState<string>('')
 
+  // Load saved home address
   useEffect(() => {
     if (props.homeAddress) setOriginAddress(props.homeAddress)
   }, [props.homeAddress])
 
-  const handleOriginAddressChange = async (value: string) => {
+  const debouncedGetSuggestions = useCallback( // useCallback caches functions between rerenders
+    debounce(
+      async (
+        newValue: string,
+        setAutocompleteData: (arg0: never[]) => void,
+        setLoading: (arg0: boolean) => void,
+      ) => {
+        const suggestions = await getSuggestions(newValue)
+        const formattedSuggestions = suggestions.map(
+          (item: { postcodeAndCity: string; street: string }) => ({
+            ...item,
+            value: item.street + ', ' + item.postcodeAndCity, // this is what will be shown if selected
+          }),
+        )
+        setAutocompleteData(formattedSuggestions)
+        setLoading(false)
+      },
+      500, // only load search results when user is not typing
+      { maxWait: 2000 }, // after a maximum of 2 seconds the results will be showed either way
+    ),
+    [],
+  )
+
+  const handleAddressChange = (
+    value: string,
+    setAutocompleteData: (arg0: never[]) => void,
+    setLoading: (arg0: boolean) => void,
+  ) => {
+    setAutocompleteData([])
+    if (value) {
+      setLoading(true)
+      debouncedGetSuggestions(value, setAutocompleteData, setLoading)
+    } else {
+      setLoading(false)
+    }
+  }
+
+  const handleOriginAddressChange = (value: string) => {
     setOriginAddress(value)
-    if (value) {
-      setOriginAddressLoading(true)
-      originAddressDebouncedSave(value)
-    } else {
-      setOriginAddressAutocompleteData([])
-    }
+    handleAddressChange(value, setOriginAddressAutocompleteData, setOriginAddressLoading)
   }
 
-  const originAddressDebouncedSave = useCallback(
-    debounce(async (newValue) => {
-      let rep = await getSuggestions(newValue)
-      rep = rep.map((item: { postcodeAndCity: string; street: string }) => ({
-        ...item,
-        value: item.street + ', ' + item.postcodeAndCity, // this is what will be shown if selected
-      }))
-      setOriginAddressAutocompleteData(rep)
-      setOriginAddressLoading(false)
-    }, 500, {'maxWait': 2000}),
-    [],
-  )
-
-  const handleDestinationAddressChange = async (value: string) => {
+  const handleDestinationAddressChange = (value: string) => {
     setDestinationAddress(value)
-    if (value) {
-      setDestinationAddressLoading(true)
-      destinationAddressDebouncedSave(value)
-    } else {
-      setDestinationAddressAutocompleteData([])
-    }
+    handleAddressChange(value, setDestinationAddressAutocompleteData, setDestinationAddressLoading)
   }
-
-  const destinationAddressDebouncedSave = useCallback(
-    debounce(async (newValue) => {
-      let rep = await getSuggestions(newValue)
-      rep = rep.map((item: { postcodeAndCity: string; street: string }) => ({
-        ...item,
-        value: item.street + ', ' + item.postcodeAndCity, // this is what will be shown if selected
-      }))
-      setDestinationAddressAutocompleteData(rep)
-      setDestinationAddressLoading(false)
-    }, 500, {'maxWait': 2000}),
-    [],
-  )
 
   async function useCal() {
     setCalLoading(true)
