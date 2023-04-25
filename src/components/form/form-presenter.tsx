@@ -43,9 +43,7 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 SelectItem.displayName = 'SelectItem'
 
 function FormPresenter(props: FormPresenterProps) {
-  const [originAddress, setOriginAddress] = useState<string>(
-    props.homeAddress ? props.homeAddress : '',
-  )
+  const [originAddress, setOriginAddress] = useState<string>('')
   const [originAddressLoading, setOriginAddressLoading] = useState(false)
   const [originAddressAutocompleteData, setOriginAddressAutocompleteData] = useState<string[]>([])
   const [destinationAddress, setDestinationAddress] = useState<string>('')
@@ -131,7 +129,7 @@ function FormPresenter(props: FormPresenterProps) {
       const event = await getFirstEvent(date)
       if (event) {
         setArriveTime(event.start.substring(11, 16))
-        if (event.location) setDestinationAddress(event.location)
+        if (event.location) handleDestinationAddressChange(event.location)
         setCalMessage(event.title)
       } else setCalError('No events found in the calendar this day.')
     } else setCalError('Authentication failed, please try again.')
@@ -150,25 +148,21 @@ function FormPresenter(props: FormPresenterProps) {
       )
 
       // Check for errors in addresses.
-      let error = false
       if (!coordsObj.originCoordLat || !coordsObj.originCoordLong) {
-        setOriginAddressError('Could not find address')
-        error = true
+        setOriginAddressError('Please check your input and try again.')
+      } else if (!coordsObj.destCoordLat || !coordsObj.destCoordLong) {
+        setDestinationAddressError('Please check your input and try again.')
+      } else {
+        try {
+          const trafficInfo = await getTrafficInfo(coordsObj)
+          const originTime = trafficInfo.data.Trip.pop().Origin.time.substring(0, 5)
+          props.setHomeAddress(originAddress)
+          props.saveHomeAddress(originAddress)
+          props.setRoute(destinationAddress, originTime, arriveTime)
+        } catch (error) {
+          setDestinationAddressError('Itenarary could not be calculated. Please try a different address.')
+        }
       }
-      if (!coordsObj.destCoordLat || !coordsObj.destCoordLong) {
-        setDestinationAddressError('Could not find address')
-        error = true
-      }
-      if (error) {
-        props.setRouteLoading(false)
-        return
-      }
-      
-      const trafficInfo = await getTrafficInfo(coordsObj)
-      const originTime = trafficInfo.Trip.pop().Origin.time.substring(0, 5)
-      props.setHomeAddress(originAddress)
-      props.saveHomeAddress(originAddress)
-      props.setRoute(destinationAddress, originTime, arriveTime)
       props.setRouteLoading(false)
     }
   }
@@ -179,10 +173,12 @@ function FormPresenter(props: FormPresenterProps) {
       onChangeOriginAddress={handleOriginAddressChange}
       originAddressAutocompleteData={originAddressAutocompleteData}
       originAddressLoading={originAddressLoading}
+      originAddressError={originAddressError}
       destinationAddress={destinationAddress}
       onChangeDestinationAddress={handleDestinationAddressChange}
       destinationAddressAutocompleteData={destinationAddressAutocompleteData}
       destinationAddressLoading={destinationAddressLoading}
+      destinationAddressError={destinationAddressError}
       date={date}
       setDate={setDate}
       arriveTime={arriveTime}
@@ -193,8 +189,6 @@ function FormPresenter(props: FormPresenterProps) {
       calMessage={calMessage}
       searchClicked={performSearch}
       itemComponent={SelectItem}
-      destinationAddressError={destinationAddressError}
-      originAddressError={originAddressError}
     />
   )
 }

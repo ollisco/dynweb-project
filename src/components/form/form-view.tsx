@@ -8,10 +8,12 @@ interface FormViewProps {
   onChangeOriginAddress: (value: string) => void
   originAddressAutocompleteData: string[]
   originAddressLoading: boolean
+  originAddressError: string
   destinationAddress: string
   onChangeDestinationAddress: (value: string) => void
   destinationAddressAutocompleteData: string[]
   destinationAddressLoading: boolean
+  destinationAddressError: string
   date: Date
   setDate: (value: Date) => void
   arriveTime: string
@@ -22,104 +24,81 @@ interface FormViewProps {
   calMessage: string
   searchClicked: React.MouseEventHandler<HTMLButtonElement>
   itemComponent: React.ForwardRefExoticComponent<ItemProps & React.RefAttributes<HTMLDivElement>>
-  destinationAddressError: string
-  originAddressError: string
 }
 
-function FormView({
-  originAddress,
-  onChangeOriginAddress,
-  originAddressAutocompleteData,
-  originAddressLoading,
-  destinationAddress,
-  onChangeDestinationAddress,
-  destinationAddressAutocompleteData,
-  destinationAddressLoading,
-  date,
-  setDate,
-  arriveTime,
-  setArriveTime,
-  useCal,
-  calLoading,
-  calError,
-  calMessage,
-  searchClicked,
-  itemComponent,
-  originAddressError,
-  destinationAddressError,
-}: FormViewProps) {
+function FormView(props: FormViewProps) {
   const theme = useMantineTheme()
   return (
     <div>
       <Autocomplete
-        value={originAddress}
-        data={originAddressAutocompleteData}
-        onChange={onChangeOriginAddress}
-        rightSection={originAddressLoading ? <Loader size='1rem' /> : null}
+        value={props.originAddress}
+        data={props.originAddressAutocompleteData}
+        onChange={props.onChangeOriginAddress}
+        rightSection={props.originAddressLoading ? <Loader size='1rem' /> : null}
         label='Home address'
         placeholder='Drottning Kristinas väg 13'
         name='address'
         required
         filter={() => true} // API filters the data instead of this component
-        itemComponent={itemComponent}
+        itemComponent={props.itemComponent}
         style={{ marginTop: theme.spacing.xs }}
       />
-      {originAddressError ? (
-        <Alert icon={<IconAlertCircle size='1rem' />} title='Uh oh!' color='red'>
-          {originAddressError}
+      {props.originAddressError ? (
+        <Alert icon={<IconAlertCircle size='1rem' />} title='Invalid address.' color='red'>
+          {props.originAddressError}
         </Alert>
       ) : null}
       <DateInput
         label='Day of travel'
         placeholder='Select date'
         required
-        value={date}
-        onChange={setDate}
+        value={props.date}
+        onChange={props.setDate}
         maw={400}
         minDate={new Date()}
       />
-      <Button onClick={useCal} loading={calLoading}>
+      <Button onClick={props.useCal} loading={props.calLoading}>
         Use Google Calendar
       </Button>
-      {calError ? (
+      {props.calError ? (
         <Alert icon={<IconAlertCircle size='1rem' />} title='Bummer!' color='red'>
-          {calError}
+          {props.calError}
         </Alert>
       ) : null}
-      {calMessage ? (
+      {props.calMessage ? (
         <Alert icon={<IconAlertCircle size='1rem' />} title='Event:' color='blue'>
-          {calMessage}
+          {props.calMessage}
         </Alert>
       ) : null}
       <Autocomplete
-        value={destinationAddress}
-        data={destinationAddressAutocompleteData}
-        onChange={onChangeDestinationAddress}
-        rightSection={destinationAddressLoading ? <Loader size='1rem' /> : null}
+        value={props.destinationAddress}
+        data={props.destinationAddressAutocompleteData}
+        onChange={props.onChangeDestinationAddress}
+        rightSection={props.destinationAddressLoading ? <Loader size='1rem' /> : null}
         label='Destination address'
         placeholder='Drottning Kristinas väg 13'
         name='address'
         required
         filter={() => true} // API filters the data instead of this component
-        itemComponent={itemComponent}
+        itemComponent={props.itemComponent}
         style={{ marginTop: theme.spacing.xs }}
       />
-      {destinationAddressError ? (
-        <Alert icon={<IconAlertCircle size='1rem' />} title='Where is that?' color='red'>
-          {destinationAddressError}
+      {props.destinationAddressError ? (
+        <Alert icon={<IconAlertCircle size='1rem' />} title='Invalid address.' color='red'>
+          {props.destinationAddressError}
         </Alert>
       ) : null}
       <TimeInput
         label='Desired arrival time'
         required
-        value={arriveTime}
+        value={props.arriveTime}
         onChange={(e) => {
-          setArriveTime(e.target.value)
+          props.setArriveTime(e.target.value)
         }}
       />
       <Button
-        onClick={searchClicked}
-        disabled={!(originAddress && destinationAddress && date && arriveTime)}
+        onClick={props.searchClicked}
+        disabled={!(props.originAddress && props.destinationAddress && props.date && props.arriveTime)}
       >
         Search
       </Button>
