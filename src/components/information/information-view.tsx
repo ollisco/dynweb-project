@@ -8,28 +8,22 @@ interface InformationViewProps {
   loading: boolean
 }
 
-function InformationView({
-  originAddress,
-  originTime,
-  destinationAddress,
-  destinationTime,
-  loading,
-}: InformationViewProps) {
+function InformationView(props: InformationViewProps) {
   return (
     <div>
       <h2>Your commute:</h2>
       <div>
-        {loading ? (
+        {props.loading ? (
           <Loader />
         ) : (
           'You should leave ' +
-          originAddress +
+          props.originAddress +
           ' at ' +
-          originTime +
+          props.originTime +
           ' in order to arrive at ' +
-          destinationAddress +
+          props.destinationAddress +
           ' at ' +
-          destinationTime +
+          props.destinationTime +
           '.'
         )}
       </div>

@@ -44,13 +44,7 @@ async function getTrafficInfo(coordsObj: CoordsObj) {
   }
   apiUrl += params.toString()
 
-  try {
-    const response = await axios.get(apiUrl)
-    return response.data
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
+  return axios.get(apiUrl)
 }
 
 function getRelevantInfo(data: any) {
