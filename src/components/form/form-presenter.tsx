@@ -18,7 +18,6 @@ interface FormPresenterProps {
 export interface ItemProps extends SelectItemProps {
   color: MantineColor
   street: string
-  index: number
   postcodeAndCity: string
 }
 
@@ -59,13 +58,16 @@ function FormPresenter(props: FormPresenterProps) {
   const [calLoading, setCalLoading] = useState<boolean>(false)
   const [calError, setCalError] = useState<string>('')
   const [calMessage, setCalMessage] = useState<string>('')
+  const [originAddressError, setOriginAddressError] = useState<string>('')
+  const [destinationAddressError, setDestinationAddressError] = useState<string>('')
 
   // Load saved home address
   useEffect(() => {
     if (props.homeAddress) setOriginAddress(props.homeAddress)
   }, [props.homeAddress])
 
-  const debouncedGetSuggestions = useCallback( // useCallback caches functions between rerenders
+  const debouncedGetSuggestions = useCallback(
+    // useCallback caches functions between rerenders
     debounce(
       async (
         newValue: string,
@@ -104,11 +106,13 @@ function FormPresenter(props: FormPresenterProps) {
 
   const handleOriginAddressChange = (value: string) => {
     setOriginAddress(value)
+    setOriginAddressError('')
     handleAddressChange(value, setOriginAddressAutocompleteData, setOriginAddressLoading)
   }
 
   const handleDestinationAddressChange = (value: string) => {
     setDestinationAddress(value)
+    setDestinationAddressError('')
     handleAddressChange(value, setDestinationAddressAutocompleteData, setDestinationAddressLoading)
   }
 
@@ -144,6 +148,22 @@ function FormPresenter(props: FormPresenterProps) {
         arriveTime,
         1,
       )
+
+      // Check for errors in addresses.
+      let error = false
+      if (!coordsObj.originCoordLat || !coordsObj.originCoordLong) {
+        setOriginAddressError('Could not find address')
+        error = true
+      }
+      if (!coordsObj.destCoordLat || !coordsObj.destCoordLong) {
+        setDestinationAddressError('Could not find address')
+        error = true
+      }
+      if (error) {
+        props.setRouteLoading(false)
+        return
+      }
+      
       const trafficInfo = await getTrafficInfo(coordsObj)
       const originTime = trafficInfo.Trip.pop().Origin.time.substring(0, 5)
       props.setHomeAddress(originAddress)
@@ -173,6 +193,8 @@ function FormPresenter(props: FormPresenterProps) {
       calMessage={calMessage}
       searchClicked={performSearch}
       itemComponent={SelectItem}
+      destinationAddressError={destinationAddressError}
+      originAddressError={originAddressError}
     />
   )
 }

@@ -22,6 +22,8 @@ interface FormViewProps {
   calMessage: string
   searchClicked: React.MouseEventHandler<HTMLButtonElement>
   itemComponent: React.ForwardRefExoticComponent<ItemProps & React.RefAttributes<HTMLDivElement>>
+  destinationAddressError: string
+  originAddressError: string
 }
 
 function FormView({
@@ -42,7 +44,9 @@ function FormView({
   calError,
   calMessage,
   searchClicked,
-  itemComponent
+  itemComponent,
+  originAddressError,
+  destinationAddressError,
 }: FormViewProps) {
   const theme = useMantineTheme()
   return (
@@ -60,6 +64,11 @@ function FormView({
         itemComponent={itemComponent}
         style={{ marginTop: theme.spacing.xs }}
       />
+      {originAddressError ? (
+        <Alert icon={<IconAlertCircle size='1rem' />} title='Uh oh!' color='red'>
+          {originAddressError}
+        </Alert>
+      ) : null}
       <DateInput
         label='Day of travel'
         placeholder='Select date'
@@ -69,17 +78,19 @@ function FormView({
         maw={400}
         minDate={new Date()}
       />
-      <Button onClick={useCal} loading={calLoading}>Use Google Calendar</Button>
-      {calError ?
-        <Alert icon={<IconAlertCircle size="1rem" />} title="Bummer!" color="red">
+      <Button onClick={useCal} loading={calLoading}>
+        Use Google Calendar
+      </Button>
+      {calError ? (
+        <Alert icon={<IconAlertCircle size='1rem' />} title='Bummer!' color='red'>
           {calError}
-        </Alert> : null
-      }
-      {calMessage ?
-        <Alert icon={<IconAlertCircle size="1rem" />} title="Event:" color="blue">
+        </Alert>
+      ) : null}
+      {calMessage ? (
+        <Alert icon={<IconAlertCircle size='1rem' />} title='Event:' color='blue'>
           {calMessage}
-        </Alert> : null
-      }
+        </Alert>
+      ) : null}
       <Autocomplete
         value={destinationAddress}
         data={destinationAddressAutocompleteData}
@@ -93,6 +104,11 @@ function FormView({
         itemComponent={itemComponent}
         style={{ marginTop: theme.spacing.xs }}
       />
+      {destinationAddressError ? (
+        <Alert icon={<IconAlertCircle size='1rem' />} title='Where is that?' color='red'>
+          {destinationAddressError}
+        </Alert>
+      ) : null}
       <TimeInput
         label='Desired arrival time'
         required

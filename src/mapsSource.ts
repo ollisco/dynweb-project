@@ -1,6 +1,5 @@
 import { MAPS_API_KEY, GEOAPIFY_KEY } from './apiconf'
 import axios from 'axios'
-import { ItemProps } from './components/form/form-presenter'
 
 async function addressToCoords(address: string) {
   try {
@@ -16,7 +15,7 @@ async function addressToCoords(address: string) {
       longitude: coords.lng,
     }
   } catch (error) {
-    console.error(`Error calling Geocoding API: ${error}`)
+    console.error(`Error calling Geocoding API: ${error}`) // Maybe remove this since it is displayed on screen
     return null
   }
 }
@@ -33,7 +32,6 @@ async function getSuggestions(value: string) {
         format: 'json',
       },
     })
-    console.log(response)
     return response.data.results.map(
       (item: { address_line1: string; address_line2: string }) => {
         const returnObj = {
