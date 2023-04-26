@@ -25,6 +25,7 @@ const Navigator = observer(({ model }: NavigatorProps) => {
                 saveHomeAddress={model.saveHomeAddress}
                 setRoute={model.setRoute}
                 setRouteLoading={model.setRouteLoading}
+                setRouteTrip={model.setRouteTrip}
               />
               <InformationPresenter
                 originAddress={model.homeAddress}
@@ -32,6 +33,7 @@ const Navigator = observer(({ model }: NavigatorProps) => {
                 destinationAddress={model.destinationAddress}
                 destinationTime={model.arriveTime}
                 loading={model.routeLoading}
+                trip={model.trip}
               />
             </div>
           }

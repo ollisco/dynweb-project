@@ -1,4 +1,6 @@
 import { Loader, useMantineTheme } from '@mantine/core'
+import AddToCalButton from '../calendar-buttons/add-to-cal-button'
+import { Trip } from '../../Model'
 
 interface InformationViewProps {
   originAddress: string | undefined
@@ -6,9 +8,11 @@ interface InformationViewProps {
   destinationAddress: string | undefined
   destinationTime: string | undefined
   loading: boolean
+  trip: Trip | undefined
 }
 
 function InformationView(props: InformationViewProps) {
+  const theme = useMantineTheme()
   return (
     <div>
       <h2>Your commute:</h2>
@@ -27,6 +31,11 @@ function InformationView(props: InformationViewProps) {
           '.'
         )}
       </div>
+      <AddToCalButton
+        originAddress={props.originAddress}
+        destinationAddress={props.destinationAddress}
+        trip={props.trip}
+      ></AddToCalButton>
     </div>
   )
 }

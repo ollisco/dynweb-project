@@ -2,6 +2,7 @@ import { DateInput, TimeInput } from '@mantine/dates'
 import { ItemProps } from './form-presenter'
 import { Alert, Autocomplete, Button, Loader, useMantineTheme } from '@mantine/core'
 import { IconAlertCircle } from '@tabler/icons-react'
+import UseCalButton from '../calendar-buttons/use-cal-button'
 
 interface FormViewProps {
   originAddress: string
@@ -18,10 +19,6 @@ interface FormViewProps {
   setDate: (value: Date) => void
   arriveTime: string
   setArriveTime: (value: string) => void
-  useCal: React.MouseEventHandler<HTMLButtonElement>
-  calLoading: boolean
-  calError: string
-  calMessage: string
   searchClicked: React.MouseEventHandler<HTMLButtonElement>
   itemComponent: React.ForwardRefExoticComponent<ItemProps & React.RefAttributes<HTMLDivElement>>
 }
@@ -57,19 +54,11 @@ function FormView(props: FormViewProps) {
         maw={400}
         minDate={new Date()}
       />
-      <Button onClick={props.useCal} loading={props.calLoading}>
-        Use Google Calendar
-      </Button>
-      {props.calError ? (
-        <Alert icon={<IconAlertCircle size='1rem' />} title='Bummer!' color='red'>
-          {props.calError}
-        </Alert>
-      ) : null}
-      {props.calMessage ? (
-        <Alert icon={<IconAlertCircle size='1rem' />} title='Event:' color='blue'>
-          {props.calMessage}
-        </Alert>
-      ) : null}
+      <UseCalButton
+        date={props.date}
+        setArriveTime={props.setArriveTime}
+        setDestinationAddress={props.onChangeDestinationAddress}
+      ></UseCalButton>
       <Autocomplete
         value={props.destinationAddress}
         data={props.destinationAddressAutocompleteData}
@@ -98,7 +87,9 @@ function FormView(props: FormViewProps) {
       />
       <Button
         onClick={props.searchClicked}
-        disabled={!(props.originAddress && props.destinationAddress && props.date && props.arriveTime)}
+        disabled={
+          !(props.originAddress && props.destinationAddress && props.date && props.arriveTime)
+        }
       >
         Search
       </Button>
