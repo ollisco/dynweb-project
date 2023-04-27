@@ -7,6 +7,30 @@ export interface Coordinates {
   longitude: string
 }
 
+export interface Trip {
+  Origin: {
+    date: string
+    time: string
+  }
+  Destination: {
+    date: string
+    time: string
+  }
+  LegList: {
+    Leg: {
+      Origin: {
+        name: string
+        time: string
+      }
+      Destination: {
+        name: string
+        time: string
+      }
+      name: string
+    }[]
+  }
+}
+
 class Model {
   user: UserCredential | null
   homeAddress: string | undefined
@@ -14,6 +38,7 @@ class Model {
   leaveTime: string | undefined
   arriveTime: string | undefined
   routeLoading: boolean
+  trip: Trip | undefined
 
   constructor() {
     makeAutoObservable(this)
@@ -23,12 +48,14 @@ class Model {
     this.saveHomeAddress = this.saveHomeAddress.bind(this)
     this.setRoute = this.setRoute.bind(this)
     this.setRouteLoading = this.setRouteLoading.bind(this)
+    this.setRouteTrip = this.setRouteTrip.bind(this)
     this.user = null
     this.homeAddress = undefined
     this.destinationAddress = undefined
     this.leaveTime = undefined
     this.arriveTime = undefined
     this.routeLoading = false
+    this.trip = undefined
   }
 
   async signIn() {
@@ -62,6 +89,10 @@ class Model {
 
   setRouteLoading(loading: boolean) {
     this.routeLoading = loading
+  }
+
+  setRouteTrip(trip: Trip) {
+    this.trip = trip
   }
 }
 

@@ -25,15 +25,21 @@ function LoginView({ onSignIn }: LoginViewProps) {
             zIndex: 1,
           }}
           radius='md'
-          p='md'
+          p='xl'
           withBorder
         >
-          <Stack justify='space-between' h='100%'>
-            <Text size='lg' weight={500} ta='center' fz="xl" fw={700}>
+          <Stack spacing='xs' justify='space-between' h='100%'>
+            <Text size='lg' weight={500} ta='center' fz='xl' fw={700}>
               Welcome back to Komitid!
             </Text>
             <Group grow mb='md' mt='md'>
-              <Button onClick={onSignIn} leftIcon={<GoogleIcon />} variant='default' color='gray' radius="xl">
+              <Button
+                onClick={onSignIn}
+                leftIcon={<GoogleIcon />}
+                variant='default'
+                color='gray'
+                radius='xl'
+              >
                 Continue with Google
               </Button>
             </Group>
