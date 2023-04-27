@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Model from '../../Model'
 import LoginPresenter from '../login/login-presenter'
 import RequireAuth from './require-auth'
@@ -25,6 +25,7 @@ const Navigator = observer(({ model }: NavigatorProps) => {
                 saveHomeAddress={model.saveHomeAddress}
                 setRoute={model.setRoute}
                 setRouteLoading={model.setRouteLoading}
+                setRouteTrip={model.setRouteTrip}
               />
               <InformationPresenter
                 originAddress={model.homeAddress}
@@ -32,6 +33,7 @@ const Navigator = observer(({ model }: NavigatorProps) => {
                 destinationAddress={model.destinationAddress}
                 destinationTime={model.arriveTime}
                 loading={model.routeLoading}
+                trip={model.trip}
               />
             </div>
           }
