@@ -137,7 +137,9 @@ function FormPresenter(props: FormPresenterProps) {
           props.setRoute(destinationAddress, originTime, arriveTime)
           props.setRouteTrip(trafficInfo.data.Trip.pop())
         } catch (error) {
-          setDestinationAddressError('Itinerary could not be calculated. Please try a different address.')
+          setDestinationAddressError(
+            'Itenarary could not be calculated. Please try a different address.',
+          )
         }
       }
       props.setRouteLoading(false)

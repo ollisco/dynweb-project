@@ -23,9 +23,9 @@ function calAuth() {
   return gcal.handleAuthClick()
 }
 
-function calSignOut() {
-  gcal.handleSignoutClick()
-}
+// function calSignOut() {
+//   gcal.handleSignoutClick()
+// }
 
 function getDaysEvents(date: Date, calendar: string | undefined = undefined) {
   function extractData(result: any) {
