@@ -3,8 +3,8 @@ import ApiCalendar from './ApiCalendar'
 import { Trip } from './Model'
 
 const gcal = new ApiCalendar({
-  clientId: GCAL_CLIENT_ID,
-  apiKey: GCAL_API_KEY,
+  clientId: GCAL_CLIENT_ID || '',
+  apiKey: GCAL_API_KEY || '',
   scope: 'https://www.googleapis.com/auth/calendar',
   discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
 })
