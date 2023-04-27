@@ -1,3 +1,4 @@
+import { Trip } from '../../Model'
 import InformationView from './information-view'
 
 interface InformationPresenterProps {
@@ -6,6 +7,7 @@ interface InformationPresenterProps {
   destinationAddress: string | undefined
   destinationTime: string | undefined
   loading: boolean
+  trip: Trip | undefined
 }
 
 function InformationPresenter(props: InformationPresenterProps) {
@@ -16,6 +18,7 @@ function InformationPresenter(props: InformationPresenterProps) {
       destinationAddress={props.destinationAddress}
       destinationTime={props.destinationTime}
       loading={props.loading}
+      trip={props.trip}
     />
   )
 }

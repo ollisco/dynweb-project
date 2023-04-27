@@ -1,10 +1,10 @@
 import FormView from './form-view'
-import { calAuth, calIsAuthed, getFirstEvent } from '../../calendarSource'
 import { createCoordsObj, getTrafficInfo } from '../../tripSource'
 import { LegacyRef, forwardRef, useCallback, useEffect, useState } from 'react'
 import { getSuggestions } from '../../mapsSource'
 import { debounce } from 'lodash'
 import { Group, Text, SelectItemProps, MantineColor } from '@mantine/core'
+import { Trip } from '../../Model'
 
 interface FormPresenterProps {
   homeAddress: string | undefined
@@ -12,6 +12,7 @@ interface FormPresenterProps {
   saveHomeAddress: (value: string) => void
   setRoute: (destionationAddress: string, leaveTime: string, arriveTime: string) => void
   setRouteLoading: (value: boolean) => void
+  setRouteTrip: (trip: Trip) => void
 }
 
 // Items used in autocorrect
@@ -53,9 +54,6 @@ function FormPresenter(props: FormPresenterProps) {
   >([])
   const [date, setDate] = useState<Date>(new Date(new Date().setUTCHours(0, 0, 0, 0)))
   const [arriveTime, setArriveTime] = useState<string>('')
-  const [calLoading, setCalLoading] = useState<boolean>(false)
-  const [calError, setCalError] = useState<string>('')
-  const [calMessage, setCalMessage] = useState<string>('')
   const [originAddressError, setOriginAddressError] = useState<string>('')
   const [destinationAddressError, setDestinationAddressError] = useState<string>('')
 
@@ -114,28 +112,6 @@ function FormPresenter(props: FormPresenterProps) {
     handleAddressChange(value, setDestinationAddressAutocompleteData, setDestinationAddressLoading)
   }
 
-  async function useCal() {
-    setCalLoading(true)
-    setCalError('')
-    setCalMessage('')
-    if (!calIsAuthed()) {
-      try {
-        await calAuth()
-      } catch (error) {
-        setCalError('Authentication failed, please try again.')
-      }
-    }
-    if (calIsAuthed()) {
-      const event = await getFirstEvent(date)
-      if (event) {
-        setArriveTime(event.start.substring(11, 16))
-        if (event.location) handleDestinationAddressChange(event.location)
-        setCalMessage(event.title)
-      } else setCalError('No events found in the calendar this day.')
-    } else setCalError('Authentication failed, please try again.')
-    setCalLoading(false)
-  }
-
   async function performSearch() {
     if (originAddress && destinationAddress && date && arriveTime) {
       props.setRouteLoading(true)
@@ -159,9 +135,10 @@ function FormPresenter(props: FormPresenterProps) {
           props.setHomeAddress(originAddress)
           props.saveHomeAddress(originAddress)
           props.setRoute(destinationAddress, originTime, arriveTime)
+          props.setRouteTrip(trafficInfo.data.Trip.pop())
         } catch (error) {
           setDestinationAddressError(
-            'Itenarary could not be calculated. Please try a different address.',
+            'Itinerary could not be calculated. Please try a different address.',
           )
         }
       }
@@ -185,10 +162,6 @@ function FormPresenter(props: FormPresenterProps) {
       setDate={setDate}
       arriveTime={arriveTime}
       setArriveTime={setArriveTime}
-      useCal={useCal}
-      calLoading={calLoading}
-      calError={calError}
-      calMessage={calMessage}
       searchClicked={performSearch}
       itemComponent={SelectItem}
     />

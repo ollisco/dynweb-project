@@ -1,4 +1,6 @@
 import { Box, Container, Loader, Stack, Title, Text } from '@mantine/core'
+import AddToCalButton from '../calendar-buttons/add-to-cal-button'
+import { Trip } from '../../Model'
 
 interface DisplayComponentProps {
   originAddress?: string
@@ -6,6 +8,7 @@ interface DisplayComponentProps {
   destinationAddress?: string
   destinationTime?: string
 }
+
 function DisplayComponent({
   originAddress,
   originTime,
@@ -27,13 +30,13 @@ function DisplayComponent({
   )
 }
 
-
 interface InformationViewProps {
   originAddress: string | undefined
   originTime: string | undefined
   destinationAddress: string | undefined
   destinationTime: string | undefined
   loading: boolean
+  trip: Trip | undefined
 }
 
 function InformationView(props: InformationViewProps) {
@@ -54,6 +57,11 @@ function InformationView(props: InformationViewProps) {
                 destinationTime={props.destinationTime}
               />
             )}
+            <AddToCalButton
+              originAddress={props.originAddress}
+              destinationAddress={props.destinationAddress}
+              trip={props.trip}
+            />
           </>
         </Stack>
       </Box>
