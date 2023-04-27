@@ -21,11 +21,7 @@ const LoginPresenter = observer((props: LoginPresenterProps) => {
     }
   }, [props.user])
 
-  return (
-    <LoginView
-      onSignIn={props.signIn}
-    />
-  )
+  return <LoginView onSignIn={props.signIn} />
 })
 
 export default LoginPresenter

@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Model from '../../Model'
 import LoginPresenter from '../login/login-presenter'
 import RequireAuth from './require-auth'
