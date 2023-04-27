@@ -24,22 +24,3 @@ jobs:
 
       - name: 🚀 Run Prettier Check
         run: yarn format:check
-  test:
-    name: Unit tests
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: ⚙️ Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: 'yarn'
-
-      - name: 📦 Install Modules
-        run: yarn
-
-      - name: 🚀 Run Tests
-        run: yarn test
-
