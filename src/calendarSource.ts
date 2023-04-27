@@ -2,8 +2,8 @@ import { GCAL_API_KEY, GCAL_CLIENT_ID } from './apiconf'
 import ApiCalendar from './ApiCalendar'
 
 const gcal = new ApiCalendar({
-  clientId: GCAL_CLIENT_ID,
-  apiKey: GCAL_API_KEY,
+  clientId: GCAL_CLIENT_ID || '',
+  apiKey: GCAL_API_KEY || '',
   scope: 'https://www.googleapis.com/auth/calendar.readonly',
   discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
 })
