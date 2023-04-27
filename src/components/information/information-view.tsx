@@ -37,16 +37,6 @@ interface InformationViewProps {
 }
 
 function InformationView(props: InformationViewProps) {
-  const displayString =
-    'You should leave ' +
-    props.originAddress +
-    ' at ' +
-    props.originTime +
-    ' in order to arrive at ' +
-    props.destinationAddress +
-    ' at ' +
-    props.destinationTime +
-    '.'
 
   return (
     <Container>
