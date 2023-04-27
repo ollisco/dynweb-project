@@ -160,7 +160,9 @@ function FormPresenter(props: FormPresenterProps) {
           props.saveHomeAddress(originAddress)
           props.setRoute(destinationAddress, originTime, arriveTime)
         } catch (error) {
-          setDestinationAddressError('Itenarary could not be calculated. Please try a different address.')
+          setDestinationAddressError(
+            'Itenarary could not be calculated. Please try a different address.',
+          )
         }
       }
       props.setRouteLoading(false)

@@ -46,7 +46,12 @@ function getDaysEvents(date: Date, calendar: string | undefined = undefined) {
   return gcal
     .listEvents({
       timeMin: date.toISOString(),
-      timeMax: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, date.getHours()).toISOString(),
+      timeMax: new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate() + 1,
+        date.getHours(),
+      ).toISOString(),
       maxResults: 10,
     })
     .then(extractData)
