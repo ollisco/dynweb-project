@@ -37,9 +37,9 @@ function FormView(props: FormViewProps) {
   const theme = useMantineTheme()
   return (
     <div>
-      <Box w='100vw' h='80vh' sx={{}}>
-        <Container h='100%'>
-          <Paper m='xl' p='xl' h='100%' withBorder>
+      <Box w='100vw'>
+        <Container>
+          <Paper m='xl' p='xl' withBorder>
             <Stack spacing='xs'>
               <Autocomplete
                 value={props.originAddress}
@@ -65,13 +65,12 @@ function FormView(props: FormViewProps) {
                 required
                 value={props.date}
                 onChange={props.setDate}
-                maw={400}
                 minDate={new Date()}
               />
               <UseCalButton
                 date={props.date}
-                setArriveTime={props.setArriveTime}
-                setDestinationAddress={props.onChangeDestinationAddress}
+                setTime={props.setArriveTime}
+                setAddress={props.onChangeDestinationAddress}
               />
               <Autocomplete
                 value={props.destinationAddress}

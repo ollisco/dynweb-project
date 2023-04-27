@@ -12,19 +12,19 @@ interface AddToCalButtonProps {
 }
 
 function AddToCalButton(props: AddToCalButtonProps) {
-  const [calLoading, setCalLoading] = useState<boolean>(false)
-  const [calError, setCalError] = useState<string>('')
-  const [calLink, setCalLink] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string>('')
+  const [eventLink, setEventLink] = useState<string>('')
 
   async function addTrip() {
-    setCalLoading(true)
-    setCalError('')
-    setCalLink('')
+    setLoading(true)
+    setError('')
+    setEventLink('')
     if (!calIsAuthed()) {
       try {
         await calAuth()
       } catch (error) {
-        setCalError('Authentication failed, please try again.')
+        setError('Authentication failed, please try again.')
       }
     }
     if (calIsAuthed()) {
@@ -34,10 +34,10 @@ function AddToCalButton(props: AddToCalButtonProps) {
           props.destinationAddress,
           props.trip,
         )
-        setCalLink(event.result.htmlLink)
+        setEventLink(event.result.htmlLink)
       }
-    } else setCalError('Authentication failed, please try again.')
-    setCalLoading(false)
+    } else setError('Authentication failed, please try again.')
+    setLoading(false)
   }
 
   return (
@@ -45,20 +45,20 @@ function AddToCalButton(props: AddToCalButtonProps) {
       <Button
         onClick={addTrip}
         disabled={!(props.originAddress && props.destinationAddress)}
-        loading={calLoading}
-        variant='light'
+        loading={loading}
         leftIcon={<GoogleIcon />}
+        variant='light'
       >
         Add to Google Calendar
       </Button>
-      {calError ? (
+      {error ? (
         <Alert icon={<IconAlertCircle size='1rem' />} title='Bummer!' color='red'>
-          {calError}
+          {error}
         </Alert>
       ) : null}
-      {calLink ? (
+      {eventLink ? (
         <Alert icon={<IconAlertCircle size='1rem' />} title='Event added!' color='blue'>
-          <a href={calLink}>{calLink}</a>
+          <a href={eventLink}>{eventLink}</a>
         </Alert>
       ) : null}
     </div>

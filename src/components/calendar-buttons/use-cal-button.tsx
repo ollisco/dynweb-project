@@ -6,50 +6,50 @@ import GoogleIcon from '../basic/googleicon'
 
 interface UseCalButtonProps {
   date: Date
-  setArriveTime: (value: string) => void
-  setDestinationAddress: (value: string) => void
+  setTime: (value: string) => void
+  setAddress: (value: string) => void
 }
 
 function UseCalButton(props: UseCalButtonProps) {
-  const [calLoading, setCalLoading] = useState<boolean>(false)
-  const [calError, setCalError] = useState<string>('')
-  const [calMessage, setCalMessage] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string>('')
+  const [eventTitle, setEventTitle] = useState<string>('')
 
   async function useCal() {
-    setCalLoading(true)
-    setCalError('')
-    setCalMessage('')
+    setLoading(true)
+    setError('')
+    setEventTitle('')
     if (!calIsAuthed()) {
       try {
         await calAuth()
       } catch (error) {
-        setCalError('Authentication failed, please try again.')
+        setError('Authentication failed, please try again.')
       }
     }
     if (calIsAuthed()) {
       const event = await getFirstEvent(props.date)
       if (event) {
-        props.setArriveTime(event.start.substring(11, 16))
-        if (event.location) props.setDestinationAddress(event.location)
-        setCalMessage(event.title)
-      } else setCalError('No events found in the calendar this day.')
-    } else setCalError('Authentication failed, please try again.')
-    setCalLoading(false)
+        props.setTime(event.start.substring(11, 16))
+        if (event.location) props.setAddress(event.location)
+        setEventTitle(event.title)
+      } else setError('No events found in the calendar this day.')
+    } else setError('Authentication failed, please try again.')
+    setLoading(false)
   }
 
   return (
     <div>
-      <Button onClick={useCal} loading={calLoading} leftIcon={<GoogleIcon />} variant='light'>
+      <Button onClick={useCal} loading={loading} leftIcon={<GoogleIcon />} variant='light'>
         Use Google Calendar
       </Button>
-      {calError ? (
+      {error ? (
         <Alert icon={<IconAlertCircle size='1rem' />} title='Bummer!' color='red'>
-          {calError}
+          {error}
         </Alert>
       ) : null}
-      {calMessage ? (
+      {eventTitle ? (
         <Alert icon={<IconAlertCircle size='1rem' />} title='Event:' color='blue'>
-          {calMessage}
+          {eventTitle}
         </Alert>
       ) : null}
     </div>
