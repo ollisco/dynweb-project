@@ -49,6 +49,7 @@ class Model {
     this.saveHomeAddress = this.saveHomeAddress.bind(this)
     this.setRoute = this.setRoute.bind(this)
     this.setRouteLoading = this.setRouteLoading.bind(this)
+    this.setDoSearch = this.setDoSearch.bind(this)
     this.setRouteTrip = this.setRouteTrip.bind(this)
     this.user = null
     this.homeAddress = undefined
