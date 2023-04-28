@@ -7,6 +7,7 @@ interface InformationPresenterProps {
   destinationAddress: string | undefined
   destinationTime: string | undefined
   loading: boolean
+  doSearch: boolean
   trip: Trip | undefined
 }
 
@@ -18,6 +19,7 @@ function InformationPresenter(props: InformationPresenterProps) {
       destinationAddress={props.destinationAddress}
       destinationTime={props.destinationTime}
       loading={props.loading}
+      doSearch={props.doSearch}
       trip={props.trip}
     />
   )

@@ -38,6 +38,7 @@ class Model {
   leaveTime: string | undefined
   arriveTime: string | undefined
   routeLoading: boolean
+  doSearch: boolean
   trip: Trip | undefined
 
   constructor() {
@@ -55,6 +56,7 @@ class Model {
     this.leaveTime = undefined
     this.arriveTime = undefined
     this.routeLoading = false
+    this.doSearch = false
     this.trip = undefined
   }
 
@@ -89,6 +91,10 @@ class Model {
 
   setRouteLoading(loading: boolean) {
     this.routeLoading = loading
+  }
+
+  setDoSearch(doSearch: boolean) {
+    this.doSearch = doSearch
   }
 
   setRouteTrip(trip: Trip) {
