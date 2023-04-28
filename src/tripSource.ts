@@ -47,15 +47,17 @@ async function getTrafficInfo(coordsObj: CoordsObj) {
   return axios.get(apiUrl)
 }
 
-function getRelevantInfo(data: any) {
-  function getStartAndArrivalTimes(trip: any) {
-    return {
-      origin: { date: trip.Origin.date, time: trip.Origin.time },
-      destination: { date: trip.Destination.date, time: trip.Destination.time },
-    }
-  }
-  return data.Trip.map(getStartAndArrivalTimes) // Add more if needed
-}
+
+// ↓ unused currently
+// function getRelevantInfo(data: any) {
+//   function getStartAndArrivalTimes(trip: any) {
+//     return {
+//       origin: { date: trip.Origin.date, time: trip.Origin.time },
+//       destination: { date: trip.Destination.date, time: trip.Destination.time },
+//     }
+//   }
+//   return data.Trip.map(getStartAndArrivalTimes) // Add more if needed
+// }
 
 export type { CoordsObj }
-export { createCoordsObj, getTrafficInfo, getRelevantInfo }
+export { createCoordsObj, getTrafficInfo }

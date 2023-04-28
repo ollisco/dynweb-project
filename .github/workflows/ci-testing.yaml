@@ -1,0 +1,26 @@
+name: CI
+on:
+  pull_request:
+    types: [synchronize, opened, reopened, ready_for_review]
+jobs:
+  lint:
+    name: Lint and format
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ⚙️ Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
+
+      - name: 📦 Install Modules
+        run: yarn
+
+      - name: 🚀 Run ESLint
+        run: yarn lint
+
+      - name: 🚀 Run Prettier Check
+        run: yarn format:check
