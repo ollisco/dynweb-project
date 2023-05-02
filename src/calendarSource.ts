@@ -9,7 +9,15 @@ const gcal = new ApiCalendar({
   discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
 })
 
-interface event {
+interface rawEvent {
+  summary: string
+  start: {
+    dateTime: string
+  }
+  location: string
+}
+
+interface processedEvent {
   title: string
   start: string
   location: string
@@ -27,9 +35,10 @@ function calAuth() {
 //   gcal.handleSignoutClick()
 // }
 
-function getDaysEvents(date: Date, calendar: string | undefined = undefined) {
-  function extractData(result: any) {
-    return result.result.items.map((event: any) => {
+function getDaysEvents(date: Date) {
+  function extractData(result: { result: { items: rawEvent[] } }): processedEvent[] {
+    console.log(result)
+    return result.result.items.map((event: rawEvent) => {
       return {
         title: event.summary,
         start: event.start.dateTime,
@@ -38,8 +47,8 @@ function getDaysEvents(date: Date, calendar: string | undefined = undefined) {
     })
   }
 
-  function removeBadEvents(events: [event]) {
-    return events.filter((event: event) => {
+  function removeBadEvents(events: [processedEvent]) {
+    return events.filter((event: processedEvent) => {
       return (
         event.start &&
         event.start.substring(0, 10) == date.toISOString().substring(0, 10) &&
@@ -99,5 +108,5 @@ function addTripToCalendar(originAddress: string, destinationAddress: string, tr
   return gcal.createEvent(event)
 }
 
-export type { event }
+export type { processedEvent as event }
 export { calAuth, calIsAuthed, getFirstEvent, addTripToCalendar }
