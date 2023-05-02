@@ -1,11 +1,11 @@
-const GCAL_API_KEY = process.env.GCAL_API_KEY
-const GCAL_CLIENT_ID = process.env.GCAL_CLIENT_ID
-const MAPS_API_KEY = process.env.MAPS_API_KEY
-const TRAFFICLAB_API_KEY = process.env.TRAFFICLAB_API_KEY
-const GEOAPIFY_KEY = process.env.GEOAPIFY_KEY
+const GCAL_API_KEY = import.meta.env.VITE_GCAL_API_KEY
+const GCAL_CLIENT_ID = import.meta.env.VITE_GCAL_CLIENT_ID
+const MAPS_API_KEY = import.meta.env.VITE_MAPS_API_KEY
+const TRAFFICLAB_API_KEY = import.meta.env.VITE_TRAFFICLAB_API_KEY
+const GEOAPIFY_KEY = import.meta.env.VITE_GEOAPIFY_KEY
 
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: 'komitid-cb8e5.firebaseapp.com',
   databaseURL: 'https://komitid-cb8e5-default-rtdb.europe-west1.firebasedatabase.app/',
   projectId: 'komitid-cb8e5',
