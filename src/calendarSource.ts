@@ -37,7 +37,6 @@ function calAuth() {
 
 function getDaysEvents(date: Date) {
   function extractData(result: { result: { items: rawEvent[] } }): processedEvent[] {
-    console.log(result)
     return result.result.items.map((event: rawEvent) => {
       return {
         title: event.summary,
