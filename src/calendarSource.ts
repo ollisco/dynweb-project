@@ -85,7 +85,9 @@ function addTripToCalendar(originAddress: string, destinationAddress: string, tr
   trip.LegList.Leg.forEach((leg) => {
     const { time: originTime, name: originName } = leg.Origin
     const { time: destinationTime, name: destinationName } = leg.Destination
-    description += `\n${originTime.substring(0, 5)}-${destinationTime.substring(0, 5)}: ${leg.name} från ${originName} till ${destinationName}`
+    description += `\n${originTime.substring(0, 5)}-${destinationTime.substring(0, 5)}: ${
+      leg.name
+    } från ${originName} till ${destinationName}`
   })
   description += '\n\nThis event was created automatically by Komitid'
 

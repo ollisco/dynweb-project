@@ -24,7 +24,7 @@ function loadData(user: UserCredential) {
     })
 }
 
-function saveData(user: UserCredential, data: {[key: string]: string}) {
+function saveData(user: UserCredential, data: { [key: string]: string }) {
   db.collection('users').doc(user.user.uid).set(data)
 }
 
