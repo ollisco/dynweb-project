@@ -47,7 +47,6 @@ async function getTrafficInfo(coordsObj: CoordsObj) {
   return axios.get(apiUrl)
 }
 
-
 // ↓ unused currently
 // function getRelevantInfo(data: any) {
 //   function getStartAndArrivalTimes(trip: any) {

@@ -13,19 +13,24 @@ function DisplayComponent({
   originAddress,
   originTime,
   destinationAddress,
-  destinationTime
+  destinationTime,
 }: DisplayComponentProps) {
-
   return (
     <Text>
       You should leave
       <Text span> {originAddress} </Text>
       at
-      <Text span fw='bold'> {originTime} </Text>
+      <Text span fw='bold'>
+        {' '}
+        {originTime}{' '}
+      </Text>
       in order to arrive at
       <Text span> {destinationAddress} </Text>
       at
-      <Text span fw='bold'> {destinationTime} </Text>
+      <Text span fw='bold'>
+        {' '}
+        {destinationTime}{' '}
+      </Text>
     </Text>
   )
 }
@@ -40,7 +45,6 @@ interface InformationViewProps {
 }
 
 function InformationView(props: InformationViewProps) {
-
   return (
     <Container>
       <Box m='xl'>
