@@ -38,6 +38,7 @@ class Model {
   leaveTime: string | undefined
   arriveTime: string | undefined
   routeLoading: boolean
+  doSearch: boolean
   trip: Trip | undefined
 
   constructor() {
@@ -48,6 +49,7 @@ class Model {
     this.saveHomeAddress = this.saveHomeAddress.bind(this)
     this.setRoute = this.setRoute.bind(this)
     this.setRouteLoading = this.setRouteLoading.bind(this)
+    this.setDoSearch = this.setDoSearch.bind(this)
     this.setRouteTrip = this.setRouteTrip.bind(this)
     this.user = null
     this.homeAddress = undefined
@@ -55,6 +57,7 @@ class Model {
     this.leaveTime = undefined
     this.arriveTime = undefined
     this.routeLoading = false
+    this.doSearch = false
     this.trip = undefined
   }
 
@@ -89,6 +92,10 @@ class Model {
 
   setRouteLoading(loading: boolean) {
     this.routeLoading = loading
+  }
+
+  setDoSearch(doSearch: boolean) {
+    this.doSearch = doSearch
   }
 
   setRouteTrip(trip: Trip) {
