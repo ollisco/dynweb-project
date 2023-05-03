@@ -11,7 +11,7 @@ interface InformationPresenterProps {
 }
 
 function InformationPresenter(props: InformationPresenterProps) {
-  const [selectedTripIndex, setSelectedTripIndex] = useState<number>(0)
+  const [selectedTripIndex] = useState<number>(0)
 
   return (
     <InformationView
