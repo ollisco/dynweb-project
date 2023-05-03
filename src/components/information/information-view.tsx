@@ -41,44 +41,36 @@ interface InformationViewProps {
   destinationAddress: string | undefined
   destinationTime: string | undefined
   loading: boolean
-  doSearch: boolean
   trip: Trip | undefined
 }
 
 function InformationView(props: InformationViewProps) {
   return (
-    <>
-      {props.doSearch ? (
-        <Container>
-          <Box m='xl'>
-            <Stack spacing='xs'>
-              <Title order={2}>Your commute:</Title>
-              <>
-                {props.loading ? (
-                  <Loader />
-                ) : (
-                  <DisplayComponent
-                    originAddress={props.originAddress}
-                    originTime={props.originTime}
-                    destinationAddress={props.destinationAddress}
-                    destinationTime={props.destinationTime}
-                  />
-                )}
-                <AddToCalButton
-                  originAddress={props.originAddress}
-                  destinationAddress={props.destinationAddress}
-                  trip={props.trip}
-                />
-              </>
-            </Stack>
-          </Box>
-        </Container>
-      ) : (
-        <Container>
-        </Container>
-      )}
-    </>
-  );
+    <Container>
+      <Box m='xl'>
+        <Stack spacing='xs'>
+          <Title order={2}>Your commute:</Title>
+          <>
+            {props.loading ? (
+              <Loader />
+            ) : (
+              <DisplayComponent
+                originAddress={props.originAddress}
+                originTime={props.originTime}
+                destinationAddress={props.destinationAddress}
+                destinationTime={props.destinationTime}
+              />
+            )}
+            <AddToCalButton
+              originAddress={props.originAddress}
+              destinationAddress={props.destinationAddress}
+              trip={props.trip}
+            />
+          </>
+        </Stack>
+      </Box>
+    </Container>
+  )
 }
 
 export default InformationView

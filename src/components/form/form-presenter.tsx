@@ -12,7 +12,6 @@ interface FormPresenterProps {
   saveHomeAddress: (value: string) => void
   setRoute: (destionationAddress: string, leaveTime: string, arriveTime: string) => void
   setRouteLoading: (value: boolean) => void
-  setDoSearch: (value: boolean) => void
   setRouteTrip: (trip: Trip) => void
 }
 
@@ -137,7 +136,6 @@ function FormPresenter(props: FormPresenterProps) {
           props.saveHomeAddress(originAddress)
           props.setRoute(destinationAddress, originTime, arriveTime)
           props.setRouteTrip(trafficInfo.data.Trip.pop())
-          props.setDoSearch(true)
         } catch (error) {
           setDestinationAddressError(
             'Itinerary could not be calculated. Please try a different address.',
