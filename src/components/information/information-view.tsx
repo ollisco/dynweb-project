@@ -1,20 +1,18 @@
-import { Box, Container, Loader, Stack, Title, Text } from '@mantine/core'
+import { Box, Container, Stack, Title, Text } from '@mantine/core'
 import AddToCalButton from '../calendar-buttons/add-to-cal-button'
-import { Trip } from '../../Model'
+import { Trip } from '../../tripSource'
 
-interface DisplayComponentProps {
-  originAddress?: string
-  originTime?: string
-  destinationAddress?: string
-  destinationTime?: string
+interface TripDisplayComponentProps {
+  originAddress: string | undefined
+  destinationAddress: string | undefined
+  trip: Trip | undefined
 }
 
-function DisplayComponent({
+function TripDisplayComponent({
   originAddress,
-  originTime,
   destinationAddress,
-  destinationTime,
-}: DisplayComponentProps) {
+  trip,
+}: TripDisplayComponentProps) {
   return (
     <Text>
       You should leave
@@ -22,14 +20,14 @@ function DisplayComponent({
       at
       <Text span fw='bold'>
         {' '}
-        {originTime}{' '}
+        {trip?.Origin.time}{' '}
       </Text>
       in order to arrive at
       <Text span> {destinationAddress} </Text>
       at
       <Text span fw='bold'>
         {' '}
-        {destinationTime}{' '}
+        {trip?.Destination.time}{' '}
       </Text>
     </Text>
   )
@@ -37,48 +35,46 @@ function DisplayComponent({
 
 interface InformationViewProps {
   originAddress: string | undefined
-  originTime: string | undefined
   destinationAddress: string | undefined
   destinationTime: string | undefined
-  loading: boolean
-  doSearch: boolean
-  trip: Trip | undefined
+  searchInProgress: boolean
+  trips: Trip[] | undefined
+  selectedTripIndex: number
 }
 
 function InformationView(props: InformationViewProps) {
   return (
     <>
-      {props.doSearch ? (
+      {!props.searchInProgress && props.destinationAddress && props.trips ? (
         <Container>
           <Box m='xl'>
             <Stack spacing='xs'>
-              <Title order={2}>Your commute:</Title>
+              <Title order={2}>Your commute</Title>
               <>
-                {props.loading ? (
-                  <Loader />
-                ) : (
-                  <DisplayComponent
-                    originAddress={props.originAddress}
-                    originTime={props.originTime}
-                    destinationAddress={props.destinationAddress}
-                    destinationTime={props.destinationTime}
-                  />
-                )}
+                {props.trips.map((trip: Trip, index: number) => {
+                  return (
+                    <TripDisplayComponent
+                      key={index}
+                      originAddress={props.originAddress}
+                      destinationAddress={props.destinationAddress}
+                      trip={trip}
+                    />
+                  )
+                })}
                 <AddToCalButton
                   originAddress={props.originAddress}
                   destinationAddress={props.destinationAddress}
-                  trip={props.trip}
+                  trip={props.trips.at(props.selectedTripIndex)}
                 />
               </>
             </Stack>
           </Box>
         </Container>
       ) : (
-        <Container>
-        </Container>
+        <Container />
       )}
     </>
-  );
+  )
 }
 
 export default InformationView

@@ -1,6 +1,20 @@
 import { MAPS_API_KEY, GEOAPIFY_KEY } from './apiconf'
 import axios from 'axios'
 
+interface Coordinates {
+  latitude: string
+  longitude: string
+}
+
+class AddressError extends Error {
+  address: string
+
+  constructor(address: string) {
+    super(`Invalid address: ${address}`)
+    this.address = address
+  }
+}
+
 async function addressToCoords(address: string) {
   try {
     const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
@@ -15,11 +29,11 @@ async function addressToCoords(address: string) {
       longitude: coords.lng,
     }
   } catch (error) {
-    return null
+    throw new AddressError(address)
   }
 }
 
-async function getSuggestions(value: string) {
+async function getAutocompleteSuggestions(value: string) {
   if (value.trim().length < 3) return [] // API won't give results for strings shorter than 3 letters
   try {
     const response = await axios.get('https://api.geoapify.com/v1/geocode/autocomplete', {
@@ -44,4 +58,5 @@ async function getSuggestions(value: string) {
   }
 }
 
-export { addressToCoords, getSuggestions }
+export type { Coordinates }
+export { addressToCoords, getAutocompleteSuggestions, AddressError }

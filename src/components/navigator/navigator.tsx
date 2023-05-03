@@ -21,21 +21,15 @@ const Navigator = observer(({ model }: NavigatorProps) => {
             <div>
               <FormPresenter
                 homeAddress={model.homeAddress}
-                setHomeAddress={model.setHomeAddress}
-                saveHomeAddress={model.saveHomeAddress}
-                setRoute={model.setRoute}
-                setRouteLoading={model.setRouteLoading}
-                setDoSearch={model.setDoSearch}
-                setRouteTrip={model.setRouteTrip}
+                searchInProgress={model.searchInProgress}
+                doSearch={model.doSearch}
               />
               <InformationPresenter
                 originAddress={model.homeAddress}
-                originTime={model.leaveTime}
                 destinationAddress={model.destinationAddress}
                 destinationTime={model.arriveTime}
-                loading={model.routeLoading}
-                trip={model.trip}
-                doSearch={model.doSearch}
+                searchInProgress={model.searchInProgress}
+                trips={model.trips}
               />
             </div>
           }

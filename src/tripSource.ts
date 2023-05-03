@@ -1,6 +1,35 @@
 import { TRAFFICLAB_API_KEY } from './apiconf'
 import axios from 'axios'
-import { addressToCoords } from './mapsSource'
+
+class TrafficLabError extends Error {
+  constructor(error: unknown) {
+    super(`Itinerary could not be calculated: ${error}`)
+  }
+}
+
+interface Trip {
+  Origin: {
+    date: string
+    time: string
+  }
+  Destination: {
+    date: string
+    time: string
+  }
+  LegList: {
+    Leg: {
+      Origin: {
+        name: string
+        time: string
+      }
+      Destination: {
+        name: string
+        time: string
+      }
+      name: string
+    }[]
+  }
+}
 
 // Structure on parameter object in getTrafficInfo.
 interface CoordsObj {
@@ -13,27 +42,6 @@ interface CoordsObj {
   searchForArrival: number // 1 if time of arrival instead of departure
 }
 
-async function createCoordsObj(
-  originAddress: string,
-  destinationAddress: string,
-  date: Date,
-  time: string,
-  searchForArrival: number,
-) {
-  const originCoords = await addressToCoords(originAddress)
-  const destinationCoords = await addressToCoords(destinationAddress)
-  const coordsObj: CoordsObj = {
-    originCoordLat: originCoords?.latitude,
-    originCoordLong: originCoords?.longitude,
-    destCoordLat: destinationCoords?.latitude,
-    destCoordLong: destinationCoords?.longitude,
-    date: date.toISOString().substring(0, 10),
-    time: time.substring(0, 5),
-    searchForArrival: searchForArrival,
-  }
-  return coordsObj
-}
-
 async function getTrafficInfo(coordsObj: CoordsObj) {
   let apiUrl = `https://api.resrobot.se/v2.1/trip?format=json&accessId=${TRAFFICLAB_API_KEY}&showPassingPoints=true&`
 
@@ -44,19 +52,13 @@ async function getTrafficInfo(coordsObj: CoordsObj) {
   }
   apiUrl += params.toString()
 
-  return axios.get(apiUrl)
+  try {
+    const trafficInfo = await axios.get(apiUrl)
+    return trafficInfo
+  } catch (error) {
+    throw new TrafficLabError(error)
+  }
 }
 
-// ↓ unused currently
-// function getRelevantInfo(data: any) {
-//   function getStartAndArrivalTimes(trip: any) {
-//     return {
-//       origin: { date: trip.Origin.date, time: trip.Origin.time },
-//       destination: { date: trip.Destination.date, time: trip.Destination.time },
-//     }
-//   }
-//   return data.Trip.map(getStartAndArrivalTimes) // Add more if needed
-// }
-
-export type { CoordsObj }
-export { createCoordsObj, getTrafficInfo }
+export type { Trip, CoordsObj }
+export { TrafficLabError, getTrafficInfo }
