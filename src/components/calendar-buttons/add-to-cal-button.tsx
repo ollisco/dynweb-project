@@ -3,7 +3,7 @@ import { calIsAuthed, calAuth, addTripToCalendar } from '../../calendarSource'
 import { Button, Alert } from '@mantine/core'
 import { IconAlertCircle } from '@tabler/icons-react'
 import GoogleIcon from '../basic/googleicon'
-import { Trip } from '../../Model'
+import { Trip } from '../../tripSource'
 
 interface AddToCalButtonProps {
   originAddress: string | undefined
@@ -52,12 +52,28 @@ function AddToCalButton(props: AddToCalButtonProps) {
         Add to Google Calendar
       </Button>
       {error ? (
-        <Alert icon={<IconAlertCircle size='1rem' />} title='Bummer!' color='red'>
+        <Alert
+          icon={<IconAlertCircle size='1rem' />}
+          title='Bummer!'
+          color='red'
+          withCloseButton
+          onClose={() => {
+            setError('')
+          }}
+        >
           {error}
         </Alert>
       ) : null}
       {eventLink ? (
-        <Alert icon={<IconAlertCircle size='1rem' />} title='Event added!' color='blue'>
+        <Alert
+          icon={<IconAlertCircle size='1rem' />}
+          title='Event added!'
+          color='blue'
+          withCloseButton
+          onClose={() => {
+            setEventLink('')
+          }}
+        >
           <a href={eventLink}>{eventLink}</a>
         </Alert>
       ) : null}

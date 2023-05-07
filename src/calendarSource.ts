@@ -1,6 +1,6 @@
 import { GCAL_API_KEY, GCAL_CLIENT_ID } from './apiconf'
 import ApiCalendar from './ApiCalendar'
-import { Trip } from './Model'
+import { Trip } from './tripSource'
 
 const gcal = new ApiCalendar({
   clientId: GCAL_CLIENT_ID || '',

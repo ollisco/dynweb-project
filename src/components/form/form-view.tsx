@@ -31,6 +31,7 @@ interface FormViewProps {
   setArriveTime: (value: string) => void
   searchClicked: React.MouseEventHandler<HTMLButtonElement>
   itemComponent: React.ForwardRefExoticComponent<ItemProps & React.RefAttributes<HTMLDivElement>>
+  searchInProgress: boolean
 }
 
 function FormView(props: FormViewProps) {
@@ -100,6 +101,7 @@ function FormView(props: FormViewProps) {
               />
               <Button
                 onClick={props.searchClicked}
+                loading={props.searchInProgress}
                 disabled={
                   !(
                     props.originAddress &&

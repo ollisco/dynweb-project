@@ -43,12 +43,28 @@ function UseCalButton(props: UseCalButtonProps) {
         Use Google Calendar
       </Button>
       {error ? (
-        <Alert icon={<IconAlertCircle size='1rem' />} title='Bummer!' color='red'>
+        <Alert
+          icon={<IconAlertCircle size='1rem' />}
+          title='Bummer!'
+          color='red'
+          withCloseButton
+          onClose={() => {
+            setError('')
+          }}
+        >
           {error}
         </Alert>
       ) : null}
       {eventTitle ? (
-        <Alert icon={<IconAlertCircle size='1rem' />} title='Event:' color='blue'>
+        <Alert
+          icon={<IconAlertCircle size='1rem' />}
+          title='Event:'
+          color='blue'
+          withCloseButton
+          onClose={() => {
+            setEventTitle('')
+          }}
+        >
           {eventTitle}
         </Alert>
       ) : null}

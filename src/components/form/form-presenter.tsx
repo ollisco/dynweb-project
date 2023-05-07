@@ -1,23 +1,30 @@
-import FormView from './form-view'
-import { createCoordsObj, getTrafficInfo } from '../../tripSource'
 import { LegacyRef, forwardRef, useCallback, useEffect, useState } from 'react'
-import { getSuggestions } from '../../mapsSource'
-import { debounce } from 'lodash'
 import { Group, Text, SelectItemProps, MantineColor } from '@mantine/core'
-import { Trip } from '../../Model'
+import { debounce } from 'lodash'
+import {
+  AddressError,
+  Coordinates,
+  getAutocompleteSuggestions,
+  addressToCoords,
+} from '../../mapsSource'
+import { TrafficLabError } from '../../tripSource'
+import FormView from './form-view'
 
 interface FormPresenterProps {
   homeAddress: string | undefined
-  setHomeAddress: (value: string) => void
-  saveHomeAddress: (value: string) => void
-  setRoute: (destionationAddress: string, leaveTime: string, arriveTime: string) => void
-  setRouteLoading: (value: boolean) => void
-  setDoSearch: (value: boolean) => void
-  setRouteTrip: (trip: Trip) => void
+  searchInProgress: boolean
+  doSearch: (
+    originAddress: string,
+    originCoords: Coordinates,
+    destinationAddress: string,
+    destinationCoords: Coordinates,
+    date: Date,
+    arriveTime: string,
+  ) => void
 }
 
 // Items used in autocorrect
-export interface ItemProps extends SelectItemProps {
+interface ItemProps extends SelectItemProps {
   color: MantineColor
   street: string
   postcodeAndCity: string
@@ -71,7 +78,7 @@ function FormPresenter(props: FormPresenterProps) {
         setAutocompleteData: (arg0: never[]) => void,
         setLoading: (arg0: boolean) => void,
       ) => {
-        const suggestions = await getSuggestions(newValue)
+        const suggestions = await getAutocompleteSuggestions(newValue)
         const formattedSuggestions = suggestions.map(
           (item: { postcodeAndCity: string; street: string }) => ({
             ...item,
@@ -114,37 +121,28 @@ function FormPresenter(props: FormPresenterProps) {
   }
 
   async function performSearch() {
-    if (originAddress && destinationAddress && date && arriveTime) {
-      props.setRouteLoading(true)
-      const coordsObj = await createCoordsObj(
+    try {
+      const originCoords = await addressToCoords(originAddress)
+      const destinationCoords = await addressToCoords(destinationAddress)
+      await props.doSearch(
         originAddress,
+        originCoords,
         destinationAddress,
+        destinationCoords,
         date,
         arriveTime,
-        1,
       )
-
-      // Check for errors in addresses.
-      if (!coordsObj.originCoordLat || !coordsObj.originCoordLong) {
-        setOriginAddressError('Please check your input and try again.')
-      } else if (!coordsObj.destCoordLat || !coordsObj.destCoordLong) {
-        setDestinationAddressError('Please check your input and try again.')
-      } else {
-        try {
-          const trafficInfo = await getTrafficInfo(coordsObj)
-          const originTime = trafficInfo.data.Trip.pop().Origin.time.substring(0, 5)
-          props.setHomeAddress(originAddress)
-          props.saveHomeAddress(originAddress)
-          props.setRoute(destinationAddress, originTime, arriveTime)
-          props.setRouteTrip(trafficInfo.data.Trip.pop())
-          props.setDoSearch(true)
-        } catch (error) {
-          setDestinationAddressError(
-            'Itinerary could not be calculated. Please try a different address.',
-          )
-        }
-      }
-      props.setRouteLoading(false)
+    } catch (error) {
+      if (error instanceof AddressError) {
+        if (error.address === originAddress)
+          setOriginAddressError('Please check your input and try again.')
+        if (error.address === destinationAddress)
+          setDestinationAddressError('Please check your input and try again.')
+      } else if (error instanceof TrafficLabError) {
+        setDestinationAddressError(
+          'Itinerary could not be calculated, please try a different address.',
+        )
+      } else console.error(error)
     }
   }
 
@@ -165,9 +163,11 @@ function FormPresenter(props: FormPresenterProps) {
       arriveTime={arriveTime}
       setArriveTime={setArriveTime}
       searchClicked={performSearch}
+      searchInProgress={props.searchInProgress}
       itemComponent={SelectItem}
     />
   )
 }
 
+export type { ItemProps }
 export default FormPresenter
