@@ -4,12 +4,15 @@ import { UserCredential } from '@firebase/auth'
 import { observer } from 'mobx-react'
 import Model from '../../Model'
 import HeaderView from './header-view'
+import { ColorScheme } from '@mantine/core'
 
 interface HeaderPresenterProps {
   model: Model
+  colorScheme: ColorScheme
+  toggleColorScheme: () => void
 }
 
-const HeaderPresenter = observer(({ model }: HeaderPresenterProps) => {
+const HeaderPresenter = observer(({ model, colorScheme, toggleColorScheme }: HeaderPresenterProps) => {
   const navigate = useNavigate()
 
   const user: UserCredential | null = model.user
@@ -33,6 +36,8 @@ const HeaderPresenter = observer(({ model }: HeaderPresenterProps) => {
       initials={initials}
       userPhotoUrl={user.user.photoURL ?? ''}
       logoutFunction={logout}
+      colorScheme={colorScheme}
+      toggleColorScheme={toggleColorScheme}
     />
   )
 })
