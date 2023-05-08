@@ -1,12 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  AppShell,
-  ColorScheme,
-  ColorSchemeProvider,
-  Header,
-  MantineProvider,
-  Navbar,
-} from '@mantine/core'
+import { AppShell, ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core'
 import { useColorScheme } from '@mantine/hooks'
 import Model from './Model'
 import Navigator from './components/navigator/navigator'
