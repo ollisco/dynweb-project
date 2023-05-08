@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { calIsAuthed, calAuth, addTripToCalendar } from '../../calendarSource'
 import { Button, Alert } from '@mantine/core'
 import { IconAlertCircle } from '@tabler/icons-react'

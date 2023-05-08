@@ -7,7 +7,7 @@ import {
   getAutocompleteSuggestions,
   addressToCoords,
 } from '../../mapsSource'
-import { TrafficLabError } from '../../tripSource'
+import { TripError } from '../../tripSource'
 import FormView from './form-view'
 
 interface FormPresenterProps {
@@ -64,6 +64,7 @@ function FormPresenter(props: FormPresenterProps) {
   const [arriveTime, setArriveTime] = useState<string>('')
   const [originAddressError, setOriginAddressError] = useState<string>('')
   const [destinationAddressError, setDestinationAddressError] = useState<string>('')
+  const [searchError, setSearchError] = useState<string>('')
 
   // Load saved home address
   useEffect(() => {
@@ -121,6 +122,9 @@ function FormPresenter(props: FormPresenterProps) {
   }
 
   async function performSearch() {
+    setOriginAddressError('')
+    setDestinationAddressError('')
+    setSearchError('')
     try {
       const originCoords = await addressToCoords(originAddress)
       const destinationCoords = await addressToCoords(destinationAddress)
@@ -135,13 +139,13 @@ function FormPresenter(props: FormPresenterProps) {
     } catch (error) {
       if (error instanceof AddressError) {
         if (error.address === originAddress)
-          setOriginAddressError('Please check your input and try again.')
+          setOriginAddressError('Invalid address, please check your input and try again.')
         if (error.address === destinationAddress)
-          setDestinationAddressError('Please check your input and try again.')
-      } else if (error instanceof TrafficLabError) {
-        setDestinationAddressError(
-          'Itinerary could not be calculated, please try a different address.',
-        )
+          setDestinationAddressError('Invalid address, please check your input and try again.')
+      } else if (error instanceof TripError) {
+        if (error.code === 'ECONNABORTED')
+          setSearchError('Request timed out, please try again later.')
+        else setSearchError('Could not calculate itinerary, please try a different address')
       } else console.error(error)
     }
   }
@@ -165,6 +169,8 @@ function FormPresenter(props: FormPresenterProps) {
       searchClicked={performSearch}
       searchInProgress={props.searchInProgress}
       itemComponent={SelectItem}
+      searchError={searchError}
+      setSearchError={setSearchError}
     />
   )
 }

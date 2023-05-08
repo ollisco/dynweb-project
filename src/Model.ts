@@ -1,14 +1,13 @@
 import { UserCredential } from '@firebase/auth'
 import { signInWithGoogle, loadData, saveData } from './Firebase'
 import { makeAutoObservable } from 'mobx'
-import { CoordsObj, TrafficLabError, Trip, getTrafficInfo } from './tripSource'
+import { CoordsObj, TripError, Trip, getTrafficInfo } from './tripSource'
 import { Coordinates } from './mapsSource'
 
 class Model {
   user: UserCredential | null
   homeAddress: string | undefined
   destinationAddress: string | undefined
-  leaveTime: string | undefined
   arriveTime: string | undefined
   searchInProgress: boolean
   trips: Trip[] | undefined
@@ -25,7 +24,6 @@ class Model {
     this.user = null
     this.homeAddress = undefined
     this.destinationAddress = undefined
-    this.leaveTime = undefined
     this.arriveTime = undefined
     this.searchInProgress = false
     this.trips = undefined
@@ -76,11 +74,11 @@ class Model {
       const trafficInfo = await getTrafficInfo(coordsObj)
       this.setHomeAddress(originAddress)
       this.saveHomeAddress(originAddress)
-      this.setRoute(destinationAddress, arriveTime, trafficInfo.data.Trip)
+      this.setRoute(destinationAddress, arriveTime, trafficInfo.data.Trip.reverse())
       this.setSearchInProgress(false)
     } catch (error) {
       this.setSearchInProgress(false)
-      throw new TrafficLabError(error)
+      throw new TripError(error)
     }
   }
 

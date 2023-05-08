@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Trip } from '../../tripSource'
 import InformationView from './information-view'
 
@@ -11,7 +11,11 @@ interface InformationPresenterProps {
 }
 
 function InformationPresenter(props: InformationPresenterProps) {
-  const [selectedTripIndex] = useState<number>(0)
+  const [selectedTripIndex, setSelectTripIndex] = useState<number>(0)
+
+  useEffect(() => {
+    setSelectTripIndex(0)
+  }, [props.trips])
 
   return (
     <InformationView
@@ -21,6 +25,7 @@ function InformationPresenter(props: InformationPresenterProps) {
       searchInProgress={props.searchInProgress}
       trips={props.trips}
       selectedTripIndex={selectedTripIndex}
+      setSelectedTripIndex={setSelectTripIndex}
     />
   )
 }

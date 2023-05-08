@@ -1,9 +1,17 @@
 import { TRAFFICLAB_API_KEY } from './apiconf'
 import axios from 'axios'
 
-class TrafficLabError extends Error {
+class TripError extends Error {
+  code = ''
   constructor(error: unknown) {
     super(`Itinerary could not be calculated: ${error}`)
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      typeof error.code === 'string'
+    )
+      this.code = error.code
   }
 }
 
@@ -27,8 +35,11 @@ interface Trip {
         time: string
       }
       name: string
+      type: string
+      duration: string
     }[]
   }
+  duration: string
 }
 
 // Structure on parameter object in getTrafficInfo.
@@ -53,12 +64,12 @@ async function getTrafficInfo(coordsObj: CoordsObj) {
   apiUrl += params.toString()
 
   try {
-    const trafficInfo = await axios.get(apiUrl)
+    const trafficInfo = await axios.get(apiUrl, { timeout: 5000 })
     return trafficInfo
   } catch (error) {
-    throw new TrafficLabError(error)
+    throw new TripError(error)
   }
 }
 
 export type { Trip, CoordsObj }
-export { TrafficLabError, getTrafficInfo }
+export { TripError, getTrafficInfo }
