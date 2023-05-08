@@ -24,7 +24,13 @@ function App() {
         <UserProvider>
           <AppShell
             padding='md'
-            header={<HeaderPresenter model={model} />}
+            header={
+              <HeaderPresenter
+                model={model}
+                colorScheme={colorScheme}
+                toggleColorScheme={toggleColorScheme}
+              />
+            }
             styles={(theme) => ({
               main: {
                 backgroundColor:

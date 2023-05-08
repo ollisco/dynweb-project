@@ -25,22 +25,33 @@ class Model {
 
     const user = localStorage.getItem('user')
     this.user = user ? (JSON.parse(user) as UserCredential) : null
-
     this.homeAddress = undefined
     this.destinationAddress = undefined
     this.arriveTime = undefined
     this.searchInProgress = false
     this.trips = undefined
+
+    if (this.user) this.loadHomeAddress()
   }
 
   async signIn() {
     try {
       const user = await signInWithGoogle()
       this.setUser(user)
-      const data = await loadData(user)
-      if (data) this.setHomeAddress(data.homeAddress)
+      this.loadHomeAddress()
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  async loadHomeAddress() {
+    if (this.user) {
+      try {
+        const data = await loadData(this.user)
+        if (data) this.setHomeAddress(data.homeAddress)
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 
