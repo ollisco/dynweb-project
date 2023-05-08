@@ -4,7 +4,7 @@ import { useColorScheme } from '@mantine/hooks'
 import Model from './Model'
 import Navigator from './components/navigator/navigator'
 import { UserProvider } from './components/login/user-context'
-import HeaderPresenter from './components/header/headerPresenter'
+import HeaderPresenter from './components/header/header-presenter'
 
 const model = new Model()
 

@@ -1,9 +1,9 @@
 import React from 'react'
-import { Avatar, Group, Header, Menu, Text, UnstyledButton } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
 import { UserCredential } from '@firebase/auth'
 import { observer } from 'mobx-react'
 import Model from '../../Model'
+import HeaderView from './header-view'
 
 interface HeaderPresenterProps {
   model: Model
@@ -29,23 +29,11 @@ const HeaderPresenter = observer(({ model }: HeaderPresenterProps) => {
   }
 
   return (
-    <Header height={60} px='xl' py='xs'>
-      <Group position='apart' align='center' h='100%'>
-        <Text weight='bold' size='xl' color='blue.6'>
-          KOMITID
-        </Text>
-        <Menu>
-          <Menu.Target>
-            <Avatar alt={initials} src={user?.user.photoURL} component={UnstyledButton}>
-              {initials}
-            </Avatar>
-          </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Item onClick={logout}>Sign out</Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
-      </Group>
-    </Header>
+    <HeaderView
+      initials={initials}
+      userPhotoUrl={user.user.photoURL ?? ''}
+      logoutFunction={logout}
+    />
   )
 })
 
