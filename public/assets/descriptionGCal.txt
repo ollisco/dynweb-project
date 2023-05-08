@@ -1,0 +1,3 @@
+Assign destination and desired arrival time with google calender event.
+The start time and location of the first event on the chosen day of travel will be chosen.
+If no location is found, the destination adress field will be left empty

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { calIsAuthed, calAuth, getFirstEvent } from '../../calendarSource'
 import { Button, Alert } from '@mantine/core'
 import { IconAlertCircle } from '@tabler/icons-react'
@@ -14,6 +14,7 @@ function UseCalButton(props: UseCalButtonProps) {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [eventTitle, setEventTitle] = useState<string>('')
+  const [buttonTitle, setButtonTitle] = useState('');
 
   async function useCal() {
     setLoading(true)
@@ -37,9 +38,20 @@ function UseCalButton(props: UseCalButtonProps) {
     setLoading(false)
   }
 
+  function fetchButtonTitle() {
+    fetch('/assets/descriptionGCal.txt')
+    .then(response => response.text())
+    .then(text => {
+      setButtonTitle(text);
+    })
+    .catch(error => console.error(error));
+  }
+
+  useEffect(fetchButtonTitle, []);
+
   return (
     <div>
-      <Button onClick={useCal} loading={loading} leftIcon={<GoogleIcon />} variant='light'>
+      <Button title={buttonTitle} onClick={useCal} loading={loading} leftIcon={<GoogleIcon />} variant='light'>
         Use Google Calendar
       </Button>
       {error ? (
