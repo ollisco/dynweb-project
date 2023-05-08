@@ -1,9 +1,17 @@
 import { useEffect, useState } from 'react'
-import { ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core'
+import {
+  AppShell,
+  ColorScheme,
+  ColorSchemeProvider,
+  Header,
+  MantineProvider,
+  Navbar,
+} from '@mantine/core'
 import { useColorScheme } from '@mantine/hooks'
 import Model from './Model'
 import Navigator from './components/navigator/navigator'
 import { UserProvider } from './components/login/user-context'
+import HeaderPresenter from './components/header/headerPresenter'
 
 const model = new Model()
 
@@ -21,7 +29,18 @@ function App() {
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
         <UserProvider>
-          <Navigator model={model} />
+          <AppShell
+            padding='md'
+            header={<HeaderPresenter model={model} />}
+            styles={(theme) => ({
+              main: {
+                backgroundColor:
+                  theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
+              },
+            })}
+          >
+            <Navigator model={model} />
+          </AppShell>
         </UserProvider>
       </MantineProvider>
     </ColorSchemeProvider>

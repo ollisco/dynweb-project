@@ -16,6 +16,7 @@ class Model {
   constructor() {
     makeAutoObservable(this)
     this.signIn = this.signIn.bind(this)
+    this.signOut = this.signOut.bind(this)
     this.setUser = this.setUser.bind(this)
     this.setHomeAddress = this.setHomeAddress.bind(this)
     this.saveHomeAddress = this.saveHomeAddress.bind(this)
@@ -43,6 +44,11 @@ class Model {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  signOut() {
+    localStorage.removeItem('user')
+    this.user = null
   }
 
   setUser(user: UserCredential) {
