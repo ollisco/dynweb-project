@@ -14,7 +14,7 @@ function UseCalButton(props: UseCalButtonProps) {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [eventTitle, setEventTitle] = useState<string>('')
-  const [buttonTitle, setButtonTitle] = useState('');
+  const [buttonTitle, setButtonTitle] = useState('')
 
   async function useCal() {
     setLoading(true)
@@ -40,18 +40,24 @@ function UseCalButton(props: UseCalButtonProps) {
 
   function fetchButtonTitle() {
     fetch('/assets/descriptionGCal.txt')
-    .then(response => response.text())
-    .then(text => {
-      setButtonTitle(text);
-    })
-    .catch(error => console.error(error));
+      .then((response) => response.text())
+      .then((text) => {
+        setButtonTitle(text)
+      })
+      .catch((error) => console.error(error))
   }
 
-  useEffect(fetchButtonTitle, []);
+  useEffect(fetchButtonTitle, [])
 
   return (
     <div>
-      <Button title={buttonTitle} onClick={useCal} loading={loading} leftIcon={<GoogleIcon />} variant='light'>
+      <Button
+        title={buttonTitle}
+        onClick={useCal}
+        loading={loading}
+        leftIcon={<GoogleIcon />}
+        variant='light'
+      >
         Use Google Calendar
       </Button>
       {error ? (
