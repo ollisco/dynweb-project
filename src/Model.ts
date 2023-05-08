@@ -43,7 +43,7 @@ class Model {
       console.error(error)
     }
   }
-  
+
   async loadHomeAddress() {
     if (this.user) {
       try {
