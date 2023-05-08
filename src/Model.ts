@@ -22,7 +22,10 @@ class Model {
     this.doSearch = this.doSearch.bind(this)
     this.setRoute = this.setRoute.bind(this)
     this.setSearchInProgress = this.setSearchInProgress.bind(this)
-    this.user = null
+
+    const user = localStorage.getItem('user')
+    this.user = user ? (JSON.parse(user) as UserCredential) : null
+
     this.homeAddress = undefined
     this.destinationAddress = undefined
     this.leaveTime = undefined
@@ -44,6 +47,7 @@ class Model {
 
   setUser(user: UserCredential) {
     this.user = user
+    localStorage.setItem('user', JSON.stringify(user))
   }
 
   setHomeAddress(address: string) {
