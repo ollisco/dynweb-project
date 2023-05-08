@@ -1,7 +1,47 @@
-import { Box, Container, Stack, Title, Text, Paper, Flex, Timeline } from '@mantine/core'
+import {
+  Box,
+  Container,
+  Stack,
+  Title,
+  Text,
+  Paper,
+  Flex,
+  Timeline,
+  useMantineTheme,
+} from '@mantine/core'
 import AddToCalButton from '../calendar-buttons/add-to-cal-button'
 import { Trip } from '../../tripSource'
-import { MdDirectionsWalk, MdLocationPin, MdTrain, MdTransferWithinAStation } from 'react-icons/md'
+import {
+  MdDirectionsWalk,
+  MdLocationPin,
+  MdTrain,
+  MdTransferWithinAStation,
+  MdKeyboardArrowRight,
+} from 'react-icons/md'
+
+function getIcon(leg: { type: string } | undefined) {
+  switch (leg?.type) {
+    case 'WALK':
+      return <MdDirectionsWalk />
+    case 'JNY':
+      return <MdTrain />
+    case 'TRSF':
+      return <MdTransferWithinAStation />
+    default:
+      return
+  }
+}
+
+function humanizeDuration(duration: string | undefined) {
+  if (duration)
+    return duration
+      .replace('P', '')
+      .replace('T', '')
+      .replace('D', ' d ')
+      .replace('H', ' h ')
+      .replace('M', ' min')
+      .trim()
+}
 
 interface CompactTripDisplayComponentProps {
   tripIndex: number
@@ -11,17 +51,35 @@ interface CompactTripDisplayComponentProps {
 }
 
 function CompactTripDisplayComponent(props: CompactTripDisplayComponentProps) {
+  const theme = useMantineTheme()
   return (
     <Paper
       p='md'
       withBorder
       shadow={props.isSelected ? 'xl' : ''}
       onClick={() => props.selectTrip(props.tripIndex)}
+      style={{ border: props.isSelected ? '1px solid ' + theme.colors.blue[6] : '' }}
     >
-      <Text fw={700}>
-        {props.trip?.Origin.time.substring(0, 5)} - {props.trip?.Destination.time.substring(0, 5)}
-      </Text>
-      <Text>{props.trip?.duration.split('PT')[1].replace('H', ' t ').replace('M', ' min')}</Text>
+      <Stack>
+        <Flex gap='md' justify='space-between'>
+          <Text fw={700}>
+            {props.trip?.Origin.time.substring(0, 5)} -{' '}
+            {props.trip?.Destination.time.substring(0, 5)}
+          </Text>
+          <Text>{humanizeDuration(props.trip?.duration)}</Text>
+        </Flex>
+        <Text color='dimmed' style={{ display: 'flex', flexDirection: 'row' }}>
+          {getIcon(props.trip?.LegList.Leg[0])}
+          {props.trip?.LegList.Leg.slice(1).map((leg, index: number) => {
+            return (
+              <div key={index}>
+                <MdKeyboardArrowRight />
+                {getIcon(leg)}
+              </div>
+            )
+          })}
+        </Text>
+      </Stack>
     </Paper>
   )
 }
@@ -34,17 +92,6 @@ interface ExtendedTripDisplayComponentProps {
 }
 
 function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) {
-  function getIcon(legType: string | undefined) {
-    switch (legType) {
-      case 'WALK':
-        return <MdDirectionsWalk />
-      case 'JNY':
-        return <MdTrain />
-      case 'TRSF':
-        return <MdTransferWithinAStation />
-    }
-  }
-
   return (
     <Paper style={{ flexGrow: 1 }} p='md' withBorder>
       <Stack>
@@ -56,13 +103,10 @@ function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) 
             }`}
           >
             <Text color='dimmed' size='sm'>
-              {getIcon(props.trip?.LegList.Leg[0].type)} {props.trip?.LegList.Leg[0].name}
+              {getIcon(props.trip?.LegList.Leg[0])} {props.trip?.LegList.Leg[0].name}
             </Text>
             <Text color='dimmed' size='sm'>
-              {props.trip?.LegList.Leg[0].duration
-                .split('PT')[1]
-                .replace('H', ' t ')
-                .replace('M', ' min')}
+              {humanizeDuration(props.trip?.LegList.Leg[0].duration)}
             </Text>
           </Timeline.Item>
           {props.trip?.LegList.Leg.slice(1).map((leg, index: number) => {
@@ -72,10 +116,10 @@ function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) 
                 key={index}
               >
                 <Text color='dimmed' size='sm'>
-                  {getIcon(leg.type)} {leg.name}
+                  {getIcon(leg)} {leg.name}
                 </Text>
                 <Text color='dimmed' size='sm'>
-                  {leg.duration.split('PT')[1].replace('H', ' t ').replace('M', ' min')}
+                  {humanizeDuration(leg.duration)}
                 </Text>
               </Timeline.Item>
             )
