@@ -1,2 +1,0 @@
-Set your destination and arrival time with one click by using your Google Calendar.
-This will automatically find the first event of the chosen date and use its start time and location (if available) to calculate your commute.
