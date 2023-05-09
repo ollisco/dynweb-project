@@ -36,6 +36,7 @@ interface Trip {
       }
       name: string
       type: string
+      direction: string
       duration: string
     }[]
   }
