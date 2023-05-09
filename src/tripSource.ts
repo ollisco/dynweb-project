@@ -34,9 +34,15 @@ interface Trip {
         name: string
         time: string
       }
+      Product: {
+        name: string
+        catOutS: string
+        num: string
+      }[]
       name: string
       type: string
       duration: string
+      category: string
     }[]
   }
   duration: string
