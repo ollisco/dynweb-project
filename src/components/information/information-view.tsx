@@ -59,7 +59,7 @@ function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) 
               {getIcon(props.trip?.LegList.Leg[0].type)} {props.trip?.LegList.Leg[0].name}
             </Text>
             <Text color='dimmed' size='sm'>
-              {props.trip?.LegList.Leg[0].direction}
+              {props.trip?.LegList.Leg[0].direction?.split(/[,(]/)[0]}
             </Text>
             <Text color='dimmed' size='sm'>
               {props.trip?.LegList.Leg[0].duration
@@ -78,7 +78,7 @@ function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) 
                   {getIcon(leg.type)} {leg.name}
                 </Text>
                 <Text color='dimmed' size='sm'>
-                  {leg.direction}
+                  {leg.direction?.split(/[,(]/)[0]}
                 </Text>
                 <Text color='dimmed' size='sm'>
                   {leg.duration.split('PT')[1].replace('H', ' t ').replace('M', ' min')}
