@@ -14,6 +14,9 @@ function UseCalButton(props: UseCalButtonProps) {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [eventTitle, setEventTitle] = useState<string>('')
+  const buttonDesc =
+    'Set your destination and arrival time with one click by using your Google Calendar.\n' +
+    'This will automatically find the first event of the chosen date and use its start time and location (if available) to calculate your commute.'
 
   async function useCal() {
     setLoading(true)
@@ -39,7 +42,13 @@ function UseCalButton(props: UseCalButtonProps) {
 
   return (
     <div>
-      <Button onClick={useCal} loading={loading} leftIcon={<GoogleIcon />} variant='light'>
+      <Button
+        title={buttonDesc}
+        onClick={useCal}
+        loading={loading}
+        leftIcon={<GoogleIcon />}
+        variant='light'
+      >
         Use Google Calendar
       </Button>
       {error ? (

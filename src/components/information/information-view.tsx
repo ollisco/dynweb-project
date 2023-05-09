@@ -106,6 +106,9 @@ function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) 
               {getIcon(props.trip?.LegList.Leg[0])} {props.trip?.LegList.Leg[0].name}
             </Text>
             <Text color='dimmed' size='sm'>
+              {props.trip?.LegList.Leg[0].direction?.split(/[,(]/)[0]}
+            </Text>
+            <Text color='dimmed' size='sm'>
               {humanizeDuration(props.trip?.LegList.Leg[0].duration)}
             </Text>
           </Timeline.Item>
@@ -117,6 +120,9 @@ function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) 
               >
                 <Text color='dimmed' size='sm'>
                   {getIcon(leg)} {leg.name}
+                </Text>
+                <Text color='dimmed' size='sm'>
+                  {leg.direction?.split(/[,(]/)[0]}
                 </Text>
                 <Text color='dimmed' size='sm'>
                   {humanizeDuration(leg.duration)}

@@ -30,7 +30,7 @@ function LoginView({ onSignIn }: LoginViewProps) {
         >
           <Stack spacing='xs' justify='space-between' h='100%'>
             <Text size='lg' weight={500} ta='center' fz='xl' fw={700}>
-              Welcome back to Komitid!
+              Welcome to Komitid!
             </Text>
             <Group grow mb='md' mt='md'>
               <Button
