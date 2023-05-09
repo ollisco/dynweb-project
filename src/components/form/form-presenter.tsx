@@ -9,6 +9,7 @@ import {
 } from '../../mapsSource'
 import { TripError } from '../../tripSource'
 import FormView from './form-view'
+import { animateScroll } from 'react-scroll'
 
 interface FormPresenterProps {
   homeAddress: string | undefined
@@ -70,6 +71,11 @@ function FormPresenter(props: FormPresenterProps) {
   useEffect(() => {
     if (props.homeAddress) setOriginAddress(props.homeAddress)
   }, [props.homeAddress])
+
+  const scrollToBottom = () => {
+    console.log('trying to scroll');
+    animateScroll.scrollToBottom({ duration: 500 })
+  }
 
   const debouncedGetSuggestions = useCallback(
     // useCallback caches functions between rerenders
@@ -166,7 +172,10 @@ function FormPresenter(props: FormPresenterProps) {
       setDate={setDate}
       arriveTime={arriveTime}
       setArriveTime={setArriveTime}
-      searchClicked={performSearch}
+      searchClicked={async () => {
+        await performSearch()
+        scrollToBottom()
+      }}
       searchInProgress={props.searchInProgress}
       itemComponent={SelectItem}
       searchError={searchError}
