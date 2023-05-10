@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { calIsAuthed, calAuth, getFirstEvent } from '../../calendarSource'
-import { Button, Alert } from '@mantine/core'
+import { Button, Alert, ActionIcon, Group, Text, Popover } from '@mantine/core'
 import { IconAlertCircle } from '@tabler/icons-react'
 import GoogleIcon from '../basic/googleicon'
+import { MdInfoOutline } from 'react-icons/md'
 
 interface UseCalButtonProps {
   date: Date
@@ -14,7 +15,7 @@ function UseCalButton(props: UseCalButtonProps) {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [eventTitle, setEventTitle] = useState<string>('')
-  const buttonDesc =
+  const buttonInfo =
     'Set your destination and arrival time with one click by using your Google Calendar.\n' +
     'This will automatically find the first event of the chosen date and use its start time and location (if available) to calculate your commute.'
 
@@ -42,15 +43,23 @@ function UseCalButton(props: UseCalButtonProps) {
 
   return (
     <div>
-      <Button
-        title={buttonDesc}
-        onClick={useCal}
-        loading={loading}
-        leftIcon={<GoogleIcon />}
-        variant='light'
-      >
-        Use Google Calendar
-      </Button>
+      <Group spacing='xs'>
+        <Button onClick={useCal} loading={loading} leftIcon={<GoogleIcon />} variant='light'>
+          Use Google Calendar
+        </Button>
+        <Popover>
+          <Popover.Target>
+            <ActionIcon size='lg'>
+              <MdInfoOutline size={20}/>
+            </ActionIcon>
+          </Popover.Target>
+          <Popover.Dropdown>
+            <Text size='sm' w='300px'>
+              {buttonInfo}
+            </Text>
+          </Popover.Dropdown>
+        </Popover>
+      </Group>
       {error ? (
         <Alert
           icon={<IconAlertCircle size='1rem' />}
