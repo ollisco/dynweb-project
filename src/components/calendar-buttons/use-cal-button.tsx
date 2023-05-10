@@ -50,7 +50,7 @@ function UseCalButton(props: UseCalButtonProps) {
         <Popover>
           <Popover.Target>
             <ActionIcon size='lg'>
-              <MdInfoOutline size={20}/>
+              <MdInfoOutline size={20} />
             </ActionIcon>
           </Popover.Target>
           <Popover.Dropdown>
