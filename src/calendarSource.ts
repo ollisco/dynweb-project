@@ -23,6 +23,26 @@ interface processedEvent {
   location: string
 }
 
+interface newEvent {
+  summary: string
+  description: string
+  start: {
+    dateTime: string
+    timeZone: string
+  }
+  end: {
+    dateTime: string
+    timeZone: string
+  }
+  reminders?: {
+    useDefault: boolean
+    overrides: {
+      minutes: number
+      method: string
+    }[]
+  }
+}
+
 function calIsAuthed() {
   return !!gcal.getToken() && !!gcal.getToken().access_token
 }
@@ -77,7 +97,12 @@ async function getFirstEvent(date: Date) {
   else return null
 }
 
-function addTripToCalendar(originAddress: string, destinationAddress: string, trip: Trip) {
+function addTripToCalendar(
+  originAddress: string,
+  destinationAddress: string,
+  trip: Trip,
+  notification: number,
+) {
   const summary = 'Komitid trip'
 
   let description = `Trip from ${originAddress} to ${destinationAddress}\n`
@@ -93,7 +118,7 @@ function addTripToCalendar(originAddress: string, destinationAddress: string, tr
   const startDateTime = new Date(`${trip.Origin.date}T${trip.Origin.time}`)
   const endDateTime = new Date(`${trip.Destination.date}T${trip.Destination.time}`)
 
-  const event = {
+  const event: newEvent = {
     summary: summary,
     description: description,
     start: {
@@ -104,6 +129,18 @@ function addTripToCalendar(originAddress: string, destinationAddress: string, tr
       dateTime: endDateTime.toISOString(),
       timeZone: 'Europe/Stockholm',
     },
+  }
+
+  if (notification) {
+    event.reminders = {
+      useDefault: false,
+      overrides: [
+        {
+          minutes: notification,
+          method: 'popup',
+        },
+      ],
+    }
   }
 
   return gcal.createEvent(event)
