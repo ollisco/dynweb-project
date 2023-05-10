@@ -15,9 +15,6 @@ function UseCalButton(props: UseCalButtonProps) {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [eventTitle, setEventTitle] = useState<string>('')
-  const buttonInfo =
-    'Set your destination and arrival time with one click by using your Google Calendar.\n' +
-    'This will automatically find the first event of the chosen date and use its start time and location (if available) to calculate your commute.'
 
   async function useCal() {
     setLoading(true)
@@ -55,7 +52,11 @@ function UseCalButton(props: UseCalButtonProps) {
           </Popover.Target>
           <Popover.Dropdown>
             <Text size='sm' w='300px'>
-              {buttonInfo}
+              Set your destination and arrival time with one click by using your Google Calendar.
+            </Text>
+            <Text size='sm' w='300px'>
+              This will automatically find the first event of the chosen date and use its start time
+              and location (if available) to calculate your commute.
             </Text>
           </Popover.Dropdown>
         </Popover>
