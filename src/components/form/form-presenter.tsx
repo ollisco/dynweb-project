@@ -1,23 +1,17 @@
 import { LegacyRef, forwardRef, useCallback, useEffect, useState } from 'react'
 import { Group, Text, SelectItemProps, MantineColor } from '@mantine/core'
 import { debounce } from 'lodash'
-import {
-  AddressError,
-  Coordinates,
-  getAutocompleteSuggestions,
-  addressToCoords,
-} from '../../mapsSource'
+import { AddressError, getAutocompleteSuggestions } from '../../mapsSource'
 import { TripError } from '../../tripSource'
 import FormView from './form-view'
 
 interface FormPresenterProps {
   homeAddress: string | undefined
+  saveHomeAddress: (value: string) => void
   searchInProgress: boolean
   doSearch: (
     originAddress: string,
-    originCoords: Coordinates,
     destinationAddress: string,
-    destinationCoords: Coordinates,
     date: Date,
     arriveTime: string,
   ) => void
@@ -65,6 +59,7 @@ function FormPresenter(props: FormPresenterProps) {
   const [originAddressError, setOriginAddressError] = useState<string>('')
   const [destinationAddressError, setDestinationAddressError] = useState<string>('')
   const [searchError, setSearchError] = useState<string>('')
+  const [saveHomeAddress, setSaveHomeAddress] = useState<boolean>(false)
 
   // Load saved home address
   useEffect(() => {
@@ -126,16 +121,8 @@ function FormPresenter(props: FormPresenterProps) {
     setDestinationAddressError('')
     setSearchError('')
     try {
-      const originCoords = await addressToCoords(originAddress)
-      const destinationCoords = await addressToCoords(destinationAddress)
-      await props.doSearch(
-        originAddress,
-        originCoords,
-        destinationAddress,
-        destinationCoords,
-        date,
-        arriveTime,
-      )
+      await props.doSearch(originAddress, destinationAddress, date, arriveTime)
+      if (saveHomeAddress) props.saveHomeAddress(originAddress)
     } catch (error) {
       if (error instanceof AddressError) {
         if (error.address === originAddress)
@@ -171,6 +158,8 @@ function FormPresenter(props: FormPresenterProps) {
       itemComponent={SelectItem}
       searchError={searchError}
       setSearchError={setSearchError}
+      saveHomeAddress={saveHomeAddress}
+      setSaveHomeAddress={setSaveHomeAddress}
     />
   )
 }

@@ -1,6 +1,16 @@
 import { DateInput, TimeInput } from '@mantine/dates'
 import { ItemProps } from './form-presenter'
-import { Alert, Autocomplete, Box, Button, Container, Loader, Paper, Stack } from '@mantine/core'
+import {
+  Alert,
+  Autocomplete,
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  Loader,
+  Paper,
+  Stack,
+} from '@mantine/core'
 import { IconAlertCircle } from '@tabler/icons-react'
 import UseCalButton from '../calendar-buttons/use-cal-button'
 
@@ -24,6 +34,8 @@ interface FormViewProps {
   searchInProgress: boolean
   searchError: string
   setSearchError: (value: string) => void
+  saveHomeAddress: boolean
+  setSaveHomeAddress: (value: boolean) => void
 }
 
 function FormView(props: FormViewProps) {
@@ -44,6 +56,11 @@ function FormView(props: FormViewProps) {
               filter={() => true} // API filters the data instead of this component
               itemComponent={props.itemComponent}
               error={props.originAddressError}
+            />
+            <Checkbox
+              checked={props.saveHomeAddress}
+              onChange={(event) => props.setSaveHomeAddress(event.currentTarget.checked)}
+              label='Save my home address to my account'
             />
             <DateInput
               label='Day of travel'
