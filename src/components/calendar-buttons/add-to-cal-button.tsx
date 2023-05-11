@@ -4,7 +4,11 @@ import { Button, Alert, Menu } from '@mantine/core'
 import { IconAlertCircle, IconChevronDown } from '@tabler/icons-react'
 import GoogleIcon from '../basic/googleicon'
 import { Trip } from '../../tripSource'
-import { MdOutlineNotificationsActive, MdOutlineNotificationsOff } from 'react-icons/md'
+import {
+  MdOutlineNotifications,
+  MdOutlineNotificationsActive,
+  MdOutlineNotificationsOff,
+} from 'react-icons/md'
 
 interface AddToCalButtonProps {
   originAddress: string | undefined
@@ -57,8 +61,11 @@ function AddToCalButton(props: AddToCalButtonProps) {
           </Button>
         </Menu.Target>
         <Menu.Dropdown>
+          <Menu.Item icon={<MdOutlineNotifications />} onClick={() => addTrip(-1)}>
+            Default reminders
+          </Menu.Item>
           <Menu.Item icon={<MdOutlineNotificationsOff />} onClick={() => addTrip(0)}>
-            No notification
+            No reminder
           </Menu.Item>
           <Menu.Item icon={<MdOutlineNotificationsActive />} onClick={() => addTrip(5)}>
             5 min before

@@ -131,7 +131,7 @@ function addTripToCalendar(
     },
   }
 
-  if (notification) {
+  if (notification > 0) {
     event.reminders = {
       useDefault: false,
       overrides: [
@@ -140,6 +140,11 @@ function addTripToCalendar(
           method: 'popup',
         },
       ],
+    }
+  } else if (notification == 0) {
+    event.reminders = {
+      useDefault: false,
+      overrides: [],
     }
   }
 
