@@ -20,6 +20,7 @@ interface FormViewProps {
   arriveTime: string
   setArriveTime: (value: string) => void
   searchClicked: React.MouseEventHandler<HTMLButtonElement>
+  enterClicked: () => Promise<void>
   itemComponent: React.ForwardRefExoticComponent<ItemProps & React.RefAttributes<HTMLDivElement>>
   searchInProgress: boolean
   searchError: string
@@ -77,6 +78,9 @@ function FormView(props: FormViewProps) {
               value={props.arriveTime}
               onChange={(e) => {
                 props.setArriveTime(e.target.value)
+              }}
+              onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+                if (event.key === 'Enter') props.enterClicked()
               }}
             />
             <Button

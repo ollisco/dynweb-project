@@ -74,7 +74,7 @@ function FormPresenter(props: FormPresenterProps) {
 
   const scrollToBottom = () => {
     console.log('trying to scroll');
-    animateScroll.scrollToBottom({ duration: 500 })
+    animateScroll.scrollTo(460, { duration: 700 })
   }
 
   const debouncedGetSuggestions = useCallback(
@@ -173,6 +173,10 @@ function FormPresenter(props: FormPresenterProps) {
       arriveTime={arriveTime}
       setArriveTime={setArriveTime}
       searchClicked={async () => {
+        await performSearch()
+        scrollToBottom()
+      }}
+      enterClicked={async () => {
         await performSearch()
         scrollToBottom()
       }}
