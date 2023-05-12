@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { calIsAuthed, calAuth, addTripToCalendar } from '../../calendarSource'
-import { Button, Alert, Menu } from '@mantine/core'
+import { Button, Alert, Menu, Text } from '@mantine/core'
 import { IconAlertCircle, IconChevronDown } from '@tabler/icons-react'
 import GoogleIcon from '../basic/googleicon'
 import { Trip } from '../../tripSource'
@@ -101,7 +101,9 @@ function AddToCalButton(props: AddToCalButtonProps) {
             setEventLink('')
           }}
         >
-          <a href={eventLink}>{eventLink}</a>
+          <a href={eventLink}>
+            <Text>View Event</Text>
+          </a>
         </Alert>
       ) : null}
     </div>
