@@ -23,6 +23,7 @@ const Navigator = observer(({ model }: NavigatorProps) => {
             <div>
               <FormPresenter
                 homeAddress={model.homeAddress}
+                saveHomeAddress={model.saveHomeAddress}
                 searchInProgress={model.searchInProgress}
                 doSearch={model.doSearch}
               />

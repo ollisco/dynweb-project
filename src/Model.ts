@@ -1,8 +1,8 @@
 import { UserCredential } from '@firebase/auth'
 import { signInWithGoogle, loadData, saveData } from './Firebase'
 import { makeAutoObservable } from 'mobx'
-import { CoordsObj, TripError, Trip, getTrafficInfo } from './tripSource'
-import { Coordinates } from './mapsSource'
+import { CoordsObj, Trip, getTrafficInfo } from './tripSource'
+import { addressToCoords } from './mapsSource'
 
 class Model {
   user: UserCredential | null
@@ -75,31 +75,30 @@ class Model {
 
   async doSearch(
     originAddress: string,
-    originCoords: Coordinates,
     destinationAddress: string,
-    destinationCoords: Coordinates,
     date: Date,
     arriveTime: string,
   ) {
     this.setSearchInProgress(true)
-    const coordsObj: CoordsObj = {
-      originCoordLat: originCoords.latitude,
-      originCoordLong: originCoords.longitude,
-      destCoordLat: destinationCoords.latitude,
-      destCoordLong: destinationCoords.longitude,
-      date: date.toISOString().substring(0, 10),
-      time: arriveTime.substring(0, 5),
-      searchForArrival: 1,
-    }
     try {
+      const originCoords = await addressToCoords(originAddress)
+      const destinationCoords = await addressToCoords(destinationAddress)
+      const coordsObj: CoordsObj = {
+        originCoordLat: originCoords.latitude,
+        originCoordLong: originCoords.longitude,
+        destCoordLat: destinationCoords.latitude,
+        destCoordLong: destinationCoords.longitude,
+        date: date.toISOString().substring(0, 10),
+        time: arriveTime.substring(0, 5),
+        searchForArrival: 1,
+      }
       const trafficInfo = await getTrafficInfo(coordsObj)
       this.setHomeAddress(originAddress)
-      this.saveHomeAddress(originAddress)
       this.setRoute(destinationAddress, arriveTime, trafficInfo.data.Trip.reverse())
       this.setSearchInProgress(false)
     } catch (error) {
       this.setSearchInProgress(false)
-      throw new TripError(error)
+      throw error
     }
   }
 
