@@ -1,9 +1,14 @@
 import { useState } from 'react'
 import { calIsAuthed, calAuth, addTripToCalendar } from '../../calendarSource'
-import { Button, Alert } from '@mantine/core'
-import { IconAlertCircle } from '@tabler/icons-react'
+import { Button, Alert, Menu } from '@mantine/core'
+import { IconAlertCircle, IconChevronDown } from '@tabler/icons-react'
 import GoogleIcon from '../basic/googleicon'
 import { Trip } from '../../tripSource'
+import {
+  MdOutlineNotifications,
+  MdOutlineNotificationsActive,
+  MdOutlineNotificationsOff,
+} from 'react-icons/md'
 
 interface AddToCalButtonProps {
   originAddress: string | undefined
@@ -16,7 +21,7 @@ function AddToCalButton(props: AddToCalButtonProps) {
   const [error, setError] = useState<string>('')
   const [eventLink, setEventLink] = useState<string>('')
 
-  async function addTrip() {
+  async function addTrip(notification: number) {
     setLoading(true)
     setError('')
     setEventLink('')
@@ -33,6 +38,7 @@ function AddToCalButton(props: AddToCalButtonProps) {
           props.originAddress,
           props.destinationAddress,
           props.trip,
+          notification,
         )
         setEventLink(event.result.htmlLink)
       }
@@ -42,15 +48,36 @@ function AddToCalButton(props: AddToCalButtonProps) {
 
   return (
     <div>
-      <Button
-        onClick={addTrip}
-        disabled={!(props.originAddress && props.destinationAddress)}
-        loading={loading}
-        leftIcon={<GoogleIcon />}
-        variant='light'
-      >
-        Add to Google Calendar
-      </Button>
+      <Menu position='top-end'>
+        <Menu.Target>
+          <Button
+            disabled={!(props.originAddress && props.destinationAddress)}
+            loading={loading}
+            leftIcon={<GoogleIcon />}
+            variant='light'
+            rightIcon={<IconChevronDown size='1.05rem' stroke={1.5} />}
+          >
+            Add to Google Calendar
+          </Button>
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Item icon={<MdOutlineNotifications />} onClick={() => addTrip(-1)}>
+            Default reminders
+          </Menu.Item>
+          <Menu.Item icon={<MdOutlineNotificationsOff />} onClick={() => addTrip(0)}>
+            No reminder
+          </Menu.Item>
+          <Menu.Item icon={<MdOutlineNotificationsActive />} onClick={() => addTrip(5)}>
+            5 min before
+          </Menu.Item>
+          <Menu.Item icon={<MdOutlineNotificationsActive />} onClick={() => addTrip(15)}>
+            15 min before
+          </Menu.Item>
+          <Menu.Item icon={<MdOutlineNotificationsActive />} onClick={() => addTrip(30)}>
+            30 min before
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
       {error ? (
         <Alert
           icon={<IconAlertCircle size='1rem' />}
