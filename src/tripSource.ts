@@ -38,6 +38,7 @@ interface Trip {
       type: string
       direction: string
       duration: string
+      category: string
     }[]
   }
   duration: string
