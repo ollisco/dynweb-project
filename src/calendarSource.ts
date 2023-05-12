@@ -14,13 +14,13 @@ interface rawEvent {
   start: {
     dateTime: string
   }
-  location: string
+  location?: string
 }
 
 interface processedEvent {
   title: string
   start: string
-  location: string
+  location: string | undefined
 }
 
 interface newEvent {
@@ -51,13 +51,16 @@ function calAuth() {
   return gcal.handleAuthClick()
 }
 
-// function calSignOut() {
-//   gcal.handleSignoutClick()
-// }
-
 function getDaysEvents(date: Date) {
-  function extractData(result: { result: { items: rawEvent[] } }): processedEvent[] {
-    return result.result.items.map((event: rawEvent) => {
+  function removeBadEvents(result: { result: { items: rawEvent[] } }) {
+    console.log(result)
+    return result.result.items.filter((event: rawEvent) => {
+      return event.start && event.summary !== 'Komitid trip'
+    })
+  }
+
+  function extractRelevantData(events: rawEvent[]): processedEvent[] {
+    return events.map((event: rawEvent) => {
       return {
         title: event.summary,
         start: event.start.dateTime,
@@ -66,13 +69,9 @@ function getDaysEvents(date: Date) {
     })
   }
 
-  function removeBadEvents(events: [processedEvent]) {
-    return events.filter((event: processedEvent) => {
-      return (
-        event.start &&
-        event.start.substring(0, 10) == date.toISOString().substring(0, 10) &&
-        event.title !== 'Komitid trip'
-      )
+  function sortByStartTime(events: processedEvent[]) {
+    return events.sort((a, b) => {
+      return new Date(a.start).getTime() - new Date(b.start).getTime()
     })
   }
 
@@ -86,9 +85,11 @@ function getDaysEvents(date: Date) {
         date.getHours(),
       ).toISOString(),
       maxResults: 10,
+      singleEvents: true,
     })
-    .then(extractData)
     .then(removeBadEvents)
+    .then(extractRelevantData)
+    .then(sortByStartTime)
 }
 
 async function getFirstEvent(date: Date) {
