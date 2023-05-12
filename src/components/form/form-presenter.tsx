@@ -73,7 +73,7 @@ function FormPresenter(props: FormPresenterProps) {
   }, [props.homeAddress])
 
   const scrollToBottom = () => {
-    console.log('trying to scroll');
+    console.log('trying to scroll')
     animateScroll.scrollTo(460, { duration: 700 })
   }
 
