@@ -22,7 +22,6 @@ import {
 } from 'react-icons/md'
 
 function getIcon(leg: { type: string; category: string } | undefined) {
-  console.log(JSON.stringify(leg))
   switch (leg?.category) {
     case 'BLT':
       return <MdDirectionsBus />
@@ -33,7 +32,6 @@ function getIcon(leg: { type: string; category: string } | undefined) {
     default:
       break
   }
-
   switch (leg?.type) {
     case 'WALK':
       return <MdDirectionsWalk />
@@ -109,9 +107,10 @@ function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) 
   return (
     <Paper style={{ flexGrow: 1 }} p='md' withBorder>
       <Stack>
-        <Timeline bulletSize={24} lineWidth={2} active={props.trip?.LegList.Leg.length}>
+        <Timeline lineWidth={2} active={props.trip?.LegList.Leg.length}>
           <Timeline.Item
             bullet={<MdLocationPin size={16} />}
+            bulletSize={24}
             title={`${props.trip?.Origin.time.substring(0, 5)} - ${
               props.originAddress?.split(/[,()]/)[0]
             }`}
@@ -126,7 +125,7 @@ function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) 
           {props.trip?.LegList.Leg.slice(1).map((leg, index: number) => {
             return (
               <Timeline.Item
-                bullet={getIcon(leg)}
+                bulletSize={16}
                 title={`${leg.Origin.time.substring(0, 5)} - ${leg.Origin.name.split(/[,(]/)[0]}`}
                 key={index}
               >
@@ -141,6 +140,7 @@ function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) 
           })}
           <Timeline.Item
             bullet={<MdLocationPin size={16} />}
+            bulletSize={24}
             title={`${props.trip?.Destination.time.substring(0, 5)} - ${
               props.destinationAddress?.split(/[,()]/)[0]
             }`}
