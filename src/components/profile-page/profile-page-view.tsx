@@ -16,6 +16,7 @@ import {
 import { UserCredential } from 'firebase/auth'
 import { SelectItem } from '../form/form-presenter'
 import { IconX } from '@tabler/icons-react'
+import { Item, ItemGroup, ItemGroupComp } from './profile-page-components/profile-page-item'
 
 interface ProfilePageViewProps {
   user: UserCredential | null
@@ -46,6 +47,47 @@ const ProfilePageView = ({
   const userPhotoUrl = user?.user.photoURL ?? ''
   const displayName = user?.user.displayName ?? ''
   const email = user?.user.email ?? ''
+
+  const item1: Item = {
+    name: 'brush teeth',
+    description: 'brush teeth',
+    duration: 5,
+  }
+
+  const item2: Item = {
+    name: 'eat breakfast',
+    description: 'eat breakfast',
+    duration: 10,
+  }
+
+  const item3: Item = {
+    name: 'get dressed',
+    description: 'get dressed',
+    duration: 25,
+  }
+  const itemGroupA: ItemGroup = {
+    name: 'morning routine',
+    items: [item1, item2, item3],
+  }
+
+  const item4: Item = {
+    name: 'pack gym bag',
+    description: 'pack gym bag',
+    duration: 5,
+  }
+
+  const item5: Item = {
+    name: 'make protein shake',
+    description: 'make protein shake',
+    duration: 15,
+  }
+
+  const itemGroupB: ItemGroup = {
+    name: 'gym routine',
+    items: [item4, item5],
+  }
+
+  const itemGroups: ItemGroup[] = [itemGroupA, itemGroupB]
 
   return (
     <Box w='100vw'>
@@ -84,6 +126,22 @@ const ProfilePageView = ({
               filter={() => true} // API filters the data instead of this component
               itemComponent={SelectItem}
             />
+
+            <Stack spacing={0}>
+              <Text weight={500} size='sm'>
+                Items
+              </Text>
+              <Text size='xs' color='dimmed'>
+                Add items to your profile to make it easier to plan rides
+              </Text>
+            </Stack>
+            <Stack>
+              {itemGroups.map((itemGroup) => (
+                <>
+                  <ItemGroupComp {...itemGroup} />
+                </>
+              ))}
+            </Stack>
             <Group position='right'>
               <Button variant='light' color='blue' size='sm' onClick={saveFunction}>
                 Save
