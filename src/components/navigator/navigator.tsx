@@ -16,7 +16,7 @@ const Navigator = observer(({ model }: NavigatorProps) => {
     <Routes>
       <Route path='login' element={<LoginPresenter user={model.user} signIn={model.signIn} />} />
       <Route path='logout' element={<Logout logoutFunction={model.signOut} />} />
-      <Route element={<RequireAuth />}>
+      <Route element={<RequireAuth user={model.user} />}>
         <Route path='' element={<MainPagePresenter model={model} />} />
         <Route path='profile' element={<ProfilePagePresenter />} />
       </Route>

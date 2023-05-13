@@ -8,8 +8,7 @@ interface RequireAuthProps {
 const RequireAuth = ({ user }: RequireAuthProps) => {
   const location = useLocation()
 
-
-  if (user) {
+  if (!user) {
     return <Navigate to='/login' state={{ from: location }} />
   }
 
