@@ -10,9 +10,12 @@ import {
   Button,
   Avatar,
   Group,
+  UnstyledButton,
+  Center,
 } from '@mantine/core'
 import { UserCredential } from 'firebase/auth'
 import { SelectItem } from '../form/form-presenter'
+import { IconX } from '@tabler/icons-react'
 
 interface ProfilePageViewProps {
   user: UserCredential | null
@@ -64,7 +67,17 @@ const ProfilePageView = ({
               value={addressSearch}
               data={addressData}
               onChange={setAddressSearch}
-              rightSection={addressLoading ? <Loader size='1rem' /> : null}
+              rightSection={
+                addressLoading ? (
+                  <Loader size='1rem' />
+                ) : (
+                  <Center sx={{ visibility: addressSearch ? 'visible' : 'hidden' }}>
+                    <UnstyledButton onClick={() => setAddressSearch('')}>
+                      <IconX size='1rem' />
+                    </UnstyledButton>
+                  </Center>
+                )
+              }
               label='Home address'
               placeholder='Drottning Kristinas väg 13'
               name='address'

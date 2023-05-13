@@ -31,10 +31,8 @@ const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => 
   }, [])
 
   const save = () => {
-    if (addressSearch) {
-      setHomeAddress(addressSearch)
-      saveHomeAddress(addressSearch)
-    }
+    setHomeAddress(addressSearch)
+    saveHomeAddress(addressSearch)
   }
 
   useEffect(() => {
