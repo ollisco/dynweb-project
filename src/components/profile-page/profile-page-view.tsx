@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   Box,
   Text,
@@ -6,17 +7,10 @@ import {
   Stack,
   Autocomplete,
   Loader,
-  Checkbox,
   Button,
-  Alert,
   Avatar,
   Group,
 } from '@mantine/core'
-import { DateInput, TimeInput } from '@mantine/dates'
-import { IconAlertCircle, IconMapPin, IconPin } from '@tabler/icons-react'
-import React from 'react'
-import UseCalButton from '../calendar-buttons/use-cal-button'
-import { useForm } from '@mantine/form'
 import { UserCredential } from 'firebase/auth'
 import { SelectItem } from '../form/form-presenter'
 
@@ -74,10 +68,8 @@ const ProfilePageView = ({
               label='Home address'
               placeholder='Drottning Kristinas väg 13'
               name='address'
-              required
               filter={() => true} // API filters the data instead of this component
               itemComponent={SelectItem}
-              // error={props.originAddressError}
             />
             <Group position='right'>
               <Button variant='light' color='blue' size='sm' onClick={saveFunction}>

@@ -1,9 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import ProfilePageView from './profile-page-view'
-import { UserCredential } from 'firebase/auth'
-import { useForm } from '@mantine/form'
-import { useDebouncedState, useDebouncedValue } from '@mantine/hooks'
-import { debounce } from 'lodash'
+import { useDebouncedValue } from '@mantine/hooks'
 import { getAutocompleteSuggestions } from '../../mapsSource'
 import { observer } from 'mobx-react'
 import Model from '../../Model'
@@ -29,7 +26,6 @@ const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => 
         value: item.street + ', ' + item.postcodeAndCity, // this is what will be shown if selected
       }),
     )
-    console.log(formattedSuggestions)
     setSuggestions(formattedSuggestions)
     setLoading(false)
   }, [])
@@ -46,7 +42,6 @@ const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => 
   }, [debounceedAddressSearch])
 
   useEffect(() => {
-    console.log(homeAddress)
     if (homeAddress) setAddressSearch(homeAddress)
   }, [homeAddress])
 
