@@ -3,7 +3,6 @@ import { AppShell, ColorScheme, ColorSchemeProvider, MantineProvider } from '@ma
 import { useColorScheme } from '@mantine/hooks'
 import Model from './Model'
 import Navigator from './components/navigator/navigator'
-import { UserProvider } from './components/login/user-context'
 import HeaderPresenter from './components/header/header-presenter'
 
 const model = new Model()
@@ -21,26 +20,24 @@ function App() {
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-        <UserProvider>
-          <AppShell
-            padding='md'
-            header={
-              <HeaderPresenter
-                model={model}
-                colorScheme={colorScheme}
-                toggleColorScheme={toggleColorScheme}
-              />
-            }
-            styles={(theme) => ({
-              main: {
-                backgroundColor:
-                  theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
-              },
-            })}
-          >
-            <Navigator model={model} />
-          </AppShell>
-        </UserProvider>
+        <AppShell
+          padding='md'
+          header={
+            <HeaderPresenter
+              model={model}
+              colorScheme={colorScheme}
+              toggleColorScheme={toggleColorScheme}
+            />
+          }
+          styles={(theme) => ({
+            main: {
+              backgroundColor:
+                theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
+            },
+          })}
+        >
+          <Navigator model={model} />
+        </AppShell>
       </MantineProvider>
     </ColorSchemeProvider>
   )

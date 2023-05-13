@@ -1,11 +1,15 @@
+import { UserCredential } from 'firebase/auth'
 import { Navigate, useLocation, Outlet } from 'react-router-dom'
-import useAuth from '../login/user-context'
 
-const RequireAuth = () => {
-  const { isLoggedIn } = useAuth()
+interface RequireAuthProps {
+  user: UserCredential | null
+}
+
+const RequireAuth = ({ user }: RequireAuthProps) => {
   const location = useLocation()
 
-  if (!isLoggedIn) {
+
+  if (user) {
     return <Navigate to='/login' state={{ from: location }} />
   }
 
