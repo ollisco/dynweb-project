@@ -128,28 +128,30 @@ export const ItemGroupComp = ({ name, items }: ItemGroup) => {
             </Text>
           </UnstyledButton>
         ) : (
-          <Group px='xl' align='flex-start' noWrap>
-            <TextInput label='Name' placeholder='Name' required {...form.getInputProps('name')} />
-            <TextInput
-              label='Description'
-              placeholder='Description'
-              required
-              {...form.getInputProps('description')}
-            />
-            <NumberInput
-              label='Duration (min)'
-              placeholder='How long it will take'
-              required
-              {...form.getInputProps('duration')}
-            />
+          <Group pl='xl' align='flex-start' position='apart' noWrap>
+            <Group noWrap>
+              <TextInput label='Name' placeholder='Name' required {...form.getInputProps('name')} />
+              <TextInput
+                label='Description'
+                placeholder='Description'
+                required
+                {...form.getInputProps('description')}
+              />
+              <NumberInput
+                label='Duration (min)'
+                placeholder='How long it will take'
+                required
+                {...form.getInputProps('duration')}
+              />
+            </Group>
             <Stack spacing={0}>
               <Text sx={{ visibility: 'hidden' }}>invisible lable</Text>
               <Group noWrap>
                 <Button variant='light' color='gray' size='sm' onClick={toggleAddItem}>
-                  cancel
+                  Cancel
                 </Button>
                 <Button variant='light' color='blue' size='sm' onClick={addItem}>
-                  Save
+                  Add
                 </Button>
               </Group>
             </Stack>
