@@ -25,7 +25,7 @@ interface ItemProps extends SelectItemProps {
 }
 
 // Style search results
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+export const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
   (
     { street, postcodeAndCity, ...others }: ItemProps,
     ref: LegacyRef<HTMLDivElement> | undefined,

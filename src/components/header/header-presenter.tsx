@@ -13,17 +13,16 @@ interface HeaderPresenterProps {
 
 const HeaderPresenter = observer(
   ({ model, colorScheme, toggleColorScheme }: HeaderPresenterProps) => {
-
     const user: UserCredential | null = model.user
 
     if (!user) return null
 
     const initials = user?.user.displayName
       ? user.user.displayName
-        .split(' ')
-        .map((name) => name[0])
-        .join('')
-        .slice(0, 2)
+          .split(' ')
+          .map((name) => name[0])
+          .join('')
+          .slice(0, 2)
       : 'UU'
 
     return (

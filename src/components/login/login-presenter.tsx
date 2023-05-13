@@ -10,15 +10,11 @@ interface LoginPresenterProps {
 }
 
 const LoginPresenter = observer((props: LoginPresenterProps) => {
-
   const navigate = useNavigate()
-
 
   useEffect(() => {
     if (props.user) navigate('/')
   }, [props.user])
-
-
 
   return <LoginView onSignIn={props.signIn} />
 })

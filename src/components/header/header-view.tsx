@@ -25,20 +25,15 @@ const HeaderView = ({
   colorScheme,
   toggleColorScheme,
 }: HeaderViewProps) => {
-
   const navigate = useNavigate()
-
-
 
   return (
     <Header height={60} px='xl' py='xs'>
       <Group position='apart' align='center' h='100%'>
         <UnstyledButton onClick={() => navigate('/')}>
-          <Text weight='bold' size='xl' color='blue.6'
-          >
+          <Text weight='bold' size='xl' color='blue.6'>
             KOMITID
           </Text>
-
         </UnstyledButton>
         <Group>
           <ActionIcon
@@ -59,9 +54,7 @@ const HeaderView = ({
               </Avatar>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item onClick={() => navigate('/profile')}>
-                Profile
-              </Menu.Item>
+              <Menu.Item onClick={() => navigate('/profile')}>Profile</Menu.Item>
               <Menu.Item onClick={() => navigate('/logout')}>Sign out</Menu.Item>
             </Menu.Dropdown>
           </Menu>
