@@ -1,4 +1,4 @@
-import { Box, Container, Stack, Title, Flex } from '@mantine/core'
+import { Box, Container, Stack, Title, Flex, useMantineTheme } from '@mantine/core'
 import { Trip } from '../../tripSource'
 import {
   MdDirectionsWalk,
@@ -56,7 +56,8 @@ interface InformationViewProps {
 }
 
 function InformationView(props: InformationViewProps) {
-  const isMobile = useMediaQuery('(max-width: 768px)')
+  const theme = useMantineTheme()
+  const isMobile = useMediaQuery(`(max-width:${theme.breakpoints.sm})`)
 
   function renderCompactTripCards(fromIndex: number, toIndex?: number) {
     if (!props.trips) return null
@@ -77,12 +78,12 @@ function InformationView(props: InformationViewProps) {
     <>
       {!props.searchInProgress && props.destinationAddress && props.trips ? (
         <Box w='100%'>
-          <Container>
-            <Title order={2} align='center'>
+          <Container px={0} size='sm'>
+            <Title order={2} align='center' m='xl'>
               Your commute
             </Title>
             {isMobile ? (
-              <Stack p='md'>
+              <Stack>
                 {renderCompactTripCards(0, props.selectedTripIndex)}
                 <ExtendedTripDisplayComponent
                   index={props.selectedTripIndex}
@@ -93,7 +94,7 @@ function InformationView(props: InformationViewProps) {
                 {renderCompactTripCards(props.selectedTripIndex + 1)}
               </Stack>
             ) : (
-              <Flex p='md' gap='md' justify='center' align='flex-start' direction='row'>
+              <Flex gap='md' justify='center' align='flex-start' direction='row'>
                 <Stack>{renderCompactTripCards(0)}</Stack>
                 <ExtendedTripDisplayComponent
                   index={props.selectedTripIndex}

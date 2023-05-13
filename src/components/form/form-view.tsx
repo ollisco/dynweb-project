@@ -41,8 +41,8 @@ interface FormViewProps {
 function FormView(props: FormViewProps) {
   return (
     <Box w='100%'>
-      <Container>
-        <Paper m='md' p='xl' withBorder>
+      <Container px={0} size='sm'>
+        <Paper p='xl' withBorder>
           <Stack spacing='xs'>
             <Autocomplete
               value={props.originAddress}

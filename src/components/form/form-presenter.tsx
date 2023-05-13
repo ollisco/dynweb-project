@@ -32,9 +32,11 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
   ) => {
     return (
       <div ref={ref} {...others}>
-        <Group>
-          <Text size='sm'>{street}</Text>
-          <Text size='xs' opacity={0.65}>
+        <Group noWrap>
+          <Text size='sm' style={{ whiteSpace: 'nowrap' }}>
+            {street}
+          </Text>
+          <Text size='xs' color='dimmed' truncate>
             {postcodeAndCity}
           </Text>
         </Group>
