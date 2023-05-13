@@ -18,7 +18,7 @@ const Navigator = observer(({ model }: NavigatorProps) => {
       <Route path='logout' element={<Logout logoutFunction={model.signOut} />} />
       <Route element={<RequireAuth user={model.user} />}>
         <Route path='' element={<MainPagePresenter model={model} />} />
-        <Route path='profile' element={<ProfilePagePresenter />} />
+        <Route path='profile' element={<ProfilePagePresenter user={model.user} homeAddress={model.homeAddress ?? 'unknown'} />} />
       </Route>
       <Route path='*' element={<div>404</div>} />
     </Routes>

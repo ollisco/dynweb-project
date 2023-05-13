@@ -1,10 +1,16 @@
 
 import React from 'react'
 import ProfilePageView from './profile-page-view'
+import { UserCredential } from 'firebase/auth'
 
-const ProfilePagePresenter = () => {
+interface ProfilePagePresenterProps {
+    user: UserCredential | null
+    homeAddress: string
+}
+
+const ProfilePagePresenter = ({ user, homeAddress }: ProfilePagePresenterProps) => {
     return (
-        <ProfilePageView />
+        <ProfilePageView user={user} homeAddress={''} />
     )
 }
 
