@@ -22,14 +22,18 @@ const HeaderPresenter = observer(
 
     const initials = user?.user.displayName
       ? user.user.displayName
-          .split(' ')
-          .map((name) => name[0])
-          .join('')
-          .slice(0, 2)
+        .split(' ')
+        .map((name) => name[0])
+        .join('')
+        .slice(0, 2)
       : 'UU'
 
     const logout = () => {
       navigate('/logout')
+    }
+
+    const profile = () => {
+      navigate('/profile')
     }
 
     return (
@@ -37,6 +41,7 @@ const HeaderPresenter = observer(
         initials={initials}
         userPhotoUrl={user.user.photoURL ?? ''}
         logoutFunction={logout}
+        toProfile={profile}
         colorScheme={colorScheme}
         toggleColorScheme={toggleColorScheme}
       />
