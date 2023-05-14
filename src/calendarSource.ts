@@ -54,9 +54,8 @@ function calAuth() {
 
 function getDaysEvents(date: Date) {
   function removeBadEvents(result: { result: { items: rawEvent[] } }) {
-    console.log(result)
     return result.result.items.filter((event: rawEvent) => {
-      return event.start && event.summary !== 'Komitid trip'
+      return event.start && event.start.dateTime && event.summary !== 'Komitid trip'
     })
   }
 
