@@ -38,7 +38,7 @@ const LoginView = ({ onSignIn }: LoginViewProps) => {
                 leftIcon={<FcGoogle />}
                 variant='default'
                 color='gray'
-                radius='xl'
+                radius='md'
               >
                 Continue with Google
               </Button>

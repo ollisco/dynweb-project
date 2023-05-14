@@ -10,28 +10,32 @@ interface CompactTripDisplayComponentProps {
   selectTrip: (index: number) => void
 }
 
-const CompactTripDisplayComponent = (props: CompactTripDisplayComponentProps) => {
+const CompactTripDisplayComponent = ({
+  tripIndex,
+  trip,
+  isSelected,
+  selectTrip,
+}: CompactTripDisplayComponentProps) => {
   const theme = useMantineTheme()
 
   return (
     <Paper
       p='md'
       withBorder
-      shadow={props.isSelected ? 'xl' : ''}
-      onClick={() => props.selectTrip(props.tripIndex)}
-      style={{ border: props.isSelected ? '1px solid ' + theme.colors.blue[6] : '' }}
+      shadow={isSelected ? 'xl' : ''}
+      onClick={() => selectTrip(tripIndex)}
+      style={{ border: isSelected ? '1px solid ' + theme.colors.blue[6] : '' }}
     >
       <Stack>
         <Flex gap='md' justify='space-between'>
           <Text fw={700}>
-            {props.trip?.Origin.time.substring(0, 5)} -{' '}
-            {props.trip?.Destination.time.substring(0, 5)}
+            {trip?.Origin.time.substring(0, 5)} - {trip?.Destination.time.substring(0, 5)}
           </Text>
-          <Text>{humanizeDuration(props.trip?.duration)}</Text>
+          <Text>{humanizeDuration(trip?.duration)}</Text>
         </Flex>
         <Text color='dimmed' style={{ display: 'flex', flexDirection: 'row' }}>
-          {getIcon(props.trip?.LegList.Leg[0])}
-          {props.trip?.LegList.Leg.slice(1).map((leg, index: number) => {
+          {getIcon(trip?.LegList.Leg[0])}
+          {trip?.LegList.Leg.slice(1).map((leg, index: number) => {
             return (
               <div key={index}>
                 <MdKeyboardArrowRight />

@@ -1,22 +1,21 @@
-import { observer } from 'mobx-react'
-import { UserCredential } from 'firebase/auth'
-import LoginView from './login-view'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { UserCredential } from 'firebase/auth'
+import LoginView from './login-view'
 
 interface LoginPresenterProps {
   user: UserCredential | null
   signIn: () => void
 }
 
-const LoginPresenter = observer((props: LoginPresenterProps) => {
+const LoginPresenter = ({ user, signIn }: LoginPresenterProps) => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (props.user) navigate('/')
-  }, [props.user])
+    if (user) navigate('/')
+  }, [user])
 
-  return <LoginView onSignIn={props.signIn} />
-})
+  return <LoginView onSignIn={signIn} />
+}
 
 export default LoginPresenter

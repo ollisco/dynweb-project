@@ -13,29 +13,32 @@ interface ExtendedTripDisplayComponentProps {
   itemGroup: ItemGroup | undefined
 }
 
-const ExtendedTripDisplayComponent = (props: ExtendedTripDisplayComponentProps) => {
+const ExtendedTripDisplayComponent = ({
+  originAddress,
+  destinationAddress,
+  trip,
+  itemGroup,
+}: ExtendedTripDisplayComponentProps) => {
   return (
     <Paper style={{ flexGrow: 1 }} p='md' withBorder>
       <Stack>
-        <Timeline lineWidth={2} active={props.trip?.LegList.Leg.length}>
+        <Timeline lineWidth={2} active={trip?.LegList.Leg.length}>
           <Timeline.Item
             bullet={<MdLocationPin size={16} />}
             bulletSize={24}
-            title={`${props.trip?.Origin.time.substring(0, 5)} - ${
-              props.originAddress?.split(/[,()]/)[0]
-            }`}
+            title={`${trip?.Origin.time.substring(0, 5)} - ${originAddress?.split(/[,()]/)[0]}`}
           >
             <Text color='dimmed' size='sm'>
-              {getIcon(props.trip?.LegList.Leg[0])} {props.trip?.LegList.Leg[0].name}
+              {getIcon(trip?.LegList.Leg[0])} {trip?.LegList.Leg[0].name}
             </Text>
             <Text color='dimmed' size='sm'>
-              {props.trip?.LegList.Leg[0].direction?.split(/[,(]/)[0]}
+              {trip?.LegList.Leg[0].direction?.split(/[,(]/)[0]}
             </Text>
             <Text color='dimmed' size='sm'>
-              {humanizeDuration(props.trip?.LegList.Leg[0].duration)}
+              {humanizeDuration(trip?.LegList.Leg[0].duration)}
             </Text>
           </Timeline.Item>
-          {props.trip?.LegList.Leg.slice(1).map((leg, index: number) => {
+          {trip?.LegList.Leg.slice(1).map((leg, index: number) => {
             return (
               <Timeline.Item
                 bulletSize={16}
@@ -57,16 +60,16 @@ const ExtendedTripDisplayComponent = (props: ExtendedTripDisplayComponentProps) 
           <Timeline.Item
             bullet={<MdLocationPin size={16} />}
             bulletSize={24}
-            title={`${props.trip?.Destination.time.substring(0, 5)} - ${
-              props.destinationAddress?.split(/[,()]/)[0]
+            title={`${trip?.Destination.time.substring(0, 5)} - ${
+              destinationAddress?.split(/[,()]/)[0]
             }`}
           />
         </Timeline>
         <AddToCalButton
-          originAddress={props.originAddress}
-          destinationAddress={props.destinationAddress}
-          trip={props.trip}
-          itemGroup={props.itemGroup}
+          originAddress={originAddress}
+          destinationAddress={destinationAddress}
+          trip={trip}
+          itemGroup={itemGroup}
         />
       </Stack>
     </Paper>

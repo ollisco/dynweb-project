@@ -50,7 +50,14 @@ interface FormPresenterProps {
   ) => void
 }
 
-const FormPresenter = (props: FormPresenterProps) => {
+const FormPresenter = ({
+  homeAddress,
+  itemGroups,
+  saveHomeAddress,
+  searchInProgress,
+  setPreActivity,
+  doSearch,
+}: FormPresenterProps) => {
   const [originAddress, setOriginAddress] = useState<string>('')
   const [originAddressLoading, setOriginAddressLoading] = useState(false)
   const [originAddressAutocompleteData, setOriginAddressAutocompleteData] = useState<string[]>([])
@@ -64,12 +71,12 @@ const FormPresenter = (props: FormPresenterProps) => {
   const [originAddressError, setOriginAddressError] = useState<string>('')
   const [destinationAddressError, setDestinationAddressError] = useState<string>('')
   const [searchError, setSearchError] = useState<string>('')
-  const [saveHomeAddress, setSaveHomeAddress] = useState<boolean>(false)
+  const [shouldSaveHomeAddress, setShouldSaveHomeAddress] = useState<boolean>(false)
 
   // Load saved home address
   useEffect(() => {
-    if (props.homeAddress) setOriginAddress(props.homeAddress)
-  }, [props.homeAddress])
+    if (homeAddress) setOriginAddress(homeAddress)
+  }, [homeAddress])
 
   const debouncedGetSuggestions = useCallback(
     // useCallback caches functions between rerenders
@@ -126,8 +133,8 @@ const FormPresenter = (props: FormPresenterProps) => {
     setDestinationAddressError('')
     setSearchError('')
     try {
-      await props.doSearch(originAddress, destinationAddress, date, arriveTime)
-      if (saveHomeAddress) props.saveHomeAddress(originAddress)
+      await doSearch(originAddress, destinationAddress, date, arriveTime)
+      if (saveHomeAddress) saveHomeAddress(originAddress)
     } catch (error) {
       if (error instanceof AddressError) {
         if (error.address === originAddress)
@@ -159,14 +166,14 @@ const FormPresenter = (props: FormPresenterProps) => {
       arriveTime={arriveTime}
       setArriveTime={setArriveTime}
       searchClicked={performSearch}
-      searchInProgress={props.searchInProgress}
+      searchInProgress={searchInProgress}
       itemComponent={SelectItem}
       searchError={searchError}
       setSearchError={setSearchError}
-      saveHomeAddress={saveHomeAddress}
-      setSaveHomeAddress={setSaveHomeAddress}
-      itemGroups={props.itemGroups}
-      setPreActivity={props.setPreActivity}
+      shouldSaveHomeAddress={shouldSaveHomeAddress}
+      setShouldSaveHomeAddress={setShouldSaveHomeAddress}
+      itemGroups={itemGroups}
+      setPreActivity={setPreActivity}
     />
   )
 }

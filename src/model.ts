@@ -1,5 +1,5 @@
 import { UserCredential } from '@firebase/auth'
-import { signInWithGoogle, loadData, saveItemData, saveLocationData } from './firebase'
+import { signInWithGoogle, loadData, saveItemData, saveHomeAddress } from './firebase'
 import { makeAutoObservable } from 'mobx'
 import { CoordsObj, Trip, getTrafficInfo } from './trip-source'
 import { addressToCoords } from './maps-source'
@@ -49,20 +49,20 @@ class Model {
     this.searchInProgress = false
     this.trips = undefined
 
-    if (this.user) this.loadHomeAddress()
+    if (this.user) this.loadData()
   }
 
   async signIn() {
     try {
       const user = await signInWithGoogle()
       this.setUser(user)
-      this.loadHomeAddress()
+      this.loadData()
     } catch (error) {
       console.error(error)
     }
   }
 
-  async loadHomeAddress() {
+  async loadData() {
     if (this.user) {
       try {
         const data = await loadData(this.user)
@@ -89,15 +89,17 @@ class Model {
   setHomeAddress(address: string) {
     this.homeAddress = address
   }
+
   setItemGroups(itemGroups: ItemGroup[]) {
     this.itemGroups = itemGroups
   }
+
   setPreActivity(preActivity: ItemGroup | undefined) {
     this.preActivity = preActivity
   }
 
   saveHomeAddress(address: string) {
-    if (this.user) saveLocationData(this.user, address)
+    if (this.user) saveHomeAddress(this.user, address)
   }
 
   saveItemGroups(itemGroups: ItemGroup[]) {

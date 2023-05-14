@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import ProfilePageView from './profile-page-view'
 import { useDebouncedValue } from '@mantine/hooks'
 import { getAutocompleteSuggestions } from '../../maps-source'

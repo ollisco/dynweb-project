@@ -3,7 +3,6 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
 import { ItemGroup, Item } from './model'
 
-// Initialize Firebase
 const app = firebase.initializeApp({
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: 'komitid-cb8e5.firebaseapp.com',
@@ -16,7 +15,6 @@ const app = firebase.initializeApp({
 })
 const auth = getAuth(app)
 const db = firebase.firestore()
-
 const provider = new GoogleAuthProvider()
 
 const signInWithGoogle = () => {
@@ -33,11 +31,7 @@ const loadData = (user: UserCredential) => {
     })
 }
 
-const saveData = (user: UserCredential, data: { [key: string]: string }) => {
-  db.collection('users').doc(user.user.uid).set(data, { merge: true })
-}
-
-const saveLocationData = (user: UserCredential, homeAddress: string) => {
+const saveHomeAddress = (user: UserCredential, homeAddress: string) => {
   db.collection('users').doc(user.user.uid).set({ homeAddress }, { merge: true })
 }
 
@@ -59,4 +53,4 @@ const saveItemData = (user: UserCredential, itemGroups: ItemGroup[]) => {
     )
 }
 
-export { signInWithGoogle, loadData, saveData, saveLocationData, saveItemData }
+export { signInWithGoogle, loadData, saveHomeAddress, saveItemData }

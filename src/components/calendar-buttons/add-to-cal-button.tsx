@@ -1,13 +1,6 @@
 import { useState } from 'react'
-import {
-  calIsAuthed,
-  calAuth,
-  addTripToCalendar,
-  addPreActivityToCalendar,
-} from '../../calendar-source'
 import { Button, Alert, Menu, Anchor } from '@mantine/core'
 import { IconAlertCircle, IconChevronDown } from '@tabler/icons-react'
-import { Trip } from '../../trip-source'
 import {
   MdOutlineNotifications,
   MdOutlineNotificationsActive,
@@ -15,6 +8,13 @@ import {
 } from 'react-icons/md'
 import { FcGoogle } from 'react-icons/fc'
 import { ItemGroup } from '../../model'
+import {
+  calIsAuthed,
+  calAuth,
+  addTripToCalendar,
+  addPreActivityToCalendar,
+} from '../../calendar-source'
+import { Trip } from '../../trip-source'
 
 interface AddToCalButtonProps {
   originAddress: string | undefined
@@ -23,7 +23,12 @@ interface AddToCalButtonProps {
   itemGroup: ItemGroup | undefined
 }
 
-const AddToCalButton = (props: AddToCalButtonProps) => {
+const AddToCalButton = ({
+  originAddress,
+  destinationAddress,
+  trip,
+  itemGroup,
+}: AddToCalButtonProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [eventLink, setEventLink] = useState<string>('')
@@ -40,17 +45,12 @@ const AddToCalButton = (props: AddToCalButtonProps) => {
       }
     }
     if (calIsAuthed()) {
-      if (props.originAddress && props.destinationAddress && props.trip) {
-        if (props.itemGroup) {
-          await addPreActivityToCalendar(props.itemGroup, props.trip)
+      if (originAddress && destinationAddress && trip) {
+        if (itemGroup) {
+          await addPreActivityToCalendar(itemGroup, trip)
         }
 
-        const event = await addTripToCalendar(
-          props.originAddress,
-          props.destinationAddress,
-          props.trip,
-          notification,
-        )
+        const event = await addTripToCalendar(originAddress, destinationAddress, trip, notification)
         setEventLink(event.result.htmlLink)
       }
     } else setError('Authentication failed, please try again.')
@@ -62,7 +62,7 @@ const AddToCalButton = (props: AddToCalButtonProps) => {
       <Menu position='top-end'>
         <Menu.Target>
           <Button
-            disabled={!(props.originAddress && props.destinationAddress)}
+            disabled={!(originAddress && destinationAddress)}
             loading={loading}
             leftIcon={<FcGoogle />}
             variant='light'
