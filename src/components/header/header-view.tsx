@@ -5,12 +5,13 @@ import {
   Menu,
   Avatar,
   UnstyledButton,
-  Text,
+  Image,
   ActionIcon,
   ColorScheme,
 } from '@mantine/core'
 import { IconSun, IconMoonStars } from '@tabler/icons-react'
 import { useNavigate } from 'react-router-dom'
+import LOGO from '../../assets/logo.svg'
 
 interface HeaderViewProps {
   initials: string
@@ -31,9 +32,7 @@ const HeaderView = ({
     <Header height={60} px='xl' py='xs'>
       <Group position='apart' align='center' h='100%'>
         <UnstyledButton onClick={() => navigate('/')}>
-          <Text weight='bold' size='xl' color='blue.6'>
-            KOMITID
-          </Text>
+          <Image src={LOGO} alt='logo' height={42} />
         </UnstyledButton>
         <Group>
           <ActionIcon
