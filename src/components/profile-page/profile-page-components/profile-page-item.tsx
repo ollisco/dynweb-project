@@ -39,11 +39,11 @@ interface ItemGroupCompProps {
   index: number
   name: string
   items: Item[]
-  onAddItem: (index: number, items: Item[]) => void
+  onUpdate: (index: number, items: Item[]) => void
 }
 
-export const ItemGroupComp = ({ index, name, items, onAddItem }: ItemGroupCompProps) => {
-  const [files, filesHandlers] = useListState<Item>(items)
+export const ItemGroupComp = ({ index, name, items, onUpdate }: ItemGroupCompProps) => {
+  const [itemState, itemStateHandlers] = useListState<Item>(items)
   const [newItem, setNewItem] = useState<boolean>(false)
 
   const form = useForm({
@@ -74,18 +74,21 @@ export const ItemGroupComp = ({ index, name, items, onAddItem }: ItemGroupCompPr
     const { name: itemName, description, duration } = form.values
 
     const theNewItem = { name: itemName, description, duration }
-    filesHandlers.append(theNewItem)
+    itemStateHandlers.append(theNewItem)
 
-    onAddItem(index, [...files, theNewItem])
     toggleAddItem()
   }
 
   const removeItem = (index: number) => {
-    filesHandlers.remove(index)
+    itemStateHandlers.remove(index)
   }
 
   useEffect(() => {
-    filesHandlers.setState(items)
+    onUpdate(index, itemState)
+  }, [itemState])
+
+  useEffect(() => {
+    itemStateHandlers.setState(items)
   }, [items])
 
   return (
@@ -94,13 +97,13 @@ export const ItemGroupComp = ({ index, name, items, onAddItem }: ItemGroupCompPr
       <DragDropContext
         onDragEnd={({ source, destination }) => {
           if (!destination) return
-          filesHandlers.reorder({ from: source.index, to: destination.index })
+          itemStateHandlers.reorder({ from: source.index, to: destination.index })
         }}
       >
         <Droppable droppableId='sop-files-list' direction='vertical'>
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {files.map((item, index) => (
+              {itemState.map((item, index) => (
                 <>
                   <Draggable index={index} draggableId={`item-${item.name}-${index}`}>
                     {(provided) => (

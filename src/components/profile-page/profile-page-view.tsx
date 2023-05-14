@@ -69,7 +69,7 @@ const ProfilePageView = ({
     saveGroups(newGroups)
   }
 
-  const onAddItem = (index: number, items: Item[]) => {
+  const onUpdate = (index: number, items: Item[]) => {
     const newGroups = itemGroups ? [...itemGroups] : []
     newGroups[index].items = items
     saveGroups(newGroups)
@@ -131,7 +131,7 @@ const ProfilePageView = ({
                 <>
                   <ItemGroupComp
                     index={index}
-                    onAddItem={onAddItem}
+                    onUpdate={onUpdate}
                     name={itemGroup.name ?? 'NO NAME'}
                     items={itemGroup.items}
                   />
