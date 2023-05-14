@@ -34,19 +34,21 @@ function saveLocationData(user: UserCredential, homeAddress: string) {
 }
 
 function saveItemData(user: UserCredential, itemGroups: ItemGroup[]) {
-  db.collection('users').doc(user.user.uid).set({ itemGroups: [] }, { merge: true })
   db.collection('users')
     .doc(user.user.uid)
-    .set({
-      itemGroups: itemGroups.map((group: ItemGroup) => ({
-        name: group.name,
-        items: group.items.map((item: Item) => ({
-          name: item.name,
-          description: item.description,
-          duration: item.duration,
+    .set(
+      {
+        itemGroups: itemGroups.map((group: ItemGroup) => ({
+          name: group.name,
+          items: group.items.map((item: Item) => ({
+            name: item.name,
+            description: item.description,
+            duration: item.duration,
+          })),
         })),
-      })),
-    })
+      },
+      { merge: true },
+    )
 }
 
 export { signInWithGoogle, loadData, saveData, saveLocationData, saveItemData }
