@@ -28,26 +28,20 @@ const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ itemGroup, ...
     <div ref={ref} {...others}>
       <Group align='center'>
         <Text>{itemGroup.name}</Text>
-        <Text>
+        <Text display={'flex'}>
           {itemGroup.items.length > 0 &&
-            itemGroup.items
-              .map<React.ReactNode>((item, index) => (
-                <div key={index}>
+            itemGroup.items.map<React.ReactNode>((item, index, array) => (
+              <div key={index}>
+                <Text span size='sm' color='dimmed'>
+                  {item.name}
+                </Text>
+                {index !== array.length - 1 && (
                   <Text span size='sm' color='dimmed'>
-                    {item.name}
+                    ,&nbsp;
                   </Text>
-                </div>
-              ))
-              .reduce((prev, curr) => [
-                prev,
-                // This key prop is a sin but technically works
-                <div key={(Number(prev)+Number(curr))/2}>
-                  <Text span size='sm' color='dimmed'>
-                    ,{' '}
-                  </Text>
-                </div>,
-                curr,
-              ])}
+                )}
+              </div>
+            ))}
         </Text>
         <Text size='sm' color='dimmed'>
           {totalDuration} min
@@ -154,7 +148,7 @@ function FormView(props: FormViewProps) {
                 label:
                   itemGroup.name +
                   ` (${itemGroup.items.reduce((prev, curr) => prev + curr.duration, 0)} min)`,
-                itemGroup: itemGroup
+                itemGroup: itemGroup,
               }))}
               onChange={(value) => {
                 // get the itemGroup
