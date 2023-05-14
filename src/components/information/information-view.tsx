@@ -10,6 +10,7 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 import CompactTripDisplayComponent from './compact-trip-display'
 import ExtendedTripDisplayComponent from './extended-trip-display'
+import { ItemGroup } from '../../Model'
 
 function getIcon(leg: { type: string; category: string } | undefined) {
   switch (leg?.category) {
@@ -51,6 +52,7 @@ interface InformationViewProps {
   destinationTime: string | undefined
   searchInProgress: boolean
   trips: Trip[] | undefined
+  itemGroup: ItemGroup | undefined
   selectedTripIndex: number
   setSelectedTripIndex: (index: number) => void
 }
@@ -90,6 +92,7 @@ function InformationView(props: InformationViewProps) {
                   originAddress={props.originAddress}
                   destinationAddress={props.destinationAddress}
                   trip={props.trips.at(props.selectedTripIndex)}
+                  itemGroup={props.itemGroup}
                 />
                 {renderCompactTripCards(props.selectedTripIndex + 1)}
               </Stack>
@@ -101,6 +104,7 @@ function InformationView(props: InformationViewProps) {
                   originAddress={props.originAddress}
                   destinationAddress={props.destinationAddress}
                   trip={props.trips.at(props.selectedTripIndex)}
+                  itemGroup={props.itemGroup}
                 />
               </Flex>
             )}

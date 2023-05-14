@@ -1,6 +1,11 @@
 import { useState } from 'react'
-import { calIsAuthed, calAuth, addTripToCalendar } from '../../calendarSource'
-import { Button, Alert, Menu } from '@mantine/core'
+import {
+  calIsAuthed,
+  calAuth,
+  addTripToCalendar,
+  addPreActivityToCalendar,
+} from '../../calendarSource'
+import { Button, Alert, Menu, Anchor } from '@mantine/core'
 import { IconAlertCircle, IconChevronDown } from '@tabler/icons-react'
 import GoogleIcon from '../basic/googleicon'
 import { Trip } from '../../tripSource'
@@ -9,11 +14,13 @@ import {
   MdOutlineNotificationsActive,
   MdOutlineNotificationsOff,
 } from 'react-icons/md'
+import { ItemGroup } from '../../Model'
 
 interface AddToCalButtonProps {
   originAddress: string | undefined
   destinationAddress: string | undefined
   trip: Trip | undefined
+  itemGroup: ItemGroup | undefined
 }
 
 function AddToCalButton(props: AddToCalButtonProps) {
@@ -34,6 +41,10 @@ function AddToCalButton(props: AddToCalButtonProps) {
     }
     if (calIsAuthed()) {
       if (props.originAddress && props.destinationAddress && props.trip) {
+        if (props.itemGroup) {
+          await addPreActivityToCalendar(props.itemGroup, props.trip)
+        }
+
         const event = await addTripToCalendar(
           props.originAddress,
           props.destinationAddress,
@@ -101,7 +112,9 @@ function AddToCalButton(props: AddToCalButtonProps) {
             setEventLink('')
           }}
         >
-          <a href={eventLink}>{eventLink}</a>
+          <Anchor href={eventLink} target='_blank'>
+            View Event
+          </Anchor>
         </Alert>
       ) : null}
     </div>

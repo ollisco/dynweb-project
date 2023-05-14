@@ -1,12 +1,25 @@
 import { UserCredential } from '@firebase/auth'
-import { signInWithGoogle, loadData, saveData } from './Firebase'
+import { signInWithGoogle, loadData, saveItemData, saveLocationData } from './Firebase'
 import { makeAutoObservable } from 'mobx'
 import { CoordsObj, Trip, getTrafficInfo } from './tripSource'
 import { addressToCoords } from './mapsSource'
 
+export interface ItemGroup {
+  name: string
+  items: Item[]
+}
+
+export interface Item {
+  name: string
+  description: string
+  duration: number // minutes
+}
+
 class Model {
   user: UserCredential | null
   homeAddress: string | undefined
+  itemGroups: ItemGroup[] | undefined
+  preActivity: ItemGroup | undefined
   destinationAddress: string | undefined
   arriveTime: string | undefined
   searchInProgress: boolean
@@ -18,7 +31,10 @@ class Model {
     this.signOut = this.signOut.bind(this)
     this.setUser = this.setUser.bind(this)
     this.setHomeAddress = this.setHomeAddress.bind(this)
+    this.setItemGroups = this.setItemGroups.bind(this)
+    this.setPreActivity = this.setPreActivity.bind(this)
     this.saveHomeAddress = this.saveHomeAddress.bind(this)
+    this.saveItemGroups = this.saveItemGroups.bind(this)
     this.doSearch = this.doSearch.bind(this)
     this.setRoute = this.setRoute.bind(this)
     this.setSearchInProgress = this.setSearchInProgress.bind(this)
@@ -26,6 +42,8 @@ class Model {
     const user = localStorage.getItem('user')
     this.user = user ? (JSON.parse(user) as UserCredential) : null
     this.homeAddress = undefined
+    this.itemGroups = undefined
+    this.preActivity = undefined
     this.destinationAddress = undefined
     this.arriveTime = undefined
     this.searchInProgress = false
@@ -48,7 +66,10 @@ class Model {
     if (this.user) {
       try {
         const data = await loadData(this.user)
-        if (data) this.setHomeAddress(data.homeAddress)
+        if (data) {
+          this.setHomeAddress(data.homeAddress)
+          this.setItemGroups(data.itemGroups)
+        }
       } catch (error) {
         console.error(error)
       }
@@ -68,9 +89,19 @@ class Model {
   setHomeAddress(address: string) {
     this.homeAddress = address
   }
+  setItemGroups(itemGroups: ItemGroup[]) {
+    this.itemGroups = itemGroups
+  }
+  setPreActivity(preActivity: ItemGroup | undefined) {
+    this.preActivity = preActivity
+  }
 
   saveHomeAddress(address: string) {
-    if (this.user) saveData(this.user, { homeAddress: address })
+    if (this.user) saveLocationData(this.user, address)
+  }
+
+  saveItemGroups(itemGroups: ItemGroup[]) {
+    if (this.user) saveItemData(this.user, itemGroups)
   }
 
   async doSearch(

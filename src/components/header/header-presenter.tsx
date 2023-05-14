@@ -1,5 +1,4 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import { UserCredential } from '@firebase/auth'
 import { observer } from 'mobx-react'
 import Model from '../../Model'
@@ -14,8 +13,6 @@ interface HeaderPresenterProps {
 
 const HeaderPresenter = observer(
   ({ model, colorScheme, toggleColorScheme }: HeaderPresenterProps) => {
-    const navigate = useNavigate()
-
     const user: UserCredential | null = model.user
 
     if (!user) return null
@@ -28,15 +25,10 @@ const HeaderPresenter = observer(
           .slice(0, 2)
       : 'UU'
 
-    const logout = () => {
-      navigate('/logout')
-    }
-
     return (
       <HeaderView
         initials={initials}
         userPhotoUrl={user.user.photoURL ?? ''}
-        logoutFunction={logout}
         colorScheme={colorScheme}
         toggleColorScheme={toggleColorScheme}
       />

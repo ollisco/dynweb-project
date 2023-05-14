@@ -2,6 +2,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, UserCredential } from 'fi
 import { firebaseConfig } from './apiconf'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
+import { ItemGroup, Item } from './Model'
 
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig)
@@ -25,7 +26,29 @@ function loadData(user: UserCredential) {
 }
 
 function saveData(user: UserCredential, data: { [key: string]: string }) {
-  db.collection('users').doc(user.user.uid).set(data)
+  db.collection('users').doc(user.user.uid).set(data, { merge: true })
 }
 
-export { signInWithGoogle, loadData, saveData }
+function saveLocationData(user: UserCredential, homeAddress: string) {
+  db.collection('users').doc(user.user.uid).set({ homeAddress }, { merge: true })
+}
+
+function saveItemData(user: UserCredential, itemGroups: ItemGroup[]) {
+  db.collection('users')
+    .doc(user.user.uid)
+    .set(
+      {
+        itemGroups: itemGroups.map((group: ItemGroup) => ({
+          name: group.name,
+          items: group.items.map((item: Item) => ({
+            name: item.name,
+            description: item.description,
+            duration: item.duration,
+          })),
+        })),
+      },
+      { merge: true },
+    )
+}
+
+export { signInWithGoogle, loadData, saveData, saveLocationData, saveItemData }
