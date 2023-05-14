@@ -36,6 +36,7 @@ const ItemComp = ({ name, description, duration }: Item) => {
 }
 
 export const ItemGroupComp = ({ name, items }: ItemGroup) => {
+  console.log(JSON.stringify(name), JSON.stringify(items))
   const [files, filesHandlers] = useListState<Item>(items)
   const [newItem, setNewItem] = useState<boolean>(false)
 

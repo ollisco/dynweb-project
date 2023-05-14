@@ -10,7 +10,7 @@ interface ProfilePagePresenterProps {
 }
 
 const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => {
-  const { user, homeAddress, saveHomeAddress, setHomeAddress } = model
+  const { user, homeAddress, saveHomeAddress, setHomeAddress, itemGroups } = model
 
   const [addressSearch, setAddressSearch] = useState('')
   const [debounceedAddressSearch] = useDebouncedValue(addressSearch, 500)
@@ -51,6 +51,7 @@ const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => 
       addressData={suggestions}
       addressLoading={loading}
       saveFunction={save}
+      itemGroups={itemGroups}
     />
   )
 })

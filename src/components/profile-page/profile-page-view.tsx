@@ -24,8 +24,8 @@ interface ProfilePageViewProps {
   setAddressSearch: (value: string) => void
   addressData: string[]
   addressLoading: boolean
-
   saveFunction: () => void
+  itemGroups: ItemGroup[] | undefined
 }
 
 const ProfilePageView = ({
@@ -35,13 +35,14 @@ const ProfilePageView = ({
   addressData,
   addressLoading,
   saveFunction,
+  itemGroups,
 }: ProfilePageViewProps) => {
   const initials = user?.user.displayName
     ? user.user.displayName
-        .split(' ')
-        .map((name) => name[0])
-        .join('')
-        .slice(0, 2)
+      .split(' ')
+      .map((name) => name[0])
+      .join('')
+      .slice(0, 2)
     : 'UU'
 
   const userPhotoUrl = user?.user.photoURL ?? ''
@@ -87,7 +88,8 @@ const ProfilePageView = ({
     items: [item4, item5],
   }
 
-  const itemGroups: ItemGroup[] = [itemGroupA, itemGroupB]
+  // const itemGroups: ItemGroup[] = [itemGroupA, itemGroupB]
+
 
   return (
     <Box w='100vw'>
@@ -136,11 +138,19 @@ const ProfilePageView = ({
               </Text>
             </Stack>
             <Stack>
-              {itemGroups.map((itemGroup) => (
-                <>
-                  <ItemGroupComp {...itemGroup} />
-                </>
-              ))}
+              {itemGroups?.map((itemGroup) => {
+                const name = JSON.parse(JSON.stringify(itemGroup))
+                console.log('n', name)
+
+                console.log('itemGroup', JSON.parse(JSON.stringify(itemGroup)))
+                //console.log('name', itemGroup.name)
+                //console.log('items', JSON.parse(JSON.stringify(itemGroup.items)))
+                return (
+                  <>
+                    <ItemGroupComp name={itemGroup.name ?? 'NO NAME'} items={itemGroup.items} />
+                  </>
+                )
+              })}
             </Stack>
             <Group position='right'>
               <Button variant='light' color='blue' size='sm' onClick={saveFunction}>

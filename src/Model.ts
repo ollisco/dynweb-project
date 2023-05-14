@@ -1,12 +1,14 @@
 import { UserCredential } from '@firebase/auth'
-import { signInWithGoogle, loadData, saveData } from './Firebase'
+import { signInWithGoogle, loadData, saveData, saveItemData } from './Firebase'
 import { makeAutoObservable } from 'mobx'
 import { CoordsObj, Trip, getTrafficInfo } from './tripSource'
 import { addressToCoords } from './mapsSource'
+import { ItemGroup } from './components/profile-page/profile-page-components/profile-page-item'
 
 class Model {
   user: UserCredential | null
   homeAddress: string | undefined
+  itemGroups: ItemGroup[] | undefined
   destinationAddress: string | undefined
   arriveTime: string | undefined
   searchInProgress: boolean
@@ -18,6 +20,7 @@ class Model {
     this.signOut = this.signOut.bind(this)
     this.setUser = this.setUser.bind(this)
     this.setHomeAddress = this.setHomeAddress.bind(this)
+    this.setItemGroups = this.setItemGroups.bind(this)
     this.saveHomeAddress = this.saveHomeAddress.bind(this)
     this.doSearch = this.doSearch.bind(this)
     this.setRoute = this.setRoute.bind(this)
@@ -26,6 +29,7 @@ class Model {
     const user = localStorage.getItem('user')
     this.user = user ? (JSON.parse(user) as UserCredential) : null
     this.homeAddress = undefined
+    this.itemGroups = undefined
     this.destinationAddress = undefined
     this.arriveTime = undefined
     this.searchInProgress = false
@@ -48,7 +52,12 @@ class Model {
     if (this.user) {
       try {
         const data = await loadData(this.user)
-        if (data) this.setHomeAddress(data.homeAddress)
+        console.log('d', data)
+        if (data) {
+          this.setHomeAddress(data.homeAddress)
+          this.setItemGroups(data.itemGroups)
+        } 
+        
       } catch (error) {
         console.error(error)
       }
@@ -68,10 +77,20 @@ class Model {
   setHomeAddress(address: string) {
     this.homeAddress = address
   }
+  setItemGroups(itemGroups: ItemGroup[]) {
+    this.itemGroups = itemGroups
+  }
+
 
   saveHomeAddress(address: string) {
     if (this.user) saveData(this.user, { homeAddress: address })
   }
+
+  saveItems(itemGroups: ItemGroup[]) {
+    if (this.user) saveItemData(this.user, itemGroups)
+  }
+
+
 
   async doSearch(
     originAddress: string,
