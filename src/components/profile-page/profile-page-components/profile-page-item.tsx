@@ -13,17 +13,8 @@ import { IconGripVertical, IconX } from '@tabler/icons-react'
 import { useListState } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import { useForm } from '@mantine/form'
+import { Item } from '../../../Model'
 
-export interface ItemGroup {
-  name: string
-  items: Item[]
-}
-
-export interface Item {
-  name: string
-  description: string
-  duration: number // minutes
-}
 
 const ItemComp = ({ name, description, duration }: Item) => {
   return (

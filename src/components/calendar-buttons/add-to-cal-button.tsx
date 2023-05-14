@@ -14,7 +14,7 @@ import {
   MdOutlineNotificationsActive,
   MdOutlineNotificationsOff,
 } from 'react-icons/md'
-import { ItemGroup } from '../profile-page/profile-page-components/profile-page-item'
+import { ItemGroup } from '../../Model'
 
 interface AddToCalButtonProps {
   originAddress: string | undefined

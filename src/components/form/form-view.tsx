@@ -17,8 +17,8 @@ import {
 } from '@mantine/core'
 import { IconAlertCircle } from '@tabler/icons-react'
 import UseCalButton from '../calendar-buttons/use-cal-button'
-import { Item, ItemGroup } from '../profile-page/profile-page-components/profile-page-item'
 import React, { forwardRef } from 'react'
+import { ItemGroup, Item } from '../../Model'
 
 type CustomItemProps = SelectItemProps & { itemGroup: ItemGroup }
 

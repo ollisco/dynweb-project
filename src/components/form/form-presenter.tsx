@@ -4,7 +4,7 @@ import { debounce } from 'lodash'
 import { AddressError, getAutocompleteSuggestions } from '../../mapsSource'
 import { TripError } from '../../tripSource'
 import FormView from './form-view'
-import { ItemGroup } from '../profile-page/profile-page-components/profile-page-item'
+import { ItemGroup } from '../../Model'
 
 // Items used in autocorrect
 interface ItemProps extends SelectItemProps {

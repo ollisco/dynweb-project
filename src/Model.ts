@@ -3,7 +3,19 @@ import { signInWithGoogle, loadData, saveItemData, saveLocationData } from './Fi
 import { makeAutoObservable } from 'mobx'
 import { CoordsObj, Trip, getTrafficInfo } from './tripSource'
 import { addressToCoords } from './mapsSource'
-import { ItemGroup } from './components/profile-page/profile-page-components/profile-page-item'
+
+
+export interface ItemGroup {
+  name: string
+  items: Item[]
+}
+
+export interface Item {
+  name: string
+  description: string
+  duration: number // minutes
+}
+
 
 class Model {
   user: UserCredential | null
