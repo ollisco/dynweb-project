@@ -29,7 +29,11 @@ function loadData(user: UserCredential) {
 }
 
 function saveData(user: UserCredential, data: { [key: string]: string }) {
-  db.collection('users').doc(user.user.uid).set(data)
+  db.collection('users').doc(user.user.uid).set(data, { merge: true })
+}
+
+function saveLocationData(user: UserCredential, homeAddress: string) {
+  db.collection('users').doc(user.user.uid).set({ homeAddress }, { merge: true })
 }
 
 function saveItemData(user: UserCredential, itemGroups: ItemGroup[]) {
@@ -48,4 +52,4 @@ function saveItemData(user: UserCredential, itemGroups: ItemGroup[]) {
     })
 }
 
-export { signInWithGoogle, loadData, saveData, saveItemData }
+export { signInWithGoogle, loadData, saveData, saveLocationData, saveItemData }

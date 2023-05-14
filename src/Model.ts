@@ -1,5 +1,5 @@
 import { UserCredential } from '@firebase/auth'
-import { signInWithGoogle, loadData, saveData, saveItemData } from './Firebase'
+import { signInWithGoogle, loadData, saveItemData, saveLocationData } from './Firebase'
 import { makeAutoObservable } from 'mobx'
 import { CoordsObj, Trip, getTrafficInfo } from './tripSource'
 import { addressToCoords } from './mapsSource'
@@ -81,7 +81,7 @@ class Model {
   }
 
   saveHomeAddress(address: string) {
-    if (this.user) saveData(this.user, { homeAddress: address })
+    if (this.user) saveLocationData(this.user, address)
   }
 
   saveItemGroups(itemGroups: ItemGroup[]) {
