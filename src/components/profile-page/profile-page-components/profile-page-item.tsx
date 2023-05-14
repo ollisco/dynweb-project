@@ -62,7 +62,14 @@ export const ItemGroupComp = ({
     validate: {
       name: (value) => (value.trim().length > 0 ? null : 'Name is required'),
       description: (value) => (value.trim().length > 0 ? null : 'Description is required'),
-      duration: (value) => (value > 0 ? null : 'Duration must be greater than 0'),
+      duration: (value) => {
+        if (value <= 0) return 'Duration must be greater than 0'
+        const totalGroupDuration = itemState.reduce((acc, item) => acc + item.duration, 0) + value
+        if (totalGroupDuration > 120) return 'Total duration must be less than 120 minutes'
+        return null
+      },
+
+      // (value > 0 ? null : 'Duration must be greater than 0'),
     },
   })
 
@@ -157,7 +164,7 @@ export const ItemGroupComp = ({
           </UnstyledButton>
         ) : (
           <Group pl='xl' align='flex-start' position='apart' noWrap>
-            <Group noWrap>
+            <Group noWrap align='flex-start'>
               <TextInput label='Name' placeholder='Name' required {...form.getInputProps('name')} />
               <TextInput
                 label='Description'
