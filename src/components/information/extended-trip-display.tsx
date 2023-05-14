@@ -3,12 +3,14 @@ import { MdLocationPin } from 'react-icons/md'
 import { Trip } from '../../tripSource'
 import AddToCalButton from '../calendar-buttons/add-to-cal-button'
 import { getIcon, humanizeDuration } from './information-view'
+import { ItemGroup } from '../../Model'
 
 interface ExtendedTripDisplayComponentProps {
   index: number
   originAddress: string | undefined
   destinationAddress: string | undefined
   trip: Trip | undefined
+  itemGroup: ItemGroup | undefined
 }
 
 function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) {
@@ -64,6 +66,7 @@ function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) 
           originAddress={props.originAddress}
           destinationAddress={props.destinationAddress}
           trip={props.trip}
+          itemGroup={props.itemGroup}
         />
       </Stack>
     </Paper>
