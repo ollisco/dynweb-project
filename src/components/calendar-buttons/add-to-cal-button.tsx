@@ -42,7 +42,7 @@ function AddToCalButton(props: AddToCalButtonProps) {
     if (calIsAuthed()) {
       if (props.originAddress && props.destinationAddress && props.trip) {
         if (props.itemGroup) {
-          await addPreActivityToCalendar(notification, props.itemGroup, props.trip)
+          await addPreActivityToCalendar(props.itemGroup, props.trip)
         }
 
         const event = await addTripToCalendar(

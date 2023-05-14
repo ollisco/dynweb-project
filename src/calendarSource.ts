@@ -99,7 +99,7 @@ async function getFirstEvent(date: Date) {
   else return null
 }
 
-function addPreActivityToCalendar(notification: number, itemGroup: ItemGroup, trip: Trip) {
+function addPreActivityToCalendar(itemGroup: ItemGroup, trip: Trip) {
   const summary = `${itemGroup.name}, before komitid trip`
 
   let description = 'Things to get done before the komitid trip:\n\n'
@@ -131,23 +131,6 @@ function addPreActivityToCalendar(notification: number, itemGroup: ItemGroup, tr
       dateTime: endDateTime.toISOString(),
       timeZone: 'Europe/Stockholm',
     },
-  }
-
-  if (notification > 0) {
-    event.reminders = {
-      useDefault: false,
-      overrides: [
-        {
-          minutes: notification,
-          method: 'popup',
-        },
-      ],
-    }
-  } else if (notification == 0) {
-    event.reminders = {
-      useDefault: false,
-      overrides: [],
-    }
   }
 
   return gcal.createEvent(event)
