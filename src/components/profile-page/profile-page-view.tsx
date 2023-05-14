@@ -153,7 +153,7 @@ const ProfilePageView = ({
             </Stack>
             <Stack>
               {itemGroups?.map((itemGroup, index) => (
-                <>
+                <div key={index}>
                   <ItemGroupComp
                     index={index}
                     onUpdateItems={onUpdate}
@@ -161,7 +161,7 @@ const ProfilePageView = ({
                     name={itemGroup.name ?? 'NO NAME'}
                     items={itemGroup.items}
                   />
-                </>
+                </div>
               ))}
               <UnstyledButton onClick={open}>
                 <Text

@@ -39,7 +39,6 @@ const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => 
   }, [])
 
   const save = () => {
-    console.log('addressSearch', addressSearch)
     setHomeAddress(addressSearch)
     saveHomeAddress(addressSearch)
   }

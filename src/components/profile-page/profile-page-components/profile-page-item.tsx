@@ -114,7 +114,7 @@ export const ItemGroupComp = ({
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {itemState.map((item, index) => (
-                <>
+                <div key={index}>
                   <Draggable index={index} draggableId={`item-${item.name}-${index}`}>
                     {(provided) => (
                       <div
@@ -132,7 +132,7 @@ export const ItemGroupComp = ({
                       </div>
                     )}
                   </Draggable>
-                </>
+                </div>
               ))}
 
               {provided.placeholder}

@@ -117,7 +117,6 @@ function addPreActivityToCalendar(itemGroup: ItemGroup, trip: Trip) {
   )
 
   const endDateTime = new Date(`${trip.Origin.date}T${trip.Origin.time}`)
-  console.log(startDateTime, endDateTime, totalDuration)
 
   const event: newEvent = {
     summary: summary,
