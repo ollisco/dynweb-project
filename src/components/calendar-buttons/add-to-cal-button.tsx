@@ -1,5 +1,10 @@
 import { useState } from 'react'
-import { calIsAuthed, calAuth, addTripToCalendar } from '../../calendarSource'
+import {
+  calIsAuthed,
+  calAuth,
+  addTripToCalendar,
+  addPreActivityToCalendar,
+} from '../../calendarSource'
 import { Button, Alert, Menu } from '@mantine/core'
 import { IconAlertCircle, IconChevronDown } from '@tabler/icons-react'
 import GoogleIcon from '../basic/googleicon'
@@ -9,11 +14,13 @@ import {
   MdOutlineNotificationsActive,
   MdOutlineNotificationsOff,
 } from 'react-icons/md'
+import { ItemGroup } from '../profile-page/profile-page-components/profile-page-item'
 
 interface AddToCalButtonProps {
   originAddress: string | undefined
   destinationAddress: string | undefined
   trip: Trip | undefined
+  itemGroup: ItemGroup
 }
 
 function AddToCalButton(props: AddToCalButtonProps) {
@@ -34,6 +41,8 @@ function AddToCalButton(props: AddToCalButtonProps) {
     }
     if (calIsAuthed()) {
       if (props.originAddress && props.destinationAddress && props.trip) {
+        await addPreActivityToCalendar(notification, props.itemGroup, props.trip)
+
         const event = await addTripToCalendar(
           props.originAddress,
           props.destinationAddress,

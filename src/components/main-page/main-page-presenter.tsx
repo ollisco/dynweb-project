@@ -34,6 +34,21 @@ const MainPagePresenter = observer(({ model }: MainPagePresenterProps) => {
           destinationTime={model.arriveTime}
           searchInProgress={model.searchInProgress}
           trips={model.trips}
+          itemGroup={{
+            name: 'Trip',
+            items: [
+              {
+                name: 'Car',
+                description: 'Car description',
+                duration: 10,
+              },
+              {
+                name: 'Bus',
+                description: 'Bus description',
+                duration: 20,
+              },
+            ],
+          }}
         />
       </div>
     </>

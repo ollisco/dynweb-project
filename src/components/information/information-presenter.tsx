@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Trip } from '../../tripSource'
 import InformationView from './information-view'
+import { ItemGroup } from '../profile-page/profile-page-components/profile-page-item'
 
 interface InformationPresenterProps {
   originAddress: string | undefined
@@ -8,6 +9,7 @@ interface InformationPresenterProps {
   destinationTime: string | undefined
   searchInProgress: boolean
   trips: Trip[] | undefined
+  itemGroup: ItemGroup
 }
 
 function InformationPresenter(props: InformationPresenterProps) {
@@ -26,6 +28,7 @@ function InformationPresenter(props: InformationPresenterProps) {
       trips={props.trips}
       selectedTripIndex={selectedTripIndex}
       setSelectedTripIndex={setSelectTripIndex}
+      itemGroup={props.itemGroup}
     />
   )
 }
