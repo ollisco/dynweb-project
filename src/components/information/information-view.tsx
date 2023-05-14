@@ -59,7 +59,7 @@ function humanizeDuration(duration: string | undefined) {
 interface CompactTripDisplayComponentProps {
   tripIndex: number
   trip: Trip | undefined
-  itemGroup: ItemGroup
+  itemGroup: ItemGroup | undefined
   isSelected: boolean
   selectTrip: (index: number) => void
 }
@@ -103,7 +103,7 @@ interface ExtendedTripDisplayComponentProps {
   originAddress: string | undefined
   destinationAddress: string | undefined
   trip: Trip | undefined
-  itemGroup: ItemGroup
+  itemGroup: ItemGroup | undefined
 }
 
 function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) {
@@ -172,7 +172,7 @@ interface InformationViewProps {
   destinationTime: string | undefined
   searchInProgress: boolean
   trips: Trip[] | undefined
-  itemGroup: ItemGroup
+  itemGroup: ItemGroup | undefined
   selectedTripIndex: number
   setSelectedTripIndex: (index: number) => void
 }

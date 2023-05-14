@@ -9,7 +9,7 @@ interface InformationPresenterProps {
   destinationTime: string | undefined
   searchInProgress: boolean
   trips: Trip[] | undefined
-  itemGroup: ItemGroup
+  itemGroup: ItemGroup | undefined
 }
 
 function InformationPresenter(props: InformationPresenterProps) {

@@ -20,7 +20,7 @@ interface AddToCalButtonProps {
   originAddress: string | undefined
   destinationAddress: string | undefined
   trip: Trip | undefined
-  itemGroup: ItemGroup
+  itemGroup: ItemGroup | undefined
 }
 
 function AddToCalButton(props: AddToCalButtonProps) {
@@ -41,7 +41,9 @@ function AddToCalButton(props: AddToCalButtonProps) {
     }
     if (calIsAuthed()) {
       if (props.originAddress && props.destinationAddress && props.trip) {
-        await addPreActivityToCalendar(notification, props.itemGroup, props.trip)
+        if (props.itemGroup) {
+          await addPreActivityToCalendar(notification, props.itemGroup, props.trip)
+        }
 
         const event = await addTripToCalendar(
           props.originAddress,

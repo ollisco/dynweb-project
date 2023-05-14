@@ -81,6 +81,7 @@ interface FormViewProps {
   saveHomeAddress: boolean
   setSaveHomeAddress: (value: boolean) => void
   itemGroups: ItemGroup[]
+  setPreActivity: (activity: ItemGroup | undefined) => void
 }
 
 function FormView(props: FormViewProps) {
@@ -155,6 +156,13 @@ function FormView(props: FormViewProps) {
                   ` (${itemGroup.items.reduce((prev, curr) => prev + curr.duration, 0)} min)`,
                 itemGroup: itemGroup,
               }))}
+              onChange={(value) => {
+                // get the itemGroup
+                if (!value) return props.setPreActivity(undefined)
+
+                const itemGroup = props.itemGroups[parseInt(value.split(' ')[0])]
+                props.setPreActivity(itemGroup)
+              }}
               itemComponent={CustomItem}
               filter={(value, item) =>
                 item.itemGroup.name.toLowerCase().includes(value.toLowerCase().trim()) ||

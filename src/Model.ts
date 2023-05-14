@@ -9,6 +9,7 @@ class Model {
   user: UserCredential | null
   homeAddress: string | undefined
   itemGroups: ItemGroup[] | undefined
+  preActivity: ItemGroup | undefined
   destinationAddress: string | undefined
   arriveTime: string | undefined
   searchInProgress: boolean
@@ -21,6 +22,7 @@ class Model {
     this.setUser = this.setUser.bind(this)
     this.setHomeAddress = this.setHomeAddress.bind(this)
     this.setItemGroups = this.setItemGroups.bind(this)
+    this.setPreActivity = this.setPreActivity.bind(this)
     this.saveHomeAddress = this.saveHomeAddress.bind(this)
     this.saveItemGroups = this.saveItemGroups.bind(this)
     this.doSearch = this.doSearch.bind(this)
@@ -31,6 +33,7 @@ class Model {
     this.user = user ? (JSON.parse(user) as UserCredential) : null
     this.homeAddress = undefined
     this.itemGroups = undefined
+    this.preActivity = undefined
     this.destinationAddress = undefined
     this.arriveTime = undefined
     this.searchInProgress = false
@@ -78,6 +81,9 @@ class Model {
   }
   setItemGroups(itemGroups: ItemGroup[]) {
     this.itemGroups = itemGroups
+  }
+  setPreActivity(preActivity: ItemGroup | undefined) {
+    this.preActivity = preActivity
   }
 
   saveHomeAddress(address: string) {

@@ -39,6 +39,7 @@ interface FormPresenterProps {
   itemGroups: ItemGroup[]
   saveHomeAddress: (value: string) => void
   searchInProgress: boolean
+  setPreActivity: (activity: ItemGroup | undefined) => void
   doSearch: (
     originAddress: string,
     destinationAddress: string,
@@ -163,6 +164,7 @@ function FormPresenter(props: FormPresenterProps) {
       saveHomeAddress={saveHomeAddress}
       setSaveHomeAddress={setSaveHomeAddress}
       itemGroups={props.itemGroups}
+      setPreActivity={props.setPreActivity}
     />
   )
 }
