@@ -4,13 +4,22 @@ import { useDebouncedValue } from '@mantine/hooks'
 import { getAutocompleteSuggestions } from '../../mapsSource'
 import { observer } from 'mobx-react'
 import Model from '../../Model'
+import { ItemGroup } from './profile-page-components/profile-page-item'
 
 interface ProfilePagePresenterProps {
   model: Model
 }
 
 const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => {
-  const { user, homeAddress, saveHomeAddress, setHomeAddress, itemGroups } = model
+  const {
+    user,
+    homeAddress,
+    saveHomeAddress,
+    setHomeAddress,
+    itemGroups,
+    saveItemGroups,
+    setItemGroups,
+  } = model
 
   const [addressSearch, setAddressSearch] = useState('')
   const [debounceedAddressSearch] = useDebouncedValue(addressSearch, 500)
@@ -35,6 +44,11 @@ const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => 
     saveHomeAddress(addressSearch)
   }
 
+  const saveGroups = (itemGroups: ItemGroup[]) => {
+    saveItemGroups(itemGroups)
+    setItemGroups(itemGroups)
+  }
+
   useEffect(() => {
     if (debounceedAddressSearch) debouncedGetSuggestions(debounceedAddressSearch)
   }, [debounceedAddressSearch])
@@ -44,15 +58,18 @@ const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => 
   }, [homeAddress])
 
   return (
-    <ProfilePageView
-      user={user}
-      setAddressSearch={setAddressSearch}
-      addressSearch={addressSearch}
-      addressData={suggestions}
-      addressLoading={loading}
-      saveFunction={save}
-      itemGroups={itemGroups}
-    />
+    <>
+      <ProfilePageView
+        user={user}
+        setAddressSearch={setAddressSearch}
+        addressSearch={addressSearch}
+        addressData={suggestions}
+        addressLoading={loading}
+        saveFunction={save}
+        itemGroups={itemGroups}
+        saveGroups={saveGroups}
+      />
+    </>
   )
 })
 

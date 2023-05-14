@@ -22,6 +22,7 @@ class Model {
     this.setHomeAddress = this.setHomeAddress.bind(this)
     this.setItemGroups = this.setItemGroups.bind(this)
     this.saveHomeAddress = this.saveHomeAddress.bind(this)
+    this.saveItemGroups = this.saveItemGroups.bind(this)
     this.doSearch = this.doSearch.bind(this)
     this.setRoute = this.setRoute.bind(this)
     this.setSearchInProgress = this.setSearchInProgress.bind(this)
@@ -52,12 +53,10 @@ class Model {
     if (this.user) {
       try {
         const data = await loadData(this.user)
-        console.log('d', data)
         if (data) {
           this.setHomeAddress(data.homeAddress)
           this.setItemGroups(data.itemGroups)
-        } 
-        
+        }
       } catch (error) {
         console.error(error)
       }
@@ -81,16 +80,13 @@ class Model {
     this.itemGroups = itemGroups
   }
 
-
   saveHomeAddress(address: string) {
     if (this.user) saveData(this.user, { homeAddress: address })
   }
 
-  saveItems(itemGroups: ItemGroup[]) {
+  saveItemGroups(itemGroups: ItemGroup[]) {
     if (this.user) saveItemData(this.user, itemGroups)
   }
-
-
 
   async doSearch(
     originAddress: string,

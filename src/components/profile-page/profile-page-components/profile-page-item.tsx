@@ -11,7 +11,7 @@ import {
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
 import { IconGripVertical, IconX } from '@tabler/icons-react'
 import { useListState } from '@mantine/hooks'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from '@mantine/form'
 
 export interface ItemGroup {
@@ -35,8 +35,14 @@ const ItemComp = ({ name, description, duration }: Item) => {
   )
 }
 
-export const ItemGroupComp = ({ name, items }: ItemGroup) => {
-  console.log(JSON.stringify(name), JSON.stringify(items))
+interface ItemGroupCompProps {
+  index: number
+  name: string
+  items: Item[]
+  onAddItem: (index: number, items: Item[]) => void
+}
+
+export const ItemGroupComp = ({ index, name, items, onAddItem }: ItemGroupCompProps) => {
   const [files, filesHandlers] = useListState<Item>(items)
   const [newItem, setNewItem] = useState<boolean>(false)
 
@@ -60,21 +66,27 @@ export const ItemGroupComp = ({ name, items }: ItemGroup) => {
   }
 
   const addItem = () => {
-    const r = form.validate()
-    if (r.hasErrors) {
-      form.setErrors(r.errors)
+    const v = form.validate()
+    if (v.hasErrors) {
+      form.setErrors(v.errors)
       return
     }
-    console.log(r)
-    const { name, description, duration } = form.values
+    const { name: itemName, description, duration } = form.values
 
-    filesHandlers.append({ name, description, duration })
+    const theNewItem = { name: itemName, description, duration }
+    filesHandlers.append(theNewItem)
+
+    onAddItem(index, [...files, theNewItem])
     toggleAddItem()
   }
 
   const removeItem = (index: number) => {
     filesHandlers.remove(index)
   }
+
+  useEffect(() => {
+    filesHandlers.setState(items)
+  }, [items])
 
   return (
     <Stack spacing={0}>
