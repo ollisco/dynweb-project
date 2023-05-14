@@ -150,7 +150,7 @@ function FormView(props: FormViewProps) {
               nothingFound='No Item Groups found, visit the profile page to add some'
               data={props.itemGroups.map((itemGroup, index) => ({
                 value: `${index} ${itemGroup.name}`,
-                label: itemGroup.name,
+                label: itemGroup.name + ` (${itemGroup.items.reduce((prev, curr) => prev + curr.duration, 0)} min)`,
                 itemGroup: itemGroup,
               }))}
               itemComponent={CustomItem}
