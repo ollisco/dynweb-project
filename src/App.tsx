@@ -1,5 +1,5 @@
 import { AppShell, ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core'
-import { useLocalStorage } from '@mantine/hooks'
+import { useColorScheme, useLocalStorage } from '@mantine/hooks'
 import Model from './Model'
 import Navigator from './components/navigator/navigator'
 import HeaderPresenter from './components/header/header-presenter'
@@ -7,9 +7,10 @@ import HeaderPresenter from './components/header/header-presenter'
 const model = new Model()
 
 function App() {
+  const preferredColorScheme = useColorScheme()
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: 'color-scheme',
-    defaultValue: 'light',
+    defaultValue: preferredColorScheme,
   })
 
   const toggleColorScheme = () =>
