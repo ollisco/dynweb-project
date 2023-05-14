@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import ProfilePageView from './profile-page-view'
 import { useDebouncedValue } from '@mantine/hooks'
-import { getAutocompleteSuggestions } from '../../mapsSource'
+import { getAutocompleteSuggestions } from '../../maps-source'
 import { observer } from 'mobx-react'
-import Model, { ItemGroup } from '../../Model'
+import Model, { ItemGroup } from '../../model'
 
 interface ProfilePagePresenterProps {
   model: Model

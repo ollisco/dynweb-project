@@ -1,11 +1,11 @@
 import { Text, Paper, Group, Box, Button, Stack, Image } from '@mantine/core'
-import GoogleIcon from '../basic/googleicon'
+import { FcGoogle } from 'react-icons/fc'
 
 interface LoginViewProps {
   onSignIn: () => void
 }
 
-function LoginView({ onSignIn }: LoginViewProps) {
+const LoginView = ({ onSignIn }: LoginViewProps) => {
   return (
     <Box mih='100vh'>
       <Box pos='relative'>
@@ -35,7 +35,7 @@ function LoginView({ onSignIn }: LoginViewProps) {
             <Group grow mb='md' mt='md'>
               <Button
                 onClick={onSignIn}
-                leftIcon={<GoogleIcon />}
+                leftIcon={<FcGoogle />}
                 variant='default'
                 color='gray'
                 radius='xl'

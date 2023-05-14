@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Trip } from '../../tripSource'
+import { Trip } from '../../trip-source'
 import InformationView from './information-view'
-import { ItemGroup } from '../../Model'
+import { ItemGroup } from '../../model'
 
 interface InformationPresenterProps {
   originAddress: string | undefined
@@ -12,7 +12,7 @@ interface InformationPresenterProps {
   itemGroup: ItemGroup | undefined
 }
 
-function InformationPresenter(props: InformationPresenterProps) {
+const InformationPresenter = (props: InformationPresenterProps) => {
   const [selectedTripIndex, setSelectTripIndex] = useState<number>(0)
 
   useEffect(() => {

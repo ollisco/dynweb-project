@@ -1,8 +1,8 @@
 import { UserCredential } from '@firebase/auth'
-import { signInWithGoogle, loadData, saveItemData, saveLocationData } from './Firebase'
+import { signInWithGoogle, loadData, saveItemData, saveLocationData } from './firebase'
 import { makeAutoObservable } from 'mobx'
-import { CoordsObj, Trip, getTrafficInfo } from './tripSource'
-import { addressToCoords } from './mapsSource'
+import { CoordsObj, Trip, getTrafficInfo } from './trip-source'
+import { addressToCoords } from './maps-source'
 
 export interface ItemGroup {
   name: string

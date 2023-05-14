@@ -1,9 +1,9 @@
 import { Paper, Stack, Timeline, Text } from '@mantine/core'
 import { MdLocationPin } from 'react-icons/md'
-import { Trip } from '../../tripSource'
+import { Trip } from '../../trip-source'
 import AddToCalButton from '../calendar-buttons/add-to-cal-button'
 import { getIcon, humanizeDuration } from './information-view'
-import { ItemGroup } from '../../Model'
+import { ItemGroup } from '../../model'
 
 interface ExtendedTripDisplayComponentProps {
   index: number
@@ -13,7 +13,7 @@ interface ExtendedTripDisplayComponentProps {
   itemGroup: ItemGroup | undefined
 }
 
-function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) {
+const ExtendedTripDisplayComponent = (props: ExtendedTripDisplayComponentProps) => {
   return (
     <Paper style={{ flexGrow: 1 }} p='md' withBorder>
       <Stack>

@@ -3,4 +3,4 @@ dist/
 .prettierrc.js
 .eslintrc.js
 vite-env.d.ts
-ApiCalendar.ts
+gcal-api.ts

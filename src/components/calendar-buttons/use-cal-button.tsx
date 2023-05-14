@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { calIsAuthed, calAuth, getFirstEvent } from '../../calendarSource'
+import { calIsAuthed, calAuth, getFirstEvent } from '../../calendar-source'
 import { Button, Alert, ActionIcon, Group, Text, Popover } from '@mantine/core'
 import { IconAlertCircle } from '@tabler/icons-react'
-import GoogleIcon from '../basic/googleicon'
 import { MdInfoOutline } from 'react-icons/md'
+import { FcGoogle } from 'react-icons/fc'
 
 interface UseCalButtonProps {
   date: Date
@@ -11,12 +11,12 @@ interface UseCalButtonProps {
   setAddress: (value: string) => void
 }
 
-function UseCalButton(props: UseCalButtonProps) {
+const UseCalButton = (props: UseCalButtonProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [eventTitle, setEventTitle] = useState<string>('')
 
-  async function useCal() {
+  const useCal = async () => {
     setLoading(true)
     setError('')
     setEventTitle('')
@@ -41,7 +41,7 @@ function UseCalButton(props: UseCalButtonProps) {
   return (
     <div>
       <Group spacing='xs'>
-        <Button onClick={useCal} loading={loading} leftIcon={<GoogleIcon />} variant='light'>
+        <Button onClick={useCal} loading={loading} leftIcon={<FcGoogle />} variant='light'>
           Use Google Calendar
         </Button>
         <Popover>

@@ -1,5 +1,5 @@
 import { Box, Container, Stack, Title, Flex, useMantineTheme } from '@mantine/core'
-import { Trip } from '../../tripSource'
+import { Trip } from '../../trip-source'
 import {
   MdDirectionsWalk,
   MdTrain,
@@ -10,9 +10,9 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 import CompactTripDisplayComponent from './compact-trip-display'
 import ExtendedTripDisplayComponent from './extended-trip-display'
-import { ItemGroup } from '../../Model'
+import { ItemGroup } from '../../model'
 
-function getIcon(leg: { type: string; category: string } | undefined) {
+const getIcon = (leg: { type: string; category: string } | undefined) => {
   switch (leg?.category) {
     case 'BLT':
       return <MdDirectionsBus />
@@ -35,7 +35,7 @@ function getIcon(leg: { type: string; category: string } | undefined) {
   }
 }
 
-function humanizeDuration(duration: string | undefined) {
+const humanizeDuration = (duration: string | undefined) => {
   if (duration)
     return duration
       .replace('P', '')
@@ -57,11 +57,11 @@ interface InformationViewProps {
   setSelectedTripIndex: (index: number) => void
 }
 
-function InformationView(props: InformationViewProps) {
+const InformationView = (props: InformationViewProps) => {
   const theme = useMantineTheme()
   const isMobile = useMediaQuery(`(max-width:${theme.breakpoints.sm})`)
 
-  function renderCompactTripCards(fromIndex: number, toIndex?: number) {
+  const renderCompactTripCards = (fromIndex: number, toIndex?: number) => {
     if (!props.trips) return null
     return props.trips.slice(fromIndex, toIndex).map((trip: Trip, index: number) => {
       return (

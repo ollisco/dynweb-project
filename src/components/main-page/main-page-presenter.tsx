@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 
 import FormPresenter from '../form/form-presenter'
-import Model from '../../Model'
+import Model from '../../model'
 import InformationPresenter from '../information/information-presenter'
 import { observer } from 'mobx-react'
 

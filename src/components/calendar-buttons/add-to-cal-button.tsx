@@ -4,17 +4,17 @@ import {
   calAuth,
   addTripToCalendar,
   addPreActivityToCalendar,
-} from '../../calendarSource'
+} from '../../calendar-source'
 import { Button, Alert, Menu, Anchor } from '@mantine/core'
 import { IconAlertCircle, IconChevronDown } from '@tabler/icons-react'
-import GoogleIcon from '../basic/googleicon'
-import { Trip } from '../../tripSource'
+import { Trip } from '../../trip-source'
 import {
   MdOutlineNotifications,
   MdOutlineNotificationsActive,
   MdOutlineNotificationsOff,
 } from 'react-icons/md'
-import { ItemGroup } from '../../Model'
+import { FcGoogle } from 'react-icons/fc'
+import { ItemGroup } from '../../model'
 
 interface AddToCalButtonProps {
   originAddress: string | undefined
@@ -23,12 +23,12 @@ interface AddToCalButtonProps {
   itemGroup: ItemGroup | undefined
 }
 
-function AddToCalButton(props: AddToCalButtonProps) {
+const AddToCalButton = (props: AddToCalButtonProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [eventLink, setEventLink] = useState<string>('')
 
-  async function addTrip(notification: number) {
+  const addTrip = async (notification: number) => {
     setLoading(true)
     setError('')
     setEventLink('')
@@ -64,7 +64,7 @@ function AddToCalButton(props: AddToCalButtonProps) {
           <Button
             disabled={!(props.originAddress && props.destinationAddress)}
             loading={loading}
-            leftIcon={<GoogleIcon />}
+            leftIcon={<FcGoogle />}
             variant='light'
             rightIcon={<IconChevronDown size='1.05rem' stroke={1.5} />}
           >

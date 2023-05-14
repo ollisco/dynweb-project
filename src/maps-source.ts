@@ -1,4 +1,3 @@
-import { MAPS_API_KEY, GEOAPIFY_KEY } from './apiconf'
 import axios from 'axios'
 
 interface Coordinates {
@@ -15,12 +14,12 @@ class AddressError extends Error {
   }
 }
 
-async function addressToCoords(address: string) {
+const addressToCoords = async (address: string) => {
   try {
     const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
       params: {
         address: address,
-        key: MAPS_API_KEY,
+        key: import.meta.env.VITE_MAPS_API_KEY,
       },
     })
     const coords = response.data.results[0].geometry.location
@@ -33,12 +32,12 @@ async function addressToCoords(address: string) {
   }
 }
 
-async function getAutocompleteSuggestions(value: string) {
+const getAutocompleteSuggestions = async (value: string) => {
   if (value.trim().length < 3) return [] // API won't give results for strings shorter than 3 letters
   try {
     const response = await axios.get('https://api.geoapify.com/v1/geocode/autocomplete', {
       params: {
-        apiKey: GEOAPIFY_KEY,
+        apiKey: import.meta.env.VITE_GEOAPIFY_KEY,
         text: value,
         filter: 'countrycode:se', // only search for swedish adresses
         lang: 'sv',

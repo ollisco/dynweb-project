@@ -1,10 +1,10 @@
 import { LegacyRef, forwardRef, useCallback, useEffect, useState } from 'react'
 import { Group, Text, SelectItemProps, MantineColor } from '@mantine/core'
 import { debounce } from 'lodash'
-import { AddressError, getAutocompleteSuggestions } from '../../mapsSource'
-import { TripError } from '../../tripSource'
+import { AddressError, getAutocompleteSuggestions } from '../../maps-source'
+import { TripError } from '../../trip-source'
 import FormView from './form-view'
-import { ItemGroup } from '../../Model'
+import { ItemGroup } from '../../model'
 
 // Items used in autocorrect
 interface ItemProps extends SelectItemProps {
@@ -50,7 +50,7 @@ interface FormPresenterProps {
   ) => void
 }
 
-function FormPresenter(props: FormPresenterProps) {
+const FormPresenter = (props: FormPresenterProps) => {
   const [originAddress, setOriginAddress] = useState<string>('')
   const [originAddressLoading, setOriginAddressLoading] = useState(false)
   const [originAddressAutocompleteData, setOriginAddressAutocompleteData] = useState<string[]>([])
@@ -121,7 +121,7 @@ function FormPresenter(props: FormPresenterProps) {
     handleAddressChange(value, setDestinationAddressAutocompleteData, setDestinationAddressLoading)
   }
 
-  async function performSearch() {
+  const performSearch = async () => {
     setOriginAddressError('')
     setDestinationAddressError('')
     setSearchError('')

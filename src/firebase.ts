@@ -1,21 +1,29 @@
 import { getAuth, GoogleAuthProvider, signInWithPopup, UserCredential } from 'firebase/auth'
-import { firebaseConfig } from './apiconf'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
-import { ItemGroup, Item } from './Model'
+import { ItemGroup, Item } from './model'
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig)
+const app = firebase.initializeApp({
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: 'komitid-cb8e5.firebaseapp.com',
+  databaseURL: 'https://komitid-cb8e5-default-rtdb.europe-west1.firebasedatabase.app/',
+  projectId: 'komitid-cb8e5',
+  storageBucket: 'komitid-cb8e5.appspot.com',
+  messagingSenderId: '568442634445',
+  appId: '1:568442634445:web:2b396de1b349bd4541e984',
+  measurementId: 'G-KWPFC22M84',
+})
 const auth = getAuth(app)
 const db = firebase.firestore()
 
 const provider = new GoogleAuthProvider()
 
-function signInWithGoogle() {
+const signInWithGoogle = () => {
   return signInWithPopup(auth, provider)
 }
 
-function loadData(user: UserCredential) {
+const loadData = (user: UserCredential) => {
   return db
     .collection('users')
     .doc(user.user.uid)
@@ -25,15 +33,15 @@ function loadData(user: UserCredential) {
     })
 }
 
-function saveData(user: UserCredential, data: { [key: string]: string }) {
+const saveData = (user: UserCredential, data: { [key: string]: string }) => {
   db.collection('users').doc(user.user.uid).set(data, { merge: true })
 }
 
-function saveLocationData(user: UserCredential, homeAddress: string) {
+const saveLocationData = (user: UserCredential, homeAddress: string) => {
   db.collection('users').doc(user.user.uid).set({ homeAddress }, { merge: true })
 }
 
-function saveItemData(user: UserCredential, itemGroups: ItemGroup[]) {
+const saveItemData = (user: UserCredential, itemGroups: ItemGroup[]) => {
   db.collection('users')
     .doc(user.user.uid)
     .set(

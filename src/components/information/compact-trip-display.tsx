@@ -1,6 +1,6 @@
 import { useMantineTheme, Paper, Stack, Flex, Text } from '@mantine/core'
 import { MdKeyboardArrowRight } from 'react-icons/md'
-import { Trip } from '../../tripSource'
+import { Trip } from '../../trip-source'
 import { humanizeDuration, getIcon } from './information-view'
 
 interface CompactTripDisplayComponentProps {
@@ -10,7 +10,7 @@ interface CompactTripDisplayComponentProps {
   selectTrip: (index: number) => void
 }
 
-function CompactTripDisplayComponent(props: CompactTripDisplayComponentProps) {
+const CompactTripDisplayComponent = (props: CompactTripDisplayComponentProps) => {
   const theme = useMantineTheme()
 
   return (

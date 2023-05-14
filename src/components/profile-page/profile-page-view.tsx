@@ -20,7 +20,7 @@ import { SelectItem } from '../form/form-presenter'
 import { IconX } from '@tabler/icons-react'
 import { useDisclosure } from '@mantine/hooks'
 import { ItemGroupComp } from './profile-page-components/profile-page-item'
-import { ItemGroup, Item } from '../../Model'
+import { ItemGroup, Item } from '../../model'
 
 interface ProfilePageViewProps {
   user: UserCredential | null

@@ -18,7 +18,7 @@ import {
 import { IconAlertCircle } from '@tabler/icons-react'
 import UseCalButton from '../calendar-buttons/use-cal-button'
 import React, { forwardRef } from 'react'
-import { ItemGroup, Item } from '../../Model'
+import { ItemGroup, Item } from '../../model'
 
 type CustomItemProps = SelectItemProps & { itemGroup: ItemGroup }
 
@@ -84,7 +84,7 @@ interface FormViewProps {
   setPreActivity: (activity: ItemGroup | undefined) => void
 }
 
-function FormView(props: FormViewProps) {
+const FormView = (props: FormViewProps) => {
   console.log(props.itemGroups)
   return (
     <Box w='100%'>
