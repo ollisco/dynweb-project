@@ -15,7 +15,6 @@ import { useEffect, useState } from 'react'
 import { useForm } from '@mantine/form'
 import { Item } from '../../../Model'
 
-
 const ItemComp = ({ name, description, duration }: Item) => {
   return (
     <Group>
@@ -52,7 +51,6 @@ export const ItemGroupComp = ({
     },
     validate: {
       name: (value) => (value.trim().length > 0 ? null : 'Name is required'),
-      description: (value) => (value.trim().length > 0 ? null : 'Description is required'),
       duration: (value) => {
         if (value <= 0) return 'Duration must be greater than 0'
         const totalGroupDuration = itemState.reduce((acc, item) => acc + item.duration, 0) + value
@@ -160,7 +158,6 @@ export const ItemGroupComp = ({
               <TextInput
                 label='Description'
                 placeholder='Description'
-                required
                 {...form.getInputProps('description')}
               />
               <NumberInput

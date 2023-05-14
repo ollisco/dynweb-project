@@ -18,8 +18,9 @@ import {
 import { UserCredential } from 'firebase/auth'
 import { SelectItem } from '../form/form-presenter'
 import { IconX } from '@tabler/icons-react'
-import { Item, ItemGroup, ItemGroupComp } from './profile-page-components/profile-page-item'
 import { useDisclosure } from '@mantine/hooks'
+import { ItemGroupComp } from './profile-page-components/profile-page-item'
+import { ItemGroup, Item } from '../../Model'
 
 interface ProfilePageViewProps {
   user: UserCredential | null

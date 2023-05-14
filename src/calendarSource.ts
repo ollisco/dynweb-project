@@ -1,10 +1,7 @@
 import { GCAL_API_KEY, GCAL_CLIENT_ID } from './apiconf'
 import ApiCalendar from './ApiCalendar'
 import { Trip } from './tripSource'
-import {
-  Item,
-  ItemGroup,
-} from './components/profile-page/profile-page-components/profile-page-item'
+import { ItemGroup, Item } from './Model'
 
 const gcal = new ApiCalendar({
   clientId: GCAL_CLIENT_ID || '',

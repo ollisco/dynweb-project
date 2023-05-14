@@ -4,7 +4,6 @@ import { makeAutoObservable } from 'mobx'
 import { CoordsObj, Trip, getTrafficInfo } from './tripSource'
 import { addressToCoords } from './mapsSource'
 
-
 export interface ItemGroup {
   name: string
   items: Item[]
@@ -15,7 +14,6 @@ export interface Item {
   description: string
   duration: number // minutes
 }
-
 
 class Model {
   user: UserCredential | null

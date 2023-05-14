@@ -20,7 +20,7 @@ import {
   MdDirectionsSubway,
   MdDirectionsBus,
 } from 'react-icons/md'
-import { ItemGroup } from '../../Model';
+import { ItemGroup } from '../../Model'
 
 function getIcon(leg: { type: string; category: string } | undefined) {
   switch (leg?.category) {
@@ -114,8 +114,9 @@ function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) 
           <Timeline.Item
             bullet={<MdLocationPin size={16} />}
             bulletSize={24}
-            title={`${props.trip?.Origin.time.substring(0, 5)} - ${props.originAddress?.split(/[,()]/)[0]
-              }`}
+            title={`${props.trip?.Origin.time.substring(0, 5)} - ${
+              props.originAddress?.split(/[,()]/)[0]
+            }`}
           >
             <Text color='dimmed' size='sm'>
               {getIcon(props.trip?.LegList.Leg[0])} {props.trip?.LegList.Leg[0].name}
@@ -149,8 +150,9 @@ function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) 
           <Timeline.Item
             bullet={<MdLocationPin size={16} />}
             bulletSize={24}
-            title={`${props.trip?.Destination.time.substring(0, 5)} - ${props.destinationAddress?.split(/[,()]/)[0]
-              }`}
+            title={`${props.trip?.Destination.time.substring(0, 5)} - ${
+              props.destinationAddress?.split(/[,()]/)[0]
+            }`}
           />
         </Timeline>
         <AddToCalButton

@@ -2,10 +2,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, UserCredential } from 'fi
 import { firebaseConfig } from './apiconf'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
-import {
-  Item,
-  ItemGroup,
-} from './components/profile-page/profile-page-components/profile-page-item'
+import { ItemGroup, Item } from './Model'
 
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig)

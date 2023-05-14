@@ -3,8 +3,7 @@ import ProfilePageView from './profile-page-view'
 import { useDebouncedValue } from '@mantine/hooks'
 import { getAutocompleteSuggestions } from '../../mapsSource'
 import { observer } from 'mobx-react'
-import Model from '../../Model'
-import { ItemGroup } from './profile-page-components/profile-page-item'
+import Model, { ItemGroup } from '../../Model'
 
 interface ProfilePagePresenterProps {
   model: Model
