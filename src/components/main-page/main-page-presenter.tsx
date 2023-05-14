@@ -25,6 +25,7 @@ const MainPagePresenter = observer(({ model }: MainPagePresenterProps) => {
         saveHomeAddress={model.saveHomeAddress}
         searchInProgress={model.searchInProgress}
         doSearch={model.doSearch}
+        itemGroups={model.itemGroups ?? []}
       />
       <div ref={scrollRef}>
         <InformationPresenter

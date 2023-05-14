@@ -4,18 +4,7 @@ import { debounce } from 'lodash'
 import { AddressError, getAutocompleteSuggestions } from '../../mapsSource'
 import { TripError } from '../../tripSource'
 import FormView from './form-view'
-
-interface FormPresenterProps {
-  homeAddress: string | undefined
-  saveHomeAddress: (value: string) => void
-  searchInProgress: boolean
-  doSearch: (
-    originAddress: string,
-    destinationAddress: string,
-    date: Date,
-    arriveTime: string,
-  ) => void
-}
+import { ItemGroup } from '../profile-page/profile-page-components/profile-page-item'
 
 // Items used in autocorrect
 interface ItemProps extends SelectItemProps {
@@ -44,6 +33,19 @@ export const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 )
 
 SelectItem.displayName = 'SelectItem'
+
+interface FormPresenterProps {
+  homeAddress: string | undefined
+  itemGroups: ItemGroup[]
+  saveHomeAddress: (value: string) => void
+  searchInProgress: boolean
+  doSearch: (
+    originAddress: string,
+    destinationAddress: string,
+    date: Date,
+    arriveTime: string,
+  ) => void
+}
 
 function FormPresenter(props: FormPresenterProps) {
   const [originAddress, setOriginAddress] = useState<string>('')
@@ -160,6 +162,7 @@ function FormPresenter(props: FormPresenterProps) {
       setSearchError={setSearchError}
       saveHomeAddress={saveHomeAddress}
       setSaveHomeAddress={setSaveHomeAddress}
+      itemGroups={props.itemGroups}
     />
   )
 }
