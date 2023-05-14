@@ -7,12 +7,56 @@ import {
   Button,
   Checkbox,
   Container,
+  Group,
   Loader,
   Paper,
+  Select,
+  SelectItemProps,
   Stack,
+  Text,
 } from '@mantine/core'
 import { IconAlertCircle } from '@tabler/icons-react'
 import UseCalButton from '../calendar-buttons/use-cal-button'
+import React, { forwardRef } from 'react'
+import { ItemGroup, Item } from '../../Model'
+
+type CustomItemProps = SelectItemProps & { itemGroup: ItemGroup }
+
+const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ itemGroup, ...others }, ref) => {
+  const totalDuration = itemGroup.items.reduce((prev, curr) => prev + curr.duration, 0)
+
+  return (
+    <div ref={ref} {...others}>
+      <Group align='center'>
+        <Text>{itemGroup.name}</Text>
+        <Text>
+          {itemGroup.items
+            .map<React.ReactNode>((item) => (
+              <>
+                <Text span size='sm' color='dimmed'>
+                  {item.name}
+                </Text>
+              </>
+            ))
+            .reduce((prev, curr) => [
+              prev,
+              <>
+                <Text span size='sm' color='dimmed'>
+                  ,{' '}
+                </Text>
+              </>,
+              curr,
+            ])}
+        </Text>
+        <Text size='sm' color='dimmed'>
+          {totalDuration} min
+        </Text>
+      </Group>
+    </div>
+  )
+})
+
+CustomItem.displayName = 'CustomItem'
 
 interface FormViewProps {
   originAddress: string
@@ -36,9 +80,12 @@ interface FormViewProps {
   setSearchError: (value: string) => void
   saveHomeAddress: boolean
   setSaveHomeAddress: (value: boolean) => void
+  itemGroups: ItemGroup[]
+  setPreActivity: (activity: ItemGroup | undefined) => void
 }
 
 function FormView(props: FormViewProps) {
+  console.log(props.itemGroups)
   return (
     <Box w='100vw'>
       <Container>
@@ -95,6 +142,34 @@ function FormView(props: FormViewProps) {
               onChange={(e) => {
                 props.setArriveTime(e.target.value)
               }}
+            />
+            <Select
+              label='Select a group of activities to do before travel'
+              placeholder='Select an group'
+              clearable
+              searchable
+              nothingFound='No Item Groups found, visit the profile page to add some'
+              data={props.itemGroups.map((itemGroup, index) => ({
+                value: `${index} ${itemGroup.name}`,
+                label:
+                  itemGroup.name +
+                  ` (${itemGroup.items.reduce((prev, curr) => prev + curr.duration, 0)} min)`,
+                itemGroup: itemGroup,
+              }))}
+              onChange={(value) => {
+                // get the itemGroup
+                if (!value) return props.setPreActivity(undefined)
+
+                const itemGroup = props.itemGroups[parseInt(value.split(' ')[0])]
+                props.setPreActivity(itemGroup)
+              }}
+              itemComponent={CustomItem}
+              filter={(value, item) =>
+                item.itemGroup.name.toLowerCase().includes(value.toLowerCase().trim()) ||
+                item.itemGroup.items.some((item: Item) =>
+                  item.name.toLowerCase().includes(value.toLowerCase().trim()),
+                )
+              }
             />
             <Button
               onClick={props.searchClicked}

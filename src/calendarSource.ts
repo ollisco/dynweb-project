@@ -1,6 +1,7 @@
 import { GCAL_API_KEY, GCAL_CLIENT_ID } from './apiconf'
 import ApiCalendar from './ApiCalendar'
 import { Trip } from './tripSource'
+import { ItemGroup, Item } from './Model'
 
 const gcal = new ApiCalendar({
   clientId: GCAL_CLIENT_ID || '',
@@ -98,6 +99,43 @@ async function getFirstEvent(date: Date) {
   else return null
 }
 
+function addPreActivityToCalendar(itemGroup: ItemGroup, trip: Trip) {
+  const summary = `${itemGroup.name}, before komitid trip`
+
+  let description = 'Things to get done before the komitid trip:\n\n'
+  itemGroup.items.forEach((item: Item) => {
+    description += `${item.name}: ${item.description} (${item.duration} min)\n`
+  })
+
+  description += '\n\nThis event was created automatically by Komitid'
+  const totalDuration = itemGroup.items.reduce((acc: number, item: Item) => {
+    return acc + item.duration
+  }, 0)
+
+  // start time is end time - total duration
+  const startDateTime = new Date(
+    new Date(`${trip.Origin.date}T${trip.Origin.time}`).getTime() - totalDuration * 60000,
+  )
+
+  const endDateTime = new Date(`${trip.Origin.date}T${trip.Origin.time}`)
+  console.log(startDateTime, endDateTime, totalDuration)
+
+  const event: newEvent = {
+    summary: summary,
+    description: description,
+    start: {
+      dateTime: startDateTime.toISOString(),
+      timeZone: 'Europe/Stockholm',
+    },
+    end: {
+      dateTime: endDateTime.toISOString(),
+      timeZone: 'Europe/Stockholm',
+    },
+  }
+
+  return gcal.createEvent(event)
+}
+
 function addTripToCalendar(
   originAddress: string,
   destinationAddress: string,
@@ -153,4 +191,4 @@ function addTripToCalendar(
 }
 
 export type { processedEvent as event }
-export { calAuth, calIsAuthed, getFirstEvent, addTripToCalendar }
+export { calAuth, calIsAuthed, getFirstEvent, addTripToCalendar, addPreActivityToCalendar }

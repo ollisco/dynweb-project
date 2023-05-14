@@ -20,6 +20,7 @@ import {
   MdDirectionsSubway,
   MdDirectionsBus,
 } from 'react-icons/md'
+import { ItemGroup } from '../../Model'
 
 function getIcon(leg: { type: string; category: string } | undefined) {
   switch (leg?.category) {
@@ -58,6 +59,7 @@ function humanizeDuration(duration: string | undefined) {
 interface CompactTripDisplayComponentProps {
   tripIndex: number
   trip: Trip | undefined
+  itemGroup: ItemGroup | undefined
   isSelected: boolean
   selectTrip: (index: number) => void
 }
@@ -101,6 +103,7 @@ interface ExtendedTripDisplayComponentProps {
   originAddress: string | undefined
   destinationAddress: string | undefined
   trip: Trip | undefined
+  itemGroup: ItemGroup | undefined
 }
 
 function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) {
@@ -156,6 +159,7 @@ function ExtendedTripDisplayComponent(props: ExtendedTripDisplayComponentProps) 
           originAddress={props.originAddress}
           destinationAddress={props.destinationAddress}
           trip={props.trip}
+          itemGroup={props.itemGroup}
         />
       </Stack>
     </Paper>
@@ -168,6 +172,7 @@ interface InformationViewProps {
   destinationTime: string | undefined
   searchInProgress: boolean
   trips: Trip[] | undefined
+  itemGroup: ItemGroup | undefined
   selectedTripIndex: number
   setSelectedTripIndex: (index: number) => void
 }
@@ -191,6 +196,7 @@ function InformationView(props: InformationViewProps) {
                       trip={trip}
                       isSelected={index == props.selectedTripIndex}
                       selectTrip={props.setSelectedTripIndex}
+                      itemGroup={props.itemGroup}
                     />
                   )
                 })}
@@ -200,6 +206,7 @@ function InformationView(props: InformationViewProps) {
                 originAddress={props.originAddress}
                 destinationAddress={props.destinationAddress}
                 trip={props.trips.at(props.selectedTripIndex)}
+                itemGroup={props.itemGroup}
               />
             </Flex>
           </Container>

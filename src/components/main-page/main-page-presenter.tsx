@@ -25,6 +25,8 @@ const MainPagePresenter = observer(({ model }: MainPagePresenterProps) => {
         saveHomeAddress={model.saveHomeAddress}
         searchInProgress={model.searchInProgress}
         doSearch={model.doSearch}
+        itemGroups={model.itemGroups ?? []}
+        setPreActivity={model.setPreActivity}
       />
       <div ref={scrollRef}>
         <InformationPresenter
@@ -33,6 +35,7 @@ const MainPagePresenter = observer(({ model }: MainPagePresenterProps) => {
           destinationTime={model.arriveTime}
           searchInProgress={model.searchInProgress}
           trips={model.trips}
+          itemGroup={model.preActivity}
         />
       </div>
     </>
