@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
 import { AppShell, ColorScheme, ColorSchemeProvider, MantineProvider } from '@mantine/core'
-import { useColorScheme } from '@mantine/hooks'
+import { useLocalStorage } from '@mantine/hooks'
 import Model from './Model'
 import Navigator from './components/navigator/navigator'
 import HeaderPresenter from './components/header/header-presenter'
@@ -8,14 +7,13 @@ import HeaderPresenter from './components/header/header-presenter'
 const model = new Model()
 
 function App() {
-  const preferredColorScheme = useColorScheme()
-  const [colorScheme, setColorScheme] = useState<ColorScheme>(preferredColorScheme)
-  const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: 'color-scheme',
+    defaultValue: 'light',
+  })
 
-  useEffect(() => {
-    setColorScheme(preferredColorScheme)
-  }, [preferredColorScheme])
+  const toggleColorScheme = () =>
+    setColorScheme((current) => (current === 'dark' ? 'light' : 'dark'))
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
