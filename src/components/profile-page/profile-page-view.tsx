@@ -24,6 +24,7 @@ import { ItemGroup, Item } from '../../Model'
 
 interface ProfilePageViewProps {
   user: UserCredential | null
+  homeAddress: string | undefined
   addressSearch: string
   setAddressSearch: (value: string) => void
   addressData: string[]
@@ -35,6 +36,7 @@ interface ProfilePageViewProps {
 
 const ProfilePageView = ({
   user,
+  homeAddress,
   addressSearch,
   setAddressSearch,
   addressData,
@@ -126,7 +128,13 @@ const ProfilePageView = ({
                 filter={() => true} // API filters the data instead of this component
                 itemComponent={SelectItem}
               />
-              <Button variant='light' color='blue' size='sm' onClick={saveFunction}>
+              <Button
+                variant='light'
+                color='blue'
+                size='sm'
+                onClick={saveFunction}
+                disabled={homeAddress === addressSearch}
+              >
                 Save
               </Button>
             </Group>

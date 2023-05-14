@@ -61,6 +61,7 @@ const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => 
     <>
       <ProfilePageView
         user={user}
+        homeAddress={homeAddress}
         setAddressSearch={setAddressSearch}
         addressSearch={addressSearch}
         addressData={suggestions}

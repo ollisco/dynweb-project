@@ -104,7 +104,7 @@ function addPreActivityToCalendar(notification: number, itemGroup: ItemGroup, tr
 
   let description = 'Things to get done before the komitid trip:\n\n'
   itemGroup.items.forEach((item: Item) => {
-    description += `${item.name}: ${item.description} (${item.duration})\n`
+    description += `${item.name}: ${item.description} (${item.duration} min)\n`
   })
 
   description += '\n\nThis event was created automatically by Komitid'
