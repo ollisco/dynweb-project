@@ -107,7 +107,7 @@ const ProfilePageView = ({
               </Stack>
             </Group>
             <Group align='flex-end'>
-              <Stack spacing={0}>
+              <Stack spacing={0} sx={{ flexGrow: 1 }}>
                 <Text weight={500} size='xl'>
                   Home Address
                 </Text>
