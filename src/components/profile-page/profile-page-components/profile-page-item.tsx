@@ -39,10 +39,17 @@ interface ItemGroupCompProps {
   index: number
   name: string
   items: Item[]
-  onUpdate: (index: number, items: Item[]) => void
+  onUpdateItems: (index: number, items: Item[]) => void
+  onRemoveGroup: (index: number) => void
 }
 
-export const ItemGroupComp = ({ index, name, items, onUpdate }: ItemGroupCompProps) => {
+export const ItemGroupComp = ({
+  index,
+  name,
+  items,
+  onUpdateItems,
+  onRemoveGroup,
+}: ItemGroupCompProps) => {
   const [itemState, itemStateHandlers] = useListState<Item>(items)
   const [newItem, setNewItem] = useState<boolean>(false)
 
@@ -84,7 +91,7 @@ export const ItemGroupComp = ({ index, name, items, onUpdate }: ItemGroupCompPro
   }
 
   useEffect(() => {
-    onUpdate(index, itemState)
+    onUpdateItems(index, itemState)
   }, [itemState])
 
   useEffect(() => {
@@ -93,7 +100,12 @@ export const ItemGroupComp = ({ index, name, items, onUpdate }: ItemGroupCompPro
 
   return (
     <Stack spacing={0}>
-      <Text weight={500}>{name}</Text>
+      <Group>
+        <Text weight={500}>{name}</Text>
+        <ActionIcon onClick={() => onRemoveGroup(index)}>
+          <IconX color='red' size={14} />
+        </ActionIcon>
+      </Group>
       <DragDropContext
         onDragEnd={({ source, destination }) => {
           if (!destination) return

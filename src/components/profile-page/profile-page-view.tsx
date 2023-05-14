@@ -45,6 +45,7 @@ const ProfilePageView = ({
   const [opened, { open, close }] = useDisclosure(false)
 
   const [newGroupName, setNewGroupName] = useState<string>('')
+  const [newGroupError, setNewGroupError] = useState<string>('')
 
   const initials = user?.user.displayName
     ? user.user.displayName
@@ -59,19 +60,30 @@ const ProfilePageView = ({
   const email = user?.user.email ?? ''
 
   const onCreateGroup = () => {
+    if (!newGroupName) {
+      setNewGroupError('Name is required')
+      return
+    }
     const newGroup = {
       name: newGroupName,
       items: [],
     }
     const newGroups = itemGroups ? [...itemGroups, newGroup] : [newGroup]
-    close()
     setNewGroupName('')
+    setNewGroupError('')
     saveGroups(newGroups)
+    close()
   }
 
   const onUpdate = (index: number, items: Item[]) => {
     const newGroups = itemGroups ? [...itemGroups] : []
     newGroups[index].items = items
+    saveGroups(newGroups)
+  }
+
+  const onRemoveGroup = (index: number) => {
+    const newGroups = itemGroups ? [...itemGroups] : []
+    newGroups.splice(index, 1)
     saveGroups(newGroups)
   }
 
@@ -131,7 +143,8 @@ const ProfilePageView = ({
                 <>
                   <ItemGroupComp
                     index={index}
-                    onUpdate={onUpdate}
+                    onUpdateItems={onUpdate}
+                    onRemoveGroup={onRemoveGroup}
                     name={itemGroup.name ?? 'NO NAME'}
                     items={itemGroup.items}
                   />
@@ -160,7 +173,11 @@ const ProfilePageView = ({
             label='Group Name'
             placeholder='Group Name'
             value={newGroupName}
-            onChange={(event) => setNewGroupName(event.currentTarget.value)}
+            error={newGroupError}
+            onChange={(event) => {
+              setNewGroupName(event.currentTarget.value)
+              setNewGroupError('')
+            }}
           />
           <Group position='right'>
             <Button onClick={onCreateGroup} variant='light'>
