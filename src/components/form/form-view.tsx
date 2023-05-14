@@ -87,9 +87,9 @@ interface FormViewProps {
 function FormView(props: FormViewProps) {
   console.log(props.itemGroups)
   return (
-    <Box w='100vw'>
-      <Container>
-        <Paper m='xl' p='xl' withBorder>
+    <Box w='100%'>
+      <Container px={0} size='sm'>
+        <Paper p='xl' withBorder>
           <Stack spacing='xs'>
             <Autocomplete
               value={props.originAddress}
