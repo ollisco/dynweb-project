@@ -30,7 +30,7 @@ const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ itemGroup, ...
       <Group align='center'>
         <Text>{itemGroup.name}</Text>
         <Text>
-          {itemGroup.items
+          {itemGroup.items.length > 0 && itemGroup.items
             .map<React.ReactNode>((item) => (
               <>
                 <Text span size='sm' color='dimmed'>
