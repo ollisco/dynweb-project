@@ -5,7 +5,7 @@ import {
   addTripToCalendar,
   addPreActivityToCalendar,
 } from '../../calendarSource'
-import { Button, Alert, Menu } from '@mantine/core'
+import { Button, Alert, Menu, Anchor } from '@mantine/core'
 import { IconAlertCircle, IconChevronDown } from '@tabler/icons-react'
 import GoogleIcon from '../basic/googleicon'
 import { Trip } from '../../tripSource'
@@ -112,7 +112,9 @@ function AddToCalButton(props: AddToCalButtonProps) {
             setEventLink('')
           }}
         >
-          <a href={eventLink}>{eventLink}</a>
+          <Anchor href={eventLink} target='_blank'>
+            View Event
+          </Anchor>
         </Alert>
       ) : null}
     </div>
