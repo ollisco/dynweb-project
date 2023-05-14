@@ -107,27 +107,31 @@ const ProfilePageView = ({
               </Stack>
             </Group>
             <Group align='flex-end' grow>
-              <Autocomplete
-                value={addressSearch}
-                data={addressData}
-                onChange={setAddressSearch}
-                rightSection={
-                  addressLoading ? (
-                    <Loader size='1rem' />
-                  ) : (
-                    <Center sx={{ visibility: addressSearch ? 'visible' : 'hidden' }}>
-                      <UnstyledButton onClick={() => setAddressSearch('')}>
-                        <IconX size='1rem' />
-                      </UnstyledButton>
-                    </Center>
-                  )
-                }
-                label='Home address'
-                placeholder='Drottning Kristinas väg 13'
-                name='address'
-                filter={() => true} // API filters the data instead of this component
-                itemComponent={SelectItem}
-              />
+              <Stack spacing={0}>
+                <Text weight={500} size='xl'>
+                  Home Address
+                </Text>
+                <Autocomplete
+                  value={addressSearch}
+                  data={addressData}
+                  onChange={setAddressSearch}
+                  rightSection={
+                    addressLoading ? (
+                      <Loader size='1rem' />
+                    ) : (
+                      <Center sx={{ visibility: addressSearch ? 'visible' : 'hidden' }}>
+                        <UnstyledButton onClick={() => setAddressSearch('')}>
+                          <IconX size='1rem' />
+                        </UnstyledButton>
+                      </Center>
+                    )
+                  }
+                  placeholder='Drottning Kristinas väg 13'
+                  name='address'
+                  filter={() => true} // API filters the data instead of this component
+                  itemComponent={SelectItem}
+                />
+              </Stack>
               <Button
                 variant='light'
                 color='blue'
@@ -140,10 +144,10 @@ const ProfilePageView = ({
             </Group>
 
             <Stack spacing={0}>
-              <Text weight={500} size='sm'>
+              <Text weight={500} size='xl'>
                 Items
               </Text>
-              <Text size='xs' color='dimmed'>
+              <Text size='sm' color='dimmed'>
                 Add items to your profile to make it easier to plan rides
               </Text>
             </Stack>

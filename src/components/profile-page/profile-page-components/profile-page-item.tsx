@@ -97,7 +97,9 @@ export const ItemGroupComp = ({
   return (
     <Stack spacing={0}>
       <Group>
-        <Text weight={500}>{name}</Text>
+        <Text weight={500} size='lg'>
+          {name}
+        </Text>
         <ActionIcon onClick={() => onRemoveGroup(index)}>
           <IconX color='red' size={14} />
         </ActionIcon>
