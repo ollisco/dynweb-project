@@ -13,9 +13,9 @@ import { IconGripVertical, IconX } from '@tabler/icons-react'
 import { useListState } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import { useForm } from '@mantine/form'
-import { Item } from '../../model'
+import { Activity } from '../../model'
 
-const ItemComp = ({ name, description, duration }: Item) => {
+const ActivityDisplayComponent = ({ name, description, duration }: Activity) => {
   return (
     <Group>
       <Text>{name}</Text>
@@ -25,23 +25,23 @@ const ItemComp = ({ name, description, duration }: Item) => {
   )
 }
 
-interface ItemGroupCompProps {
+interface RoutineCompProps {
   index: number
   name: string
-  items: Item[]
-  onUpdateItems: (index: number, items: Item[]) => void
-  onRemoveGroup: (index: number) => void
+  activities: Activity[]
+  onUpdateActivities: (index: number, activities: Activity[]) => void
+  onRemoveRoutine: (index: number) => void
 }
 
-export const ItemGroupComp = ({
+const RoutineDisplayComponent = ({
   index,
   name,
-  items,
-  onUpdateItems,
-  onRemoveGroup,
-}: ItemGroupCompProps) => {
-  const [itemState, itemStateHandlers] = useListState<Item>(items)
-  const [newItem, setNewItem] = useState<boolean>(false)
+  activities,
+  onUpdateActivities,
+  onRemoveRoutine,
+}: RoutineCompProps) => {
+  const [activityState, activityStateHandlers] = useListState<Activity>(activities)
+  const [newActivity, setNewActivity] = useState<boolean>(false)
 
   const form = useForm({
     initialValues: {
@@ -53,8 +53,8 @@ export const ItemGroupComp = ({
       name: (value) => (value.trim().length > 0 ? null : 'Name is required'),
       duration: (value) => {
         if (value <= 0) return 'Duration must be greater than 0'
-        const totalGroupDuration = itemState.reduce((acc, item) => acc + item.duration, 0) + value
-        if (totalGroupDuration > 120) return 'Total duration must be less than 120 minutes'
+        const totalRoutineDuration = activityState.reduce((acc, activity) => acc + activity.duration, 0) + value
+        if (totalRoutineDuration > 120) return 'Total duration must be less than 120 minutes'
         return null
       },
 
@@ -62,37 +62,37 @@ export const ItemGroupComp = ({
     },
   })
 
-  const toggleAddItem = () => {
+  const toggleAddActivity = () => {
     form.reset()
     form.setErrors({})
-    setNewItem(!newItem)
+    setNewActivity(!newActivity)
   }
 
-  const addItem = () => {
+  const addActivity = () => {
     const v = form.validate()
     if (v.hasErrors) {
       form.setErrors(v.errors)
       return
     }
-    const { name: itemName, description, duration } = form.values
+    const { name: activityName, description, duration } = form.values
 
-    const theNewItem = { name: itemName, description, duration }
-    itemStateHandlers.append(theNewItem)
+    const theNewActivity = { name: activityName, description, duration }
+    activityStateHandlers.append(theNewActivity)
 
-    toggleAddItem()
+    toggleAddActivity()
   }
 
-  const removeItem = (index: number) => {
-    itemStateHandlers.remove(index)
+  const removeActivity = (index: number) => {
+    activityStateHandlers.remove(index)
   }
 
   useEffect(() => {
-    onUpdateItems(index, itemState)
-  }, [itemState])
+    onUpdateActivities(index, activityState)
+  }, [activityState])
 
   useEffect(() => {
-    itemStateHandlers.setState(items)
-  }, [items])
+    activityStateHandlers.setState(activities)
+  }, [activities])
 
   return (
     <Stack spacing={0}>
@@ -100,22 +100,22 @@ export const ItemGroupComp = ({
         <Text weight={500} size='lg'>
           {name}
         </Text>
-        <ActionIcon onClick={() => onRemoveGroup(index)}>
+        <ActionIcon onClick={() => onRemoveRoutine(index)}>
           <IconX color='red' size={14} />
         </ActionIcon>
       </Group>
       <DragDropContext
         onDragEnd={({ source, destination }) => {
           if (!destination) return
-          itemStateHandlers.reorder({ from: source.index, to: destination.index })
+          activityStateHandlers.reorder({ from: source.index, to: destination.index })
         }}
       >
         <Droppable droppableId='sop-files-list' direction='vertical'>
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {itemState.map((item, index) => (
+              {activityState.map((activity, index) => (
                 <>
-                  <Draggable index={index} draggableId={`item-${item.name}-${index}`}>
+                  <Draggable index={index} draggableId={`activity-${activity.name}-${index}`}>
                     {(provided) => (
                       <div
                         {...provided.draggableProps}
@@ -124,8 +124,8 @@ export const ItemGroupComp = ({
                       >
                         <Group align='center' spacing='sm'>
                           <IconGripVertical size={14} />
-                          <ItemComp {...item} />
-                          <ActionIcon onClick={() => removeItem(index)}>
+                          <ActivityDisplayComponent {...activity} />
+                          <ActionIcon onClick={() => removeActivity(index)}>
                             <IconX color='red' size={14} />
                           </ActionIcon>
                         </Group>
@@ -139,8 +139,8 @@ export const ItemGroupComp = ({
             </div>
           )}
         </Droppable>
-        {!newItem ? (
-          <UnstyledButton onClick={toggleAddItem}>
+        {!newActivity ? (
+          <UnstyledButton onClick={toggleAddActivity}>
             <Text
               px='xl'
               color='blue.6'
@@ -150,7 +150,7 @@ export const ItemGroupComp = ({
                 },
               }}
             >
-              + Add item
+              + Add Activity
             </Text>
           </UnstyledButton>
         ) : (
@@ -172,10 +172,10 @@ export const ItemGroupComp = ({
             <Stack spacing={0}>
               <Text sx={{ visibility: 'hidden' }}>invisible lable</Text>
               <Group noWrap>
-                <Button variant='light' color='gray' size='sm' onClick={toggleAddItem}>
+                <Button variant='light' color='gray' size='sm' onClick={toggleAddActivity}>
                   Cancel
                 </Button>
-                <Button variant='light' color='blue' size='sm' onClick={addItem}>
+                <Button variant='light' color='blue' size='sm' onClick={addActivity}>
                   Add
                 </Button>
               </Group>
@@ -186,3 +186,5 @@ export const ItemGroupComp = ({
     </Stack>
   )
 }
+
+export default RoutineDisplayComponent

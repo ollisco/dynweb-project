@@ -7,7 +7,7 @@ import {
   MdOutlineNotificationsOff,
 } from 'react-icons/md'
 import { FcGoogle } from 'react-icons/fc'
-import { ItemGroup } from '../../model'
+import { Routine } from '../../model'
 import {
   calIsAuthed,
   calAuth,
@@ -20,14 +20,14 @@ interface AddToCalButtonProps {
   originAddress: string | undefined
   destinationAddress: string | undefined
   trip: Trip | undefined
-  itemGroup: ItemGroup | undefined
+  routine: Routine | undefined
 }
 
 const AddToCalButton = ({
   originAddress,
   destinationAddress,
   trip,
-  itemGroup,
+  routine,
 }: AddToCalButtonProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
@@ -46,8 +46,8 @@ const AddToCalButton = ({
     }
     if (calIsAuthed()) {
       if (originAddress && destinationAddress && trip) {
-        if (itemGroup) {
-          await addPreActivityToCalendar(itemGroup, trip)
+        if (routine) {
+          await addPreActivityToCalendar(routine, trip)
         }
 
         const event = await addTripToCalendar(originAddress, destinationAddress, trip, notification)

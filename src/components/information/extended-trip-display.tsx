@@ -3,21 +3,21 @@ import { MdLocationPin } from 'react-icons/md'
 import { Trip } from '../../trip-source'
 import AddToCalButton from '../calendar-buttons/add-to-cal-button'
 import { getIcon, humanizeDuration } from './information-view'
-import { ItemGroup } from '../../model'
+import { Routine } from '../../model'
 
 interface ExtendedTripDisplayComponentProps {
   index: number
   originAddress: string | undefined
   destinationAddress: string | undefined
   trip: Trip | undefined
-  itemGroup: ItemGroup | undefined
+  routine: Routine | undefined
 }
 
 const ExtendedTripDisplayComponent = ({
   originAddress,
   destinationAddress,
   trip,
-  itemGroup,
+  routine,
 }: ExtendedTripDisplayComponentProps) => {
   return (
     <Paper style={{ flexGrow: 1 }} p='md' withBorder>
@@ -69,7 +69,7 @@ const ExtendedTripDisplayComponent = ({
           originAddress={originAddress}
           destinationAddress={destinationAddress}
           trip={trip}
-          itemGroup={itemGroup}
+          routine={routine}
         />
       </Stack>
     </Paper>

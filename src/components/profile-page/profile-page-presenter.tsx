@@ -3,7 +3,7 @@ import ProfilePageView from './profile-page-view'
 import { useDebouncedValue } from '@mantine/hooks'
 import { getAutocompleteSuggestions } from '../../maps-source'
 import { observer } from 'mobx-react'
-import Model, { ItemGroup } from '../../model'
+import Model, { Routine } from '../../model'
 
 interface ProfilePagePresenterProps {
   model: Model
@@ -15,9 +15,9 @@ const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => 
     homeAddress,
     saveHomeAddress,
     setHomeAddress,
-    itemGroups,
-    saveItemGroups,
-    setItemGroups,
+    routines,
+    saveRoutines,
+    setRoutines,
   } = model
 
   const [addressSearch, setAddressSearch] = useState('')
@@ -38,15 +38,14 @@ const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => 
     setLoading(false)
   }, [])
 
-  const save = () => {
-    console.log('addressSearch', addressSearch)
+  const onSaveHomeAddress = () => {
     setHomeAddress(addressSearch)
     saveHomeAddress(addressSearch)
   }
 
-  const saveGroups = (itemGroups: ItemGroup[]) => {
-    saveItemGroups(itemGroups)
-    setItemGroups(itemGroups)
+  const onSaveRoutines = (Routines: Routine[]) => {
+    saveRoutines(Routines)
+    setRoutines(Routines)
   }
 
   useEffect(() => {
@@ -66,9 +65,9 @@ const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => 
         addressSearch={addressSearch}
         addressData={suggestions}
         addressLoading={loading}
-        saveFunction={save}
-        itemGroups={itemGroups}
-        saveGroups={saveGroups}
+        saveHomeAddress={onSaveHomeAddress}
+        routines={routines}
+        saveRoutines={onSaveRoutines}
       />
     </>
   )

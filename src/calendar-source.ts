@@ -1,6 +1,6 @@
 import ApiCalendar from './gcal-api'
 import { Trip } from './trip-source'
-import { ItemGroup, Item } from './model'
+import { Routine, Activity } from './model'
 
 const gcal = new ApiCalendar({
   clientId: import.meta.env.VITE_GCAL_CLIENT_ID || '',
@@ -52,8 +52,8 @@ const calAuth = () => {
 }
 
 const getDaysEvents = (date: Date) => {
-  const removeBadEvents = (result: { result: { items: rawEvent[] } }) => {
-    return result.result.items.filter((event: rawEvent) => {
+  const removeBadEvents = (result: { result: { activities: rawEvent[] } }) => {
+    return result.result.activities.filter((event: rawEvent) => {
       return event.start && event.start.dateTime && event.summary !== 'Komitid trip'
     })
   }
@@ -97,17 +97,17 @@ const getFirstEvent = async (date: Date) => {
   else return null
 }
 
-const addPreActivityToCalendar = (itemGroup: ItemGroup, trip: Trip) => {
-  const summary = `${itemGroup.name}, before komitid trip`
+const addPreActivityToCalendar = (routine: Routine, trip: Trip) => {
+  const summary = `${routine.name}, before komitid trip`
 
   let description = 'Things to get done before the komitid trip:\n\n'
-  itemGroup.items.forEach((item: Item) => {
-    description += `${item.name}: ${item.description} (${item.duration} min)\n`
+  routine.activities.forEach((activity: Activity) => {
+    description += `${activity.name}: ${activity.description} (${activity.duration} min)\n`
   })
 
   description += '\n\nThis event was created automatically by Komitid'
-  const totalDuration = itemGroup.items.reduce((acc: number, item: Item) => {
-    return acc + item.duration
+  const totalDuration = routine.activities.reduce((acc: number, activity: Activity) => {
+    return acc + activity.duration
   }, 0)
 
   // start time is end time - total duration
@@ -116,7 +116,6 @@ const addPreActivityToCalendar = (itemGroup: ItemGroup, trip: Trip) => {
   )
 
   const endDateTime = new Date(`${trip.Origin.date}T${trip.Origin.time}`)
-  console.log(startDateTime, endDateTime, totalDuration)
 
   const event: newEvent = {
     summary: summary,

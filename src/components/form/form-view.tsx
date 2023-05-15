@@ -18,42 +18,45 @@ import { DateInput, TimeInput } from '@mantine/dates'
 import { IconAlertCircle } from '@tabler/icons-react'
 import { ItemProps } from './form-presenter'
 import UseCalButton from '../calendar-buttons/use-cal-button'
-import { ItemGroup, Item } from '../../model'
+import { Routine, Activity } from '../../model'
 
-type CustomItemProps = SelectItemProps & { itemGroup: ItemGroup }
+type CustomItemProps = SelectItemProps & { routine: Routine }
 
-const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ itemGroup, ...others }, ref) => {
-  const totalDuration = itemGroup.items.reduce((prev, curr) => prev + curr.duration, 0)
-
-  return (
-    <div ref={ref} {...others}>
-      <Group align='center'>
-        <Text>{itemGroup.name}</Text>
-        <Text>
-          {itemGroup.items
-            .map<React.ReactNode>((item) => (
-              <>
-                <Text span size='sm' color='dimmed'>
-                  {item.name}
-                </Text>
-              </>
-            ))
-            .reduce((prev, curr) => [
-              prev,
-              <>
-                <Text span size='sm' color='dimmed'>
-                  ,{' '}
-                </Text>
-              </>,
-              curr,
-            ])}
-        </Text>
-        <Text size='sm' color='dimmed'>
-          {totalDuration} min
-        </Text>
-      </Group>
-    </div>
-  )
+const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ routine, ...others }, ref) => {
+  if (routine.activities.length > 0) {
+    const totalDuration = routine.activities.reduce((prev, curr) => prev + curr.duration, 0)
+  
+    return (
+      <div ref={ref} {...others}>
+        <Group align='center'>
+          <Text>{routine.name}</Text>
+          <Text>
+            {routine.activities
+              .map<React.ReactNode>((item) => (
+                <>
+                  <Text span size='sm' color='dimmed'>
+                    {item.name}
+                  </Text>
+                </>
+              ))
+              .reduce((prev, curr) => [
+                prev,
+                <>
+                  <Text span size='sm' color='dimmed'>
+                    ,{' '}
+                  </Text>
+                </>,
+                curr,
+              ])}
+          </Text>
+          <Text size='sm' color='dimmed'>
+            {totalDuration} min
+          </Text>
+        </Group>
+      </div>
+    )
+  }
+  else return null
 })
 
 CustomItem.displayName = 'CustomItem'
@@ -80,8 +83,8 @@ interface FormViewProps {
   setSearchError: (value: string) => void
   shouldSaveHomeAddress: boolean
   setShouldSaveHomeAddress: (value: boolean) => void
-  itemGroups: ItemGroup[]
-  setPreActivity: (activity: ItemGroup | undefined) => void
+  routines: Routine[]
+  setSelectedRoutine: (routine: Routine | undefined) => void
 }
 
 const FormView = ({
@@ -106,10 +109,9 @@ const FormView = ({
   setSearchError,
   shouldSaveHomeAddress,
   setShouldSaveHomeAddress,
-  itemGroups,
-  setPreActivity,
+  routines,
+  setSelectedRoutine,
 }: FormViewProps) => {
-  console.log(itemGroups)
   return (
     <Box w='100%'>
       <Container px={0} size='sm'>
@@ -168,29 +170,29 @@ const FormView = ({
               }}
             />
             <Select
-              label='Select a group of activities to do before travel'
-              placeholder='Select an group'
+              label='Pre-commute routine'
+              placeholder='Select a routine'
               clearable
               searchable
-              nothingFound='No Item Groups found, visit the profile page to add some'
-              data={itemGroups.map((itemGroup, index) => ({
-                value: `${index} ${itemGroup.name}`,
+              nothingFound='You have no routines saved, try adding some to your profile!'
+              data={routines.map((routine, index) => ({
+                value: `${index} ${routine.name}`,
                 label:
-                  itemGroup.name +
-                  ` (${itemGroup.items.reduce((prev, curr) => prev + curr.duration, 0)} min)`,
-                itemGroup: itemGroup,
+                  routine.name +
+                  ` (${routine.activities.reduce((prev, curr) => prev + curr.duration, 0)} min)`,
+                routine: routine,
               }))}
               onChange={(value) => {
-                // get the itemGroup
-                if (!value) return setPreActivity(undefined)
+                // get the routines
+                if (!value) return setSelectedRoutine(undefined)
 
-                const itemGroup = itemGroups[parseInt(value.split(' ')[0])]
-                setPreActivity(itemGroup)
+                const routine = routines[parseInt(value.split(' ')[0])]
+                setSelectedRoutine(routine)
               }}
               itemComponent={CustomItem}
               filter={(value, item) =>
-                item.itemGroup.name.toLowerCase().includes(value.toLowerCase().trim()) ||
-                item.itemGroup.items.some((item: Item) =>
+                item.routine.name.toLowerCase().includes(value.toLowerCase().trim()) ||
+                item.routine.activities.some((item: Activity) =>
                   item.name.toLowerCase().includes(value.toLowerCase().trim()),
                 )
               }

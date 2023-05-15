@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Trip } from '../../trip-source'
 import InformationView from './information-view'
-import { ItemGroup } from '../../model'
+import { Routine } from '../../model'
 
 interface InformationPresenterProps {
   originAddress: string | undefined
@@ -9,7 +9,7 @@ interface InformationPresenterProps {
   destinationTime: string | undefined
   searchInProgress: boolean
   trips: Trip[] | undefined
-  itemGroup: ItemGroup | undefined
+  routine: Routine | undefined
 }
 
 const InformationPresenter = ({
@@ -18,7 +18,7 @@ const InformationPresenter = ({
   destinationTime,
   searchInProgress,
   trips,
-  itemGroup,
+  routine,
 }: InformationPresenterProps) => {
   const [selectedTripIndex, setSelectTripIndex] = useState<number>(0)
 
@@ -35,7 +35,7 @@ const InformationPresenter = ({
       trips={trips}
       selectedTripIndex={selectedTripIndex}
       setSelectedTripIndex={setSelectTripIndex}
-      itemGroup={itemGroup}
+      routine={routine}
     />
   )
 }

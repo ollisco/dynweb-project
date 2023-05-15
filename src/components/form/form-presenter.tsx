@@ -4,7 +4,7 @@ import { debounce } from 'lodash'
 import { AddressError, getAutocompleteSuggestions } from '../../maps-source'
 import { TripError } from '../../trip-source'
 import FormView from './form-view'
-import { ItemGroup } from '../../model'
+import { Routine } from '../../model'
 
 // Items used in autocorrect
 interface ItemProps extends SelectItemProps {
@@ -38,10 +38,10 @@ SelectItem.displayName = 'SelectItem'
 
 interface FormPresenterProps {
   homeAddress: string | undefined
-  itemGroups: ItemGroup[]
+  routines: Routine[]
   saveHomeAddress: (value: string) => void
   searchInProgress: boolean
-  setPreActivity: (activity: ItemGroup | undefined) => void
+  setSelectedRoutine: (routine: Routine | undefined) => void
   doSearch: (
     originAddress: string,
     destinationAddress: string,
@@ -52,10 +52,10 @@ interface FormPresenterProps {
 
 const FormPresenter = ({
   homeAddress,
-  itemGroups,
+  routines,
   saveHomeAddress,
   searchInProgress,
-  setPreActivity,
+  setSelectedRoutine,
   doSearch,
 }: FormPresenterProps) => {
   const [originAddress, setOriginAddress] = useState<string>('')
@@ -144,7 +144,7 @@ const FormPresenter = ({
       } else if (error instanceof TripError) {
         if (error.code === 'ECONNABORTED')
           setSearchError('Request timed out, please try again later.')
-        else setSearchError('Could not calculate itinerary, please try a different address')
+        else setSearchError('Could not calculate itinerary, please try a different address.')
       } else console.error(error)
     }
   }
@@ -172,8 +172,8 @@ const FormPresenter = ({
       setSearchError={setSearchError}
       shouldSaveHomeAddress={shouldSaveHomeAddress}
       setShouldSaveHomeAddress={setShouldSaveHomeAddress}
-      itemGroups={itemGroups}
-      setPreActivity={setPreActivity}
+      routines={routines}
+      setSelectedRoutine={setSelectedRoutine}
     />
   )
 }

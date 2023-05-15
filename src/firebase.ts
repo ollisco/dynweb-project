@@ -1,7 +1,7 @@
 import { getAuth, GoogleAuthProvider, signInWithPopup, UserCredential } from 'firebase/auth'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
-import { ItemGroup, Item } from './model'
+import { Routine, Activity } from './model'
 
 const app = firebase.initializeApp({
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -35,17 +35,17 @@ const saveHomeAddress = (user: UserCredential, homeAddress: string) => {
   db.collection('users').doc(user.user.uid).set({ homeAddress }, { merge: true })
 }
 
-const saveItemData = (user: UserCredential, itemGroups: ItemGroup[]) => {
+const saveRoutineData = (user: UserCredential, routines: Routine[]) => {
   db.collection('users')
     .doc(user.user.uid)
     .set(
       {
-        itemGroups: itemGroups.map((group: ItemGroup) => ({
-          name: group.name,
-          items: group.items.map((item: Item) => ({
-            name: item.name,
-            description: item.description,
-            duration: item.duration,
+        routines: routines.map((routine: Routine) => ({
+          name: routine.name,
+          activities: routine.activities.map((activity: Activity) => ({
+            name: activity.name,
+            description: activity.description,
+            duration: activity.duration,
           })),
         })),
       },
@@ -53,4 +53,4 @@ const saveItemData = (user: UserCredential, itemGroups: ItemGroup[]) => {
     )
 }
 
-export { signInWithGoogle, loadData, saveHomeAddress, saveItemData }
+export { signInWithGoogle, loadData, saveHomeAddress, saveRoutineData }

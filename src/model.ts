@@ -1,15 +1,15 @@
 import { UserCredential } from '@firebase/auth'
-import { signInWithGoogle, loadData, saveItemData, saveHomeAddress } from './firebase'
+import { signInWithGoogle, loadData, saveRoutineData, saveHomeAddress } from './firebase'
 import { makeAutoObservable } from 'mobx'
 import { CoordsObj, Trip, getTrafficInfo } from './trip-source'
 import { addressToCoords } from './maps-source'
 
-export interface ItemGroup {
+interface Routine {
   name: string
-  items: Item[]
+  activities: Activity[]
 }
 
-export interface Item {
+interface Activity {
   name: string
   description: string
   duration: number // minutes
@@ -18,8 +18,8 @@ export interface Item {
 class Model {
   user: UserCredential | null
   homeAddress: string | undefined
-  itemGroups: ItemGroup[] | undefined
-  preActivity: ItemGroup | undefined
+  routines: Routine[] | undefined
+  selectedRoutine: Routine | undefined
   destinationAddress: string | undefined
   arriveTime: string | undefined
   searchInProgress: boolean
@@ -31,10 +31,10 @@ class Model {
     this.signOut = this.signOut.bind(this)
     this.setUser = this.setUser.bind(this)
     this.setHomeAddress = this.setHomeAddress.bind(this)
-    this.setItemGroups = this.setItemGroups.bind(this)
-    this.setPreActivity = this.setPreActivity.bind(this)
+    this.setRoutines = this.setRoutines.bind(this)
+    this.setSelectedRoutine = this.setSelectedRoutine.bind(this)
     this.saveHomeAddress = this.saveHomeAddress.bind(this)
-    this.saveItemGroups = this.saveItemGroups.bind(this)
+    this.saveRoutines = this.saveRoutines.bind(this)
     this.doSearch = this.doSearch.bind(this)
     this.setRoute = this.setRoute.bind(this)
     this.setSearchInProgress = this.setSearchInProgress.bind(this)
@@ -42,8 +42,8 @@ class Model {
     const user = localStorage.getItem('user')
     this.user = user ? (JSON.parse(user) as UserCredential) : null
     this.homeAddress = undefined
-    this.itemGroups = undefined
-    this.preActivity = undefined
+    this.routines = undefined
+    this.selectedRoutine = undefined
     this.destinationAddress = undefined
     this.arriveTime = undefined
     this.searchInProgress = false
@@ -68,7 +68,7 @@ class Model {
         const data = await loadData(this.user)
         if (data) {
           this.setHomeAddress(data.homeAddress)
-          this.setItemGroups(data.itemGroups)
+          this.setRoutines(data.routines)
         }
       } catch (error) {
         console.error(error)
@@ -90,20 +90,20 @@ class Model {
     this.homeAddress = address
   }
 
-  setItemGroups(itemGroups: ItemGroup[]) {
-    this.itemGroups = itemGroups
+  setRoutines(routines: Routine[]) {
+    this.routines = routines
   }
 
-  setPreActivity(preActivity: ItemGroup | undefined) {
-    this.preActivity = preActivity
+  setSelectedRoutine(selectedRoutine: Routine | undefined) {
+    this.selectedRoutine = selectedRoutine
   }
 
   saveHomeAddress(address: string) {
     if (this.user) saveHomeAddress(this.user, address)
   }
 
-  saveItemGroups(itemGroups: ItemGroup[]) {
-    if (this.user) saveItemData(this.user, itemGroups)
+  saveRoutines(routines: Routine[]) {
+    if (this.user) saveRoutineData(this.user, routines)
   }
 
   async doSearch(
@@ -146,4 +146,5 @@ class Model {
   }
 }
 
+export type { Routine, Activity }
 export default Model
