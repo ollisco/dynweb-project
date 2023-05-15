@@ -18,6 +18,7 @@ interface HeaderViewProps {
   userPhotoUrl: string
   colorScheme: ColorScheme
   toggleColorScheme: () => void
+  logoutFunction: () => void
 }
 
 const HeaderView = ({
@@ -25,6 +26,7 @@ const HeaderView = ({
   userPhotoUrl,
   colorScheme,
   toggleColorScheme,
+  logoutFunction,
 }: HeaderViewProps) => {
   const navigate = useNavigate()
 
@@ -54,7 +56,7 @@ const HeaderView = ({
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Item onClick={() => navigate('/profile')}>Profile</Menu.Item>
-              <Menu.Item onClick={() => navigate('/logout')}>Sign out</Menu.Item>
+              <Menu.Item onClick={logoutFunction}>Sign out</Menu.Item>
             </Menu.Dropdown>
           </Menu>
         </Group>
