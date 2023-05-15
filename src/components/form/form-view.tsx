@@ -25,7 +25,7 @@ type CustomItemProps = SelectItemProps & { routine: Routine }
 const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ routine, ...others }, ref) => {
   if (routine.activities.length > 0) {
     const totalDuration = routine.activities.reduce((prev, curr) => prev + curr.duration, 0)
-  
+
     return (
       <div ref={ref} {...others}>
         <Group align='center'>
@@ -55,8 +55,7 @@ const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ routine, ...ot
         </Group>
       </div>
     )
-  }
-  else return null
+  } else return null
 })
 
 CustomItem.displayName = 'CustomItem'

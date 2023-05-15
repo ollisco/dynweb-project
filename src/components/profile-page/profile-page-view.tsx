@@ -143,7 +143,7 @@ const ProfilePageView = ({
               </Button>
             </Group>
 
-            <Stack spacing={0}  mt='md'>
+            <Stack spacing={0} mt='md'>
               <Text weight={500} size='xl'>
                 Routines
               </Text>

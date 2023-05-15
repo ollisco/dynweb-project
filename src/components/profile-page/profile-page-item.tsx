@@ -53,7 +53,8 @@ const RoutineDisplayComponent = ({
       name: (value) => (value.trim().length > 0 ? null : 'Name is required'),
       duration: (value) => {
         if (value <= 0) return 'Duration must be greater than 0'
-        const totalRoutineDuration = activityState.reduce((acc, activity) => acc + activity.duration, 0) + value
+        const totalRoutineDuration =
+          activityState.reduce((acc, activity) => acc + activity.duration, 0) + value
         if (totalRoutineDuration > 120) return 'Total duration must be less than 120 minutes'
         return null
       },
