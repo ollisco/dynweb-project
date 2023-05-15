@@ -31,19 +31,18 @@ const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ routine, ...ot
         <Text>{routine.name}</Text>
         <Text>
           {routine.activities.length > 0 &&
-            routine.activities
-              .map<React.ReactNode>((item, index) => (
-                <Fragment key={`${item.name}-${index}`}>
+            routine.activities.map<React.ReactNode>((item, index) => (
+              <Fragment key={`${item.name}-${index}`}>
+                <Text span size='sm' color='dimmed'>
+                  {item.name}
+                </Text>
+                {index < routine.activities.length - 1 && (
                   <Text span size='sm' color='dimmed'>
-                    {item.name}
+                    ,{' '}
                   </Text>
-                  {index < routine.activities.length - 1 && (
-                    <Text span size='sm' color='dimmed'>
-                      ,{' '}
-                    </Text>
-                  )}
-                </Fragment>
-              ))}
+                )}
+              </Fragment>
+            ))}
         </Text>
         <Text size='sm' color='dimmed'>
           {totalDuration} min

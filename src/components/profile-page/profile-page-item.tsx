@@ -115,7 +115,11 @@ const RoutineDisplayComponent = ({
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {activityState.map((activity, index) => (
-                <Draggable key={index} index={index} draggableId={`activity-${activity.name}-${index}`}>
+                <Draggable
+                  key={index}
+                  index={index}
+                  draggableId={`activity-${activity.name}-${index}`}
+                >
                   {(provided) => (
                     <div
                       {...provided.draggableProps}
