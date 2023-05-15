@@ -130,12 +130,17 @@ class Model {
       this.setRoute(destinationAddress, arriveTime, trafficInfo.data.Trip.reverse())
       this.setSearchInProgress(false)
     } catch (error) {
+      this.setRoute(undefined, undefined, undefined)
       this.setSearchInProgress(false)
       throw error
     }
   }
 
-  setRoute(destinationAddress: string, arriveTime: string, trips: Trip[]) {
+  setRoute(
+    destinationAddress: string | undefined,
+    arriveTime: string | undefined,
+    trips: Trip[] | undefined,
+  ) {
     this.destinationAddress = destinationAddress
     this.arriveTime = arriveTime
     this.trips = trips
