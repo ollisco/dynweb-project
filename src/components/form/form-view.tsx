@@ -30,23 +30,24 @@ const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ itemGroup, ...
       <Group align='center'>
         <Text>{itemGroup.name}</Text>
         <Text>
-          {itemGroup.items
-            .map<React.ReactNode>((item) => (
-              <>
-                <Text span size='sm' color='dimmed'>
-                  {item.name}
-                </Text>
-              </>
-            ))
-            .reduce((prev, curr) => [
-              prev,
-              <>
-                <Text span size='sm' color='dimmed'>
-                  ,{' '}
-                </Text>
-              </>,
-              curr,
-            ])}
+          {itemGroup.items.length > 0 &&
+            itemGroup.items
+              .map<React.ReactNode>((item) => (
+                <>
+                  <Text span size='sm' color='dimmed'>
+                    {item.name}
+                  </Text>
+                </>
+              ))
+              .reduce((prev, curr) => [
+                prev,
+                <>
+                  <Text span size='sm' color='dimmed'>
+                    ,{' '}
+                  </Text>
+                </>,
+                curr,
+              ])}
         </Text>
         <Text size='sm' color='dimmed'>
           {totalDuration} min
