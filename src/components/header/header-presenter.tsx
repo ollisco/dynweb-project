@@ -1,9 +1,8 @@
-import React from 'react'
 import { UserCredential } from '@firebase/auth'
 import { observer } from 'mobx-react'
-import Model from '../../Model'
-import HeaderView from './header-view'
 import { ColorScheme } from '@mantine/core'
+import Model from '../../model'
+import HeaderView from './header-view'
 
 interface HeaderPresenterProps {
   model: Model

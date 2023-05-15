@@ -19,8 +19,8 @@ import { UserCredential } from 'firebase/auth'
 import { SelectItem } from '../form/form-presenter'
 import { IconX } from '@tabler/icons-react'
 import { useDisclosure } from '@mantine/hooks'
-import { ItemGroupComp } from './profile-page-components/profile-page-item'
-import { ItemGroup, Item } from '../../Model'
+import RoutineDisplayComponent from './profile-page-item'
+import { Routine, Activity } from '../../model'
 
 interface ProfilePageViewProps {
   user: UserCredential | null
@@ -29,9 +29,9 @@ interface ProfilePageViewProps {
   setAddressSearch: (value: string) => void
   addressData: string[]
   addressLoading: boolean
-  saveFunction: () => void
-  itemGroups: ItemGroup[] | undefined
-  saveGroups: (itemGroups: ItemGroup[]) => void
+  saveHomeAddress: () => void
+  routines: Routine[] | undefined
+  saveRoutines: (routines: Routine[]) => void
 }
 
 const ProfilePageView = ({
@@ -41,14 +41,14 @@ const ProfilePageView = ({
   setAddressSearch,
   addressData,
   addressLoading,
-  saveFunction,
-  itemGroups,
-  saveGroups,
+  saveHomeAddress,
+  routines,
+  saveRoutines,
 }: ProfilePageViewProps) => {
   const [opened, { open, close }] = useDisclosure(false)
 
-  const [newGroupName, setNewGroupName] = useState<string>('')
-  const [newGroupError, setNewGroupError] = useState<string>('')
+  const [newRoutineName, setNewRoutineName] = useState<string>('')
+  const [newRoutineError, setNewRoutineError] = useState<string>('')
 
   const initials = user?.user.displayName
     ? user.user.displayName
@@ -62,32 +62,32 @@ const ProfilePageView = ({
   const displayName = user?.user.displayName ?? ''
   const email = user?.user.email ?? ''
 
-  const onCreateGroup = () => {
-    if (!newGroupName) {
-      setNewGroupError('Name is required')
+  const onCreateRoutine = () => {
+    if (!newRoutineName) {
+      setNewRoutineError('Name is required')
       return
     }
-    const newGroup = {
-      name: newGroupName,
-      items: [],
+    const newRoutine = {
+      name: newRoutineName,
+      activities: [],
     }
-    const newGroups = itemGroups ? [...itemGroups, newGroup] : [newGroup]
-    setNewGroupName('')
-    setNewGroupError('')
-    saveGroups(newGroups)
+    const newRoutines = routines ? [...routines, newRoutine] : [newRoutine]
+    setNewRoutineName('')
+    setNewRoutineError('')
+    saveRoutines(newRoutines)
     close()
   }
 
-  const onUpdate = (index: number, items: Item[]) => {
-    const newGroups = itemGroups ? [...itemGroups] : []
-    newGroups[index].items = items
-    saveGroups(newGroups)
+  const onUpdate = (index: number, activities: Activity[]) => {
+    const newRoutines = routines ? [...routines] : []
+    newRoutines[index].activities = activities
+    saveRoutines(newRoutines)
   }
 
-  const onRemoveGroup = (index: number) => {
-    const newGroups = itemGroups ? [...itemGroups] : []
-    newGroups.splice(index, 1)
-    saveGroups(newGroups)
+  const onRemoveRoutine = (index: number) => {
+    const newRoutines = routines ? [...routines] : []
+    newRoutines.splice(index, 1)
+    saveRoutines(newRoutines)
   }
 
   return (
@@ -106,7 +106,7 @@ const ProfilePageView = ({
                 </Text>
               </Stack>
             </Group>
-            <Group align='flex-end'>
+            <Group align='flex-end' mt='md'>
               <Stack spacing={0} sx={{ flexGrow: 1 }}>
                 <Text weight={500} size='xl'>
                   Home Address
@@ -136,32 +136,31 @@ const ProfilePageView = ({
                 variant='light'
                 color='blue'
                 size='sm'
-                onClick={saveFunction}
+                onClick={saveHomeAddress}
                 disabled={homeAddress === addressSearch}
               >
                 Save
               </Button>
             </Group>
 
-            <Stack spacing={0}>
+            <Stack spacing={0} mt='md'>
               <Text weight={500} size='xl'>
-                Items
+                Routines
               </Text>
               <Text size='sm' color='dimmed'>
-                Add items to your profile to make it easier to plan rides
+                Add routines to your profile to make it easier to plan your commute
               </Text>
             </Stack>
             <Stack>
-              {itemGroups?.map((itemGroup, index) => (
-                <>
-                  <ItemGroupComp
-                    index={index}
-                    onUpdateItems={onUpdate}
-                    onRemoveGroup={onRemoveGroup}
-                    name={itemGroup.name ?? 'NO NAME'}
-                    items={itemGroup.items}
-                  />
-                </>
+              {routines?.map((routine, index) => (
+                <RoutineDisplayComponent
+                  key={index}
+                  index={index}
+                  onUpdateActivities={onUpdate}
+                  onRemoveRoutine={onRemoveRoutine}
+                  name={routine.name ?? 'NO NAME'}
+                  activities={routine.activities}
+                />
               ))}
               <UnstyledButton onClick={open}>
                 <Text
@@ -173,27 +172,28 @@ const ProfilePageView = ({
                     },
                   }}
                 >
-                  + Add Group
+                  + Add Routine
                 </Text>
               </UnstyledButton>
             </Stack>
           </Stack>
         </Paper>
       </Container>
-      <Modal title='Create Group' opened={opened} onClose={close}>
+      <Modal title='Create Routine' opened={opened} onClose={close}>
         <Stack>
           <TextInput
-            label='Group Name'
-            placeholder='Group Name'
-            value={newGroupName}
-            error={newGroupError}
+            label='Routine'
+            placeholder='Routine name'
+            required
+            value={newRoutineName}
+            error={newRoutineError}
             onChange={(event) => {
-              setNewGroupName(event.currentTarget.value)
-              setNewGroupError('')
+              setNewRoutineName(event.currentTarget.value)
+              setNewRoutineError('')
             }}
           />
           <Group position='right'>
-            <Button onClick={onCreateGroup} variant='light'>
+            <Button onClick={onCreateRoutine} variant='light'>
               Create
             </Button>
           </Group>

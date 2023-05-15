@@ -1,5 +1,4 @@
-import { DateInput, TimeInput } from '@mantine/dates'
-import { ItemProps } from './form-presenter'
+import React, { Fragment, forwardRef } from 'react'
 import {
   Alert,
   Autocomplete,
@@ -15,39 +14,35 @@ import {
   Stack,
   Text,
 } from '@mantine/core'
+import { DateInput, TimeInput } from '@mantine/dates'
 import { IconAlertCircle } from '@tabler/icons-react'
+import { ItemProps } from './form-presenter'
 import UseCalButton from '../calendar-buttons/use-cal-button'
-import React, { forwardRef } from 'react'
-import { ItemGroup, Item } from '../../Model'
+import { Routine, Activity } from '../../model'
 
-type CustomItemProps = SelectItemProps & { itemGroup: ItemGroup }
+type CustomItemProps = SelectItemProps & { routine: Routine }
 
-const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ itemGroup, ...others }, ref) => {
-  const totalDuration = itemGroup.items.reduce((prev, curr) => prev + curr.duration, 0)
+const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ routine, ...others }, ref) => {
+  const totalDuration = routine.activities.reduce((prev, curr) => prev + curr.duration, 0)
 
   return (
     <div ref={ref} {...others}>
       <Group align='center'>
-        <Text>{itemGroup.name}</Text>
+        <Text>{routine.name}</Text>
         <Text>
-          {itemGroup.items.length > 0 &&
-            itemGroup.items
-              .map<React.ReactNode>((item) => (
-                <>
-                  <Text span size='sm' color='dimmed'>
-                    {item.name}
-                  </Text>
-                </>
-              ))
-              .reduce((prev, curr) => [
-                prev,
-                <>
+          {routine.activities.length > 0 &&
+            routine.activities.map<React.ReactNode>((item, index) => (
+              <Fragment key={`${item.name}-${index}`}>
+                <Text span size='sm' color='dimmed'>
+                  {item.name}
+                </Text>
+                {index < routine.activities.length - 1 && (
                   <Text span size='sm' color='dimmed'>
                     ,{' '}
                   </Text>
-                </>,
-                curr,
-              ])}
+                )}
+              </Fragment>
+            ))}
         </Text>
         <Text size='sm' color='dimmed'>
           {totalDuration} min
@@ -79,118 +74,139 @@ interface FormViewProps {
   searchInProgress: boolean
   searchError: string
   setSearchError: (value: string) => void
-  saveHomeAddress: boolean
-  setSaveHomeAddress: (value: boolean) => void
-  itemGroups: ItemGroup[]
-  setPreActivity: (activity: ItemGroup | undefined) => void
+  shouldSaveHomeAddress: boolean
+  setShouldSaveHomeAddress: (value: boolean) => void
+  routines: Routine[]
+  setSelectedRoutine: (routine: Routine | undefined) => void
 }
 
-function FormView(props: FormViewProps) {
-  console.log(props.itemGroups)
+const FormView = ({
+  originAddress,
+  onChangeOriginAddress,
+  originAddressAutocompleteData,
+  originAddressLoading,
+  originAddressError,
+  destinationAddress,
+  onChangeDestinationAddress,
+  destinationAddressAutocompleteData,
+  destinationAddressLoading,
+  destinationAddressError,
+  date,
+  setDate,
+  arriveTime,
+  setArriveTime,
+  searchClicked,
+  itemComponent,
+  searchInProgress,
+  searchError,
+  setSearchError,
+  shouldSaveHomeAddress,
+  setShouldSaveHomeAddress,
+  routines,
+  setSelectedRoutine,
+}: FormViewProps) => {
   return (
     <Box w='100%'>
       <Container px={0} size='sm'>
         <Paper p='xl' withBorder>
           <Stack spacing='xs'>
             <Autocomplete
-              value={props.originAddress}
-              data={props.originAddressAutocompleteData}
-              onChange={props.onChangeOriginAddress}
-              rightSection={props.originAddressLoading ? <Loader size='1rem' /> : null}
+              value={originAddress}
+              data={originAddressAutocompleteData}
+              onChange={onChangeOriginAddress}
+              rightSection={originAddressLoading ? <Loader size='1rem' /> : null}
               label='Home address'
               placeholder='Drottning Kristinas väg 13'
               name='address'
               required
               filter={() => true} // API filters the data instead of this component
-              itemComponent={props.itemComponent}
-              error={props.originAddressError}
+              itemComponent={itemComponent}
+              error={originAddressError}
             />
             <Checkbox
-              checked={props.saveHomeAddress}
-              onChange={(event) => props.setSaveHomeAddress(event.currentTarget.checked)}
+              checked={shouldSaveHomeAddress}
+              onChange={(event) => setShouldSaveHomeAddress(event.currentTarget.checked)}
               label='Save my home address to my account'
             />
             <DateInput
               label='Day of travel'
               placeholder='Select date'
               required
-              value={props.date}
-              onChange={props.setDate}
+              value={date}
+              onChange={setDate}
               minDate={new Date()}
             />
             <UseCalButton
-              date={props.date}
-              setTime={props.setArriveTime}
-              setAddress={props.onChangeDestinationAddress}
+              date={date}
+              setTime={setArriveTime}
+              setAddress={onChangeDestinationAddress}
             />
             <Autocomplete
-              value={props.destinationAddress}
-              data={props.destinationAddressAutocompleteData}
-              onChange={props.onChangeDestinationAddress}
-              rightSection={props.destinationAddressLoading ? <Loader size='1rem' /> : null}
+              value={destinationAddress}
+              data={destinationAddressAutocompleteData}
+              onChange={onChangeDestinationAddress}
+              rightSection={destinationAddressLoading ? <Loader size='1rem' /> : null}
               label='Destination address'
               placeholder='Drottning Kristinas väg 13'
               name='address'
               required
               filter={() => true} // API filters the data instead of this component
-              itemComponent={props.itemComponent}
-              error={props.destinationAddressError}
+              itemComponent={itemComponent}
+              error={destinationAddressError}
             />
             <TimeInput
               label='Desired arrival time'
               required
-              value={props.arriveTime}
+              value={arriveTime}
               onChange={(e) => {
-                props.setArriveTime(e.target.value)
+                setArriveTime(e.target.value)
               }}
             />
             <Select
-              label='Select a group of activities to do before travel'
-              placeholder='Select an group'
+              label='Pre-commute routine'
+              placeholder='Select a routine'
               clearable
               searchable
-              nothingFound='No Item Groups found, visit the profile page to add some'
-              data={props.itemGroups.map((itemGroup, index) => ({
-                value: `${index} ${itemGroup.name}`,
+              nothingFound='You have no routines saved, try adding some to your profile!'
+              data={routines.map((routine, index) => ({
+                value: `${index} ${routine.name}`,
                 label:
-                  itemGroup.name +
-                  ` (${itemGroup.items.reduce((prev, curr) => prev + curr.duration, 0)} min)`,
-                itemGroup: itemGroup,
+                  routine.name +
+                  ` (${routine.activities.reduce((prev, curr) => prev + curr.duration, 0)} min)`,
+                routine: routine,
               }))}
               onChange={(value) => {
-                // get the itemGroup
-                if (!value) return props.setPreActivity(undefined)
+                // get the routines
+                if (!value) return setSelectedRoutine(undefined)
 
-                const itemGroup = props.itemGroups[parseInt(value.split(' ')[0])]
-                props.setPreActivity(itemGroup)
+                const routine = routines[parseInt(value.split(' ')[0])]
+                setSelectedRoutine(routine)
               }}
               itemComponent={CustomItem}
               filter={(value, item) =>
-                item.itemGroup.name.toLowerCase().includes(value.toLowerCase().trim()) ||
-                item.itemGroup.items.some((item: Item) =>
+                item.routine.name.toLowerCase().includes(value.toLowerCase().trim()) ||
+                item.routine.activities.some((item: Activity) =>
                   item.name.toLowerCase().includes(value.toLowerCase().trim()),
                 )
               }
             />
             <Button
-              onClick={props.searchClicked}
-              loading={props.searchInProgress}
-              disabled={
-                !(props.originAddress && props.destinationAddress && props.date && props.arriveTime)
-              }
+              onClick={searchClicked}
+              loading={searchInProgress}
+              disabled={!(originAddress && destinationAddress && date && arriveTime)}
             >
               Search
             </Button>
-            {props.searchError ? (
+            {searchError ? (
               <Alert
                 icon={<IconAlertCircle size='1rem' />}
                 title='Bummer!'
                 color='red'
                 withCloseButton
                 variant='filled'
-                onClose={() => props.setSearchError('')}
+                onClose={() => setSearchError('')}
               >
-                {props.searchError}
+                {searchError}
               </Alert>
             ) : null}
           </Stack>

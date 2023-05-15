@@ -1,10 +1,10 @@
 import { LegacyRef, forwardRef, useCallback, useEffect, useState } from 'react'
 import { Group, Text, SelectItemProps, MantineColor } from '@mantine/core'
 import { debounce } from 'lodash'
-import { AddressError, getAutocompleteSuggestions } from '../../mapsSource'
-import { TripError } from '../../tripSource'
+import { AddressError, getAutocompleteSuggestions } from '../../maps-source'
+import { TripError } from '../../trip-source'
 import FormView from './form-view'
-import { ItemGroup } from '../../Model'
+import { Routine } from '../../model'
 
 // Items used in autocorrect
 interface ItemProps extends SelectItemProps {
@@ -38,10 +38,10 @@ SelectItem.displayName = 'SelectItem'
 
 interface FormPresenterProps {
   homeAddress: string | undefined
-  itemGroups: ItemGroup[]
+  routines: Routine[]
   saveHomeAddress: (value: string) => void
   searchInProgress: boolean
-  setPreActivity: (activity: ItemGroup | undefined) => void
+  setSelectedRoutine: (routine: Routine | undefined) => void
   doSearch: (
     originAddress: string,
     destinationAddress: string,
@@ -50,7 +50,14 @@ interface FormPresenterProps {
   ) => void
 }
 
-function FormPresenter(props: FormPresenterProps) {
+const FormPresenter = ({
+  homeAddress,
+  routines,
+  saveHomeAddress,
+  searchInProgress,
+  setSelectedRoutine,
+  doSearch,
+}: FormPresenterProps) => {
   const [originAddress, setOriginAddress] = useState<string>('')
   const [originAddressLoading, setOriginAddressLoading] = useState(false)
   const [originAddressAutocompleteData, setOriginAddressAutocompleteData] = useState<string[]>([])
@@ -64,12 +71,12 @@ function FormPresenter(props: FormPresenterProps) {
   const [originAddressError, setOriginAddressError] = useState<string>('')
   const [destinationAddressError, setDestinationAddressError] = useState<string>('')
   const [searchError, setSearchError] = useState<string>('')
-  const [saveHomeAddress, setSaveHomeAddress] = useState<boolean>(false)
+  const [shouldSaveHomeAddress, setShouldSaveHomeAddress] = useState<boolean>(false)
 
   // Load saved home address
   useEffect(() => {
-    if (props.homeAddress) setOriginAddress(props.homeAddress)
-  }, [props.homeAddress])
+    if (homeAddress) setOriginAddress(homeAddress)
+  }, [homeAddress])
 
   const debouncedGetSuggestions = useCallback(
     // useCallback caches functions between rerenders
@@ -121,13 +128,13 @@ function FormPresenter(props: FormPresenterProps) {
     handleAddressChange(value, setDestinationAddressAutocompleteData, setDestinationAddressLoading)
   }
 
-  async function performSearch() {
+  const performSearch = async () => {
     setOriginAddressError('')
     setDestinationAddressError('')
     setSearchError('')
     try {
-      await props.doSearch(originAddress, destinationAddress, date, arriveTime)
-      if (saveHomeAddress) props.saveHomeAddress(originAddress)
+      await doSearch(originAddress, destinationAddress, date, arriveTime)
+      if (saveHomeAddress) saveHomeAddress(originAddress)
     } catch (error) {
       if (error instanceof AddressError) {
         if (error.address === originAddress)
@@ -137,7 +144,7 @@ function FormPresenter(props: FormPresenterProps) {
       } else if (error instanceof TripError) {
         if (error.code === 'ECONNABORTED')
           setSearchError('Request timed out, please try again later.')
-        else setSearchError('Could not calculate itinerary, please try a different address')
+        else setSearchError('Could not calculate itinerary, please try a different address.')
       } else console.error(error)
     }
   }
@@ -159,14 +166,14 @@ function FormPresenter(props: FormPresenterProps) {
       arriveTime={arriveTime}
       setArriveTime={setArriveTime}
       searchClicked={performSearch}
-      searchInProgress={props.searchInProgress}
+      searchInProgress={searchInProgress}
       itemComponent={SelectItem}
       searchError={searchError}
       setSearchError={setSearchError}
-      saveHomeAddress={saveHomeAddress}
-      setSaveHomeAddress={setSaveHomeAddress}
-      itemGroups={props.itemGroups}
-      setPreActivity={props.setPreActivity}
+      shouldSaveHomeAddress={shouldSaveHomeAddress}
+      setShouldSaveHomeAddress={setShouldSaveHomeAddress}
+      routines={routines}
+      setSelectedRoutine={setSelectedRoutine}
     />
   )
 }

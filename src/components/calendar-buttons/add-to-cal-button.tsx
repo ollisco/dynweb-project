@@ -1,34 +1,39 @@
 import { useState } from 'react'
-import {
-  calIsAuthed,
-  calAuth,
-  addTripToCalendar,
-  addPreActivityToCalendar,
-} from '../../calendarSource'
 import { Button, Alert, Menu, Anchor } from '@mantine/core'
 import { IconAlertCircle, IconChevronDown } from '@tabler/icons-react'
-import GoogleIcon from '../basic/googleicon'
-import { Trip } from '../../tripSource'
 import {
   MdOutlineNotifications,
   MdOutlineNotificationsActive,
   MdOutlineNotificationsOff,
 } from 'react-icons/md'
-import { ItemGroup } from '../../Model'
+import { FcGoogle } from 'react-icons/fc'
+import { Routine } from '../../model'
+import {
+  calIsAuthed,
+  calAuth,
+  addTripToCalendar,
+  addPreActivityToCalendar,
+} from '../../calendar-source'
+import { Trip } from '../../trip-source'
 
 interface AddToCalButtonProps {
   originAddress: string | undefined
   destinationAddress: string | undefined
   trip: Trip | undefined
-  itemGroup: ItemGroup | undefined
+  routine: Routine | undefined
 }
 
-function AddToCalButton(props: AddToCalButtonProps) {
+const AddToCalButton = ({
+  originAddress,
+  destinationAddress,
+  trip,
+  routine,
+}: AddToCalButtonProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [eventLink, setEventLink] = useState<string>('')
 
-  async function addTrip(notification: number) {
+  const addTrip = async (notification: number) => {
     setLoading(true)
     setError('')
     setEventLink('')
@@ -40,17 +45,12 @@ function AddToCalButton(props: AddToCalButtonProps) {
       }
     }
     if (calIsAuthed()) {
-      if (props.originAddress && props.destinationAddress && props.trip) {
-        if (props.itemGroup) {
-          await addPreActivityToCalendar(props.itemGroup, props.trip)
+      if (originAddress && destinationAddress && trip) {
+        if (routine) {
+          await addPreActivityToCalendar(routine, trip)
         }
 
-        const event = await addTripToCalendar(
-          props.originAddress,
-          props.destinationAddress,
-          props.trip,
-          notification,
-        )
+        const event = await addTripToCalendar(originAddress, destinationAddress, trip, notification)
         setEventLink(event.result.htmlLink)
       }
     } else setError('Authentication failed, please try again.')
@@ -62,9 +62,9 @@ function AddToCalButton(props: AddToCalButtonProps) {
       <Menu position='top-end'>
         <Menu.Target>
           <Button
-            disabled={!(props.originAddress && props.destinationAddress)}
+            disabled={!(originAddress && destinationAddress)}
             loading={loading}
-            leftIcon={<GoogleIcon />}
+            leftIcon={<FcGoogle />}
             variant='light'
             rightIcon={<IconChevronDown size='1.05rem' stroke={1.5} />}
           >

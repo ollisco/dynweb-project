@@ -1,5 +1,5 @@
 import { Box, Container, Stack, Title, Flex, useMantineTheme } from '@mantine/core'
-import { Trip } from '../../tripSource'
+import { Trip } from '../../trip-source'
 import {
   MdDirectionsWalk,
   MdTrain,
@@ -10,9 +10,9 @@ import {
 import { useMediaQuery } from '@mantine/hooks'
 import CompactTripDisplayComponent from './compact-trip-display'
 import ExtendedTripDisplayComponent from './extended-trip-display'
-import { ItemGroup } from '../../Model'
+import { Routine } from '../../model'
 
-function getIcon(leg: { type: string; category: string } | undefined) {
+const getIcon = (leg: { type: string; category: string } | undefined) => {
   switch (leg?.category) {
     case 'BLT':
       return <MdDirectionsBus />
@@ -35,7 +35,7 @@ function getIcon(leg: { type: string; category: string } | undefined) {
   }
 }
 
-function humanizeDuration(duration: string | undefined) {
+const humanizeDuration = (duration: string | undefined) => {
   if (duration)
     return duration
       .replace('P', '')
@@ -52,25 +52,33 @@ interface InformationViewProps {
   destinationTime: string | undefined
   searchInProgress: boolean
   trips: Trip[] | undefined
-  itemGroup: ItemGroup | undefined
+  routine: Routine | undefined
   selectedTripIndex: number
   setSelectedTripIndex: (index: number) => void
 }
 
-function InformationView(props: InformationViewProps) {
+const InformationView = ({
+  originAddress,
+  destinationAddress,
+  searchInProgress,
+  trips,
+  routine,
+  selectedTripIndex,
+  setSelectedTripIndex,
+}: InformationViewProps) => {
   const theme = useMantineTheme()
   const isMobile = useMediaQuery(`(max-width:${theme.breakpoints.sm})`)
 
-  function renderCompactTripCards(fromIndex: number, toIndex?: number) {
-    if (!props.trips) return null
-    return props.trips.slice(fromIndex, toIndex).map((trip: Trip, index: number) => {
+  const renderCompactTripCards = (fromIndex: number, toIndex?: number) => {
+    if (!trips) return null
+    return trips.slice(fromIndex, toIndex).map((trip: Trip, index: number) => {
       return (
         <CompactTripDisplayComponent
           key={index}
           tripIndex={fromIndex + index}
           trip={trip}
-          isSelected={fromIndex + index == props.selectedTripIndex}
-          selectTrip={props.setSelectedTripIndex}
+          isSelected={fromIndex + index == selectedTripIndex}
+          selectTrip={setSelectedTripIndex}
         />
       )
     })
@@ -78,7 +86,7 @@ function InformationView(props: InformationViewProps) {
 
   return (
     <>
-      {!props.searchInProgress && props.destinationAddress && props.trips ? (
+      {!searchInProgress && destinationAddress && trips ? (
         <Box w='100%'>
           <Container px={0} size='sm'>
             <Title order={2} align='center' m='xl'>
@@ -86,25 +94,25 @@ function InformationView(props: InformationViewProps) {
             </Title>
             {isMobile ? (
               <Stack>
-                {renderCompactTripCards(0, props.selectedTripIndex)}
+                {renderCompactTripCards(0, selectedTripIndex)}
                 <ExtendedTripDisplayComponent
-                  index={props.selectedTripIndex}
-                  originAddress={props.originAddress}
-                  destinationAddress={props.destinationAddress}
-                  trip={props.trips.at(props.selectedTripIndex)}
-                  itemGroup={props.itemGroup}
+                  index={selectedTripIndex}
+                  originAddress={originAddress}
+                  destinationAddress={destinationAddress}
+                  trip={trips.at(selectedTripIndex)}
+                  routine={routine}
                 />
-                {renderCompactTripCards(props.selectedTripIndex + 1)}
+                {renderCompactTripCards(selectedTripIndex + 1)}
               </Stack>
             ) : (
               <Flex gap='md' justify='center' align='flex-start' direction='row'>
                 <Stack>{renderCompactTripCards(0)}</Stack>
                 <ExtendedTripDisplayComponent
-                  index={props.selectedTripIndex}
-                  originAddress={props.originAddress}
-                  destinationAddress={props.destinationAddress}
-                  trip={props.trips.at(props.selectedTripIndex)}
-                  itemGroup={props.itemGroup}
+                  index={selectedTripIndex}
+                  originAddress={originAddress}
+                  destinationAddress={destinationAddress}
+                  trip={trips.at(selectedTripIndex)}
+                  routine={routine}
                 />
               </Flex>
             )}

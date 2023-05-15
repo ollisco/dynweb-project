@@ -1,4 +1,3 @@
-import { TRAFFICLAB_API_KEY } from './apiconf'
 import axios from 'axios'
 
 class TripError extends Error {
@@ -55,8 +54,10 @@ interface CoordsObj {
   searchForArrival: number // 1 if time of arrival instead of departure
 }
 
-async function getTrafficInfo(coordsObj: CoordsObj) {
-  let apiUrl = `https://api.resrobot.se/v2.1/trip?format=json&accessId=${TRAFFICLAB_API_KEY}&showPassingPoints=true&`
+const getTrafficInfo = async (coordsObj: CoordsObj) => {
+  let apiUrl = `https://api.resrobot.se/v2.1/trip?format=json&accessId=${
+    import.meta.env.VITE_TRAFFICLAB_API_KEY
+  }&showPassingPoints=true&`
 
   const params = new URLSearchParams() // uses URLSearchParams to build URL with the given information
   for (const key in coordsObj) {

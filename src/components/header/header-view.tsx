@@ -1,4 +1,4 @@
-import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Header,
   Group,
@@ -10,7 +10,6 @@ import {
   ColorScheme,
 } from '@mantine/core'
 import { IconSun, IconMoonStars } from '@tabler/icons-react'
-import { useNavigate } from 'react-router-dom'
 import LOGO from '../../assets/logo.svg'
 
 interface HeaderViewProps {

@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { calIsAuthed, calAuth, getFirstEvent } from '../../calendarSource'
 import { Button, Alert, ActionIcon, Group, Text, Popover } from '@mantine/core'
 import { IconAlertCircle } from '@tabler/icons-react'
-import GoogleIcon from '../basic/googleicon'
 import { MdInfoOutline } from 'react-icons/md'
+import { FcGoogle } from 'react-icons/fc'
+import { calIsAuthed, calAuth, getFirstEvent } from '../../calendar-source'
 
 interface UseCalButtonProps {
   date: Date
@@ -11,12 +11,12 @@ interface UseCalButtonProps {
   setAddress: (value: string) => void
 }
 
-function UseCalButton(props: UseCalButtonProps) {
+const UseCalButton = ({ date, setTime, setAddress }: UseCalButtonProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const [eventTitle, setEventTitle] = useState<string>('')
 
-  async function useCal() {
+  const useCal = async () => {
     setLoading(true)
     setError('')
     setEventTitle('')
@@ -28,10 +28,10 @@ function UseCalButton(props: UseCalButtonProps) {
       }
     }
     if (calIsAuthed()) {
-      const event = await getFirstEvent(props.date)
+      const event = await getFirstEvent(date)
       if (event) {
-        props.setTime(event.start.substring(11, 16))
-        if (event.location) props.setAddress(event.location)
+        setTime(event.start.substring(11, 16))
+        if (event.location) setAddress(event.location)
         setEventTitle(event.title)
       } else setError('No events found in the calendar this day.')
     } else setError('Authentication failed, please try again.')
@@ -41,7 +41,7 @@ function UseCalButton(props: UseCalButtonProps) {
   return (
     <div>
       <Group spacing='xs'>
-        <Button onClick={useCal} loading={loading} leftIcon={<GoogleIcon />} variant='light'>
+        <Button onClick={useCal} loading={loading} leftIcon={<FcGoogle />} variant='light'>
           Use Google Calendar
         </Button>
         <Popover>

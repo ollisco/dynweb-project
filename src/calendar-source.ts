@@ -1,11 +1,10 @@
-import { GCAL_API_KEY, GCAL_CLIENT_ID } from './apiconf'
-import ApiCalendar from './ApiCalendar'
-import { Trip } from './tripSource'
-import { ItemGroup, Item } from './Model'
+import ApiCalendar from './gcal-api'
+import { Trip } from './trip-source'
+import { Routine, Activity } from './model'
 
 const gcal = new ApiCalendar({
-  clientId: GCAL_CLIENT_ID || '',
-  apiKey: GCAL_API_KEY || '',
+  clientId: import.meta.env.VITE_GCAL_CLIENT_ID || '',
+  apiKey: import.meta.env.VITE_GCAL_API_KEY || '',
   scope: 'https://www.googleapis.com/auth/calendar',
   discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
 })
@@ -44,22 +43,22 @@ interface newEvent {
   }
 }
 
-function calIsAuthed() {
+const calIsAuthed = () => {
   return !!gcal.getToken() && !!gcal.getToken().access_token
 }
 
-function calAuth() {
+const calAuth = () => {
   return gcal.handleAuthClick()
 }
 
-function getDaysEvents(date: Date) {
-  function removeBadEvents(result: { result: { items: rawEvent[] } }) {
-    return result.result.items.filter((event: rawEvent) => {
+const getDaysEvents = (date: Date) => {
+  const removeBadEvents = (result: { result: { activities: rawEvent[] } }) => {
+    return result.result.activities.filter((event: rawEvent) => {
       return event.start && event.start.dateTime && event.summary !== 'Komitid trip'
     })
   }
 
-  function extractRelevantData(events: rawEvent[]): processedEvent[] {
+  const extractRelevantData = (events: rawEvent[]): processedEvent[] => {
     return events.map((event: rawEvent) => {
       return {
         title: event.summary,
@@ -69,7 +68,7 @@ function getDaysEvents(date: Date) {
     })
   }
 
-  function sortByStartTime(events: processedEvent[]) {
+  const sortByStartTime = (events: processedEvent[]) => {
     return events.sort((a, b) => {
       return new Date(a.start).getTime() - new Date(b.start).getTime()
     })
@@ -92,23 +91,23 @@ function getDaysEvents(date: Date) {
     .then(sortByStartTime)
 }
 
-async function getFirstEvent(date: Date) {
+const getFirstEvent = async (date: Date) => {
   const events = await getDaysEvents(date)
   if (events) return events[0]
   else return null
 }
 
-function addPreActivityToCalendar(itemGroup: ItemGroup, trip: Trip) {
-  const summary = `${itemGroup.name}, before komitid trip`
+const addPreActivityToCalendar = (routine: Routine, trip: Trip) => {
+  const summary = `${routine.name}, before komitid trip`
 
   let description = 'Things to get done before the komitid trip:\n\n'
-  itemGroup.items.forEach((item: Item) => {
-    description += `${item.name}: ${item.description} (${item.duration} min)\n`
+  routine.activities.forEach((activity: Activity) => {
+    description += `${activity.name}: ${activity.description} (${activity.duration} min)\n`
   })
 
   description += '\n\nThis event was created automatically by Komitid'
-  const totalDuration = itemGroup.items.reduce((acc: number, item: Item) => {
-    return acc + item.duration
+  const totalDuration = routine.activities.reduce((acc: number, activity: Activity) => {
+    return acc + activity.duration
   }, 0)
 
   // start time is end time - total duration
@@ -117,7 +116,6 @@ function addPreActivityToCalendar(itemGroup: ItemGroup, trip: Trip) {
   )
 
   const endDateTime = new Date(`${trip.Origin.date}T${trip.Origin.time}`)
-  console.log(startDateTime, endDateTime, totalDuration)
 
   const event: newEvent = {
     summary: summary,
@@ -135,12 +133,12 @@ function addPreActivityToCalendar(itemGroup: ItemGroup, trip: Trip) {
   return gcal.createEvent(event)
 }
 
-function addTripToCalendar(
+const addTripToCalendar = (
   originAddress: string,
   destinationAddress: string,
   trip: Trip,
   notification: number,
-) {
+) => {
   const summary = 'Komitid trip'
 
   let description = `Trip from ${originAddress} to ${destinationAddress}\n`
