@@ -54,7 +54,10 @@ const calAuth = () => {
 const getDaysEvents = (date: Date) => {
   const removeBadEvents = (result: { result: { items: rawEvent[] } }) => {
     return result.result.items.filter((event: rawEvent) => {
-      return event.start && event.start.dateTime && !event.summary.includes('Komitid')
+      if (!event.start) return false
+      if (!event.start.dateTime) return false
+      if (event.summary && event.summary.includes('Komitid')) return false
+      return true
     })
   }
 
