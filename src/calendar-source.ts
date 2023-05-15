@@ -52,9 +52,9 @@ const calAuth = () => {
 }
 
 const getDaysEvents = (date: Date) => {
-  const removeBadEvents = (result: { result: { activities: rawEvent[] } }) => {
-    return result.result.activities.filter((event: rawEvent) => {
-      return event.start && event.start.dateTime && event.summary !== 'Komitid trip'
+  const removeBadEvents = (result: { result: { items: rawEvent[] } }) => {
+    return result.result.items.filter((event: rawEvent) => {
+      return event.start && event.start.dateTime && !event.summary.includes('Komitid')
     })
   }
 
@@ -98,11 +98,11 @@ const getFirstEvent = async (date: Date) => {
 }
 
 const addPreActivityToCalendar = (routine: Routine, trip: Trip) => {
-  const summary = `${routine.name}, before komitid trip`
+  const summary = `Komitid: ${routine.name}`
 
-  let description = 'Things to get done before the komitid trip:\n\n'
+  let description = 'Activities to get done before your commute:\n'
   routine.activities.forEach((activity: Activity) => {
-    description += `${activity.name}: ${activity.description} (${activity.duration} min)\n`
+    description += `\n${activity.name}: ${activity.description} (${activity.duration} min)`
   })
 
   description += '\n\nThis event was created automatically by Komitid'
@@ -139,7 +139,7 @@ const addTripToCalendar = (
   trip: Trip,
   notification: number,
 ) => {
-  const summary = 'Komitid trip'
+  const summary = `Komitid: commute to ${originAddress.split(/[,()]/)[0]}`
 
   let description = `Trip from ${originAddress} to ${destinationAddress}\n`
   trip.LegList.Leg.forEach((leg) => {
