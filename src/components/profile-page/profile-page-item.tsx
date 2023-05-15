@@ -9,7 +9,7 @@ import {
   UnstyledButton,
 } from '@mantine/core'
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd'
-import { IconGripVertical, IconX } from '@tabler/icons-react'
+import { MdDragIndicator, MdCancel } from 'react-icons/md'
 import { useListState } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import { useForm } from '@mantine/form'
@@ -19,8 +19,10 @@ const ActivityDisplayComponent = ({ name, description, duration }: Activity) => 
   return (
     <Group>
       <Text>{name}</Text>
-      <Text>{description}</Text>
-      <Text>{duration}</Text>
+      <Text size='sm' color='dimmed'>
+        {description}
+      </Text>
+      <Text>{duration} min</Text>
     </Group>
   )
 }
@@ -102,7 +104,7 @@ const RoutineDisplayComponent = ({
           {name}
         </Text>
         <ActionIcon onClick={() => onRemoveRoutine(index)}>
-          <IconX color='red' size={14} />
+          <MdCancel size={16} />
         </ActionIcon>
       </Group>
       <DragDropContext
@@ -127,10 +129,10 @@ const RoutineDisplayComponent = ({
                       ref={provided.innerRef}
                     >
                       <Group align='center' spacing='sm'>
-                        <IconGripVertical size={14} />
+                        <MdDragIndicator size={16} />
                         <ActivityDisplayComponent {...activity} />
                         <ActionIcon onClick={() => removeActivity(index)}>
-                          <IconX color='red' size={14} />
+                          <MdCancel size={16} />
                         </ActionIcon>
                       </Group>
                     </div>
@@ -153,7 +155,7 @@ const RoutineDisplayComponent = ({
                 },
               }}
             >
-              + Add Activity
+              + Add new activity
             </Text>
           </UnstyledButton>
         ) : (
@@ -173,7 +175,6 @@ const RoutineDisplayComponent = ({
               />
             </Group>
             <Stack spacing={0}>
-              <Text sx={{ visibility: 'hidden' }}>invisible lable</Text>
               <Group noWrap>
                 <Button variant='light' color='gray' size='sm' onClick={toggleAddActivity}>
                   Cancel

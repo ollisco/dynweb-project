@@ -172,7 +172,7 @@ const ProfilePageView = ({
                     },
                   }}
                 >
-                  + Add Routine
+                  + Add new routine
                 </Text>
               </UnstyledButton>
             </Stack>
