@@ -1,4 +1,3 @@
-
 import { UserCredential } from '@firebase/auth'
 import { observer } from 'mobx-react'
 import Model from '../../Model'
