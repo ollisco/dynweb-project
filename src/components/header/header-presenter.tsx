@@ -1,11 +1,10 @@
-import React from 'react'
+
 import { UserCredential } from '@firebase/auth'
 import { observer } from 'mobx-react'
 import Model from '../../Model'
 import HeaderView from './header-view'
 import { ColorScheme } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
-import { NativeScrollArea } from '@mantine/core/lib/ModalBase/NativeScrollArea/NativeScrollArea'
 
 interface HeaderPresenterProps {
   model: Model
