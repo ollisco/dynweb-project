@@ -28,11 +28,11 @@ const HeaderPresenter = observer(
           .slice(0, 2)
       : 'UU'
 
-      const logout = () => {
-        model.signOut()
-        navigate('/login')
-      }
-    
+    const logout = () => {
+      model.signOut()
+      navigate('/login')
+    }
+
     return (
       <HeaderView
         initials={initials}
