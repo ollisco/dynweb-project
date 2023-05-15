@@ -115,25 +115,23 @@ const RoutineDisplayComponent = ({
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {activityState.map((activity, index) => (
-                <>
-                  <Draggable index={index} draggableId={`activity-${activity.name}-${index}`}>
-                    {(provided) => (
-                      <div
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
-                      >
-                        <Group align='center' spacing='sm'>
-                          <IconGripVertical size={14} />
-                          <ActivityDisplayComponent {...activity} />
-                          <ActionIcon onClick={() => removeActivity(index)}>
-                            <IconX color='red' size={14} />
-                          </ActionIcon>
-                        </Group>
-                      </div>
-                    )}
-                  </Draggable>
-                </>
+                <Draggable key={index} index={index} draggableId={`activity-${activity.name}-${index}`}>
+                  {(provided) => (
+                    <div
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                    >
+                      <Group align='center' spacing='sm'>
+                        <IconGripVertical size={14} />
+                        <ActivityDisplayComponent {...activity} />
+                        <ActionIcon onClick={() => removeActivity(index)}>
+                          <IconX color='red' size={14} />
+                        </ActionIcon>
+                      </Group>
+                    </div>
+                  )}
+                </Draggable>
               ))}
 
               {provided.placeholder}

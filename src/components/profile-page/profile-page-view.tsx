@@ -153,15 +153,14 @@ const ProfilePageView = ({
             </Stack>
             <Stack>
               {routines?.map((routine, index) => (
-                <>
-                  <RoutineDisplayComponent
-                    index={index}
-                    onUpdateActivities={onUpdate}
-                    onRemoveRoutine={onRemoveRoutine}
-                    name={routine.name ?? 'NO NAME'}
-                    activities={routine.activities}
-                  />
-                </>
+                <RoutineDisplayComponent
+                  key={index}
+                  index={index}
+                  onUpdateActivities={onUpdate}
+                  onRemoveRoutine={onRemoveRoutine}
+                  name={routine.name ?? 'NO NAME'}
+                  activities={routine.activities}
+                />
               ))}
               <UnstyledButton onClick={open}>
                 <Text

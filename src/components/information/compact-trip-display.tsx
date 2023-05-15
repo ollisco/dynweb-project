@@ -2,6 +2,7 @@ import { useMantineTheme, Paper, Stack, Flex, Text } from '@mantine/core'
 import { MdKeyboardArrowRight } from 'react-icons/md'
 import { Trip } from '../../trip-source'
 import { humanizeDuration, getIcon } from './information-view'
+import { Fragment } from 'react'
 
 interface CompactTripDisplayComponentProps {
   tripIndex: number
@@ -37,10 +38,10 @@ const CompactTripDisplayComponent = ({
           {getIcon(trip?.LegList.Leg[0])}
           {trip?.LegList.Leg.slice(1).map((leg, index: number) => {
             return (
-              <div key={index}>
+              <Fragment key={index}>
                 <MdKeyboardArrowRight />
                 {getIcon(leg)}
-              </div>
+              </Fragment>
             )
           })}
         </Text>

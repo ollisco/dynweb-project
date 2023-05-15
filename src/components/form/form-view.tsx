@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import React, { Fragment, forwardRef } from 'react'
 import {
   Alert,
   Autocomplete,
@@ -32,22 +32,18 @@ const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ routine, ...ot
         <Text>
           {routine.activities.length > 0 &&
             routine.activities
-              .map<React.ReactNode>((item) => (
-                <>
+              .map<React.ReactNode>((item, index) => (
+                <Fragment key={`${item.name}-${index}`}>
                   <Text span size='sm' color='dimmed'>
                     {item.name}
                   </Text>
-                </>
-              ))
-              .reduce((prev, curr) => [
-                prev,
-                <>
-                  <Text span size='sm' color='dimmed'>
-                    ,{' '}
-                  </Text>
-                </>,
-                curr,
-              ])}
+                  {index < routine.activities.length - 1 && (
+                    <Text span size='sm' color='dimmed'>
+                      ,{' '}
+                    </Text>
+                  )}
+                </Fragment>
+              ))}
         </Text>
         <Text size='sm' color='dimmed'>
           {totalDuration} min
