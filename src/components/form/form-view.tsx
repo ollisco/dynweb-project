@@ -23,15 +23,15 @@ import { Routine, Activity } from '../../model'
 type CustomItemProps = SelectItemProps & { routine: Routine }
 
 const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ routine, ...others }, ref) => {
-  if (routine.activities.length > 0) {
-    const totalDuration = routine.activities.reduce((prev, curr) => prev + curr.duration, 0)
+  const totalDuration = routine.activities.reduce((prev, curr) => prev + curr.duration, 0)
 
-    return (
-      <div ref={ref} {...others}>
-        <Group align='center'>
-          <Text>{routine.name}</Text>
-          <Text>
-            {routine.activities
+  return (
+    <div ref={ref} {...others}>
+      <Group align='center'>
+        <Text>{routine.name}</Text>
+        <Text>
+          {routine.activities.length > 0 &&
+            routine.activities
               .map<React.ReactNode>((item) => (
                 <>
                   <Text span size='sm' color='dimmed'>
@@ -48,14 +48,13 @@ const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ routine, ...ot
                 </>,
                 curr,
               ])}
-          </Text>
-          <Text size='sm' color='dimmed'>
-            {totalDuration} min
-          </Text>
-        </Group>
-      </div>
-    )
-  } else return null
+        </Text>
+        <Text size='sm' color='dimmed'>
+          {totalDuration} min
+        </Text>
+      </Group>
+    </div>
+  )
 })
 
 CustomItem.displayName = 'CustomItem'
