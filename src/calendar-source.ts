@@ -142,7 +142,7 @@ const addTripToCalendar = (
   trip: Trip,
   notification: number,
 ) => {
-  const summary = `Komitid: commute to ${originAddress.split(/[,()]/)[0]}`
+  const summary = `Komitid: commute to ${destinationAddress.split(/[,()]/)[0]}`
 
   let description = `Trip from ${originAddress} to ${destinationAddress}\n`
   trip.LegList.Leg.forEach((leg) => {

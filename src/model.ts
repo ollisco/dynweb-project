@@ -79,6 +79,13 @@ class Model {
   signOut() {
     localStorage.removeItem('user')
     this.user = null
+    this.homeAddress = undefined
+    this.routines = undefined
+    this.selectedRoutine = undefined
+    this.destinationAddress = undefined
+    this.arriveTime = undefined
+    this.searchInProgress = false
+    this.trips = undefined
   }
 
   setUser(user: UserCredential) {

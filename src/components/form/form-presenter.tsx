@@ -134,7 +134,7 @@ const FormPresenter = ({
     setSearchError('')
     try {
       await doSearch(originAddress, destinationAddress, date, arriveTime)
-      if (saveHomeAddress) saveHomeAddress(originAddress)
+      if (shouldSaveHomeAddress) saveHomeAddress(originAddress)
     } catch (error) {
       if (error instanceof AddressError) {
         if (error.address === originAddress)
