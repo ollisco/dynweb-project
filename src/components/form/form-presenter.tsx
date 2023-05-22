@@ -1,40 +1,9 @@
-import { LegacyRef, forwardRef, useCallback, useEffect, useState } from 'react'
-import { Group, Text, SelectItemProps, MantineColor } from '@mantine/core'
+import { useCallback, useEffect, useState } from 'react'
 import { debounce } from 'lodash'
 import { AddressError, getAutocompleteSuggestions } from '../../maps-source'
 import { TripError } from '../../trip-source'
 import FormView from './form-view'
 import { Routine } from '../../model'
-
-// Items used in autocorrect
-interface ItemProps extends SelectItemProps {
-  color: MantineColor
-  street: string
-  postcodeAndCity: string
-}
-
-// Style search results
-export const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
-  (
-    { street, postcodeAndCity, ...others }: ItemProps,
-    ref: LegacyRef<HTMLDivElement> | undefined,
-  ) => {
-    return (
-      <div ref={ref} {...others}>
-        <Group noWrap>
-          <Text size='sm' style={{ whiteSpace: 'nowrap' }}>
-            {street}
-          </Text>
-          <Text size='xs' color='dimmed' truncate>
-            {postcodeAndCity}
-          </Text>
-        </Group>
-      </div>
-    )
-  },
-)
-
-SelectItem.displayName = 'SelectItem'
 
 interface FormPresenterProps {
   homeAddress: string | undefined
@@ -167,7 +136,6 @@ const FormPresenter = ({
       setArriveTime={setArriveTime}
       searchClicked={performSearch}
       searchInProgress={searchInProgress}
-      itemComponent={SelectItem}
       searchError={searchError}
       setSearchError={setSearchError}
       shouldSaveHomeAddress={shouldSaveHomeAddress}
@@ -178,5 +146,4 @@ const FormPresenter = ({
   )
 }
 
-export type { ItemProps }
 export default FormPresenter

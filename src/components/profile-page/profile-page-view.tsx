@@ -16,7 +16,7 @@ import {
   TextInput,
 } from '@mantine/core'
 import { UserCredential } from 'firebase/auth'
-import { SelectItem } from '../form/form-presenter'
+import { AddressItem } from '../form/form-view'
 import { IconX } from '@tabler/icons-react'
 import { useDisclosure } from '@mantine/hooks'
 import RoutineDisplayComponent from './profile-page-item'
@@ -129,7 +129,7 @@ const ProfilePageView = ({
                   placeholder='Drottning Kristinas väg 13'
                   name='address'
                   filter={() => true} // API filters the data instead of this component
-                  itemComponent={SelectItem}
+                  itemComponent={AddressItem}
                 />
               </Stack>
               <Button
