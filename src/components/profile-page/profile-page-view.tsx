@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import {
   Box,
   Text,
@@ -14,95 +13,69 @@ import {
   Center,
   Modal,
   TextInput,
+  ActionIcon,
 } from '@mantine/core'
-import { UserCredential } from 'firebase/auth'
 import { AddressItem } from '../form/form-view'
-import { IconX } from '@tabler/icons-react'
+import { MdCancel } from 'react-icons/md'
 import { useDisclosure } from '@mantine/hooks'
-import RoutineDisplayComponent from './profile-page-item'
 import { Routine, Activity } from '../../model'
+import RoutineDisplayComponent from './routine-display/routine-display-component'
 
 interface ProfilePageViewProps {
-  user: UserCredential | null
+  userInitials: string
+  userPhotoUrl: string
+  userDisplayName: string
+  userEmail: string
   homeAddress: string | undefined
   addressSearch: string
   setAddressSearch: (value: string) => void
   addressData: string[]
   addressLoading: boolean
-  saveHomeAddress: () => void
+  onSaveHomeAddress: () => void
   routines: Routine[] | undefined
-  saveRoutines: (routines: Routine[]) => void
+  onCreateRoutine: (close: () => void) => void
+  onUpdateRoutine: (index: number, activities: Activity[]) => void
+  onRemoveRoutine: (index: number) => void
+  newRoutineName: string
+  setNewRoutineName: (value: string) => void
+  newRoutineError: string
+  setNewRoutineError: (value: string) => void
 }
 
 const ProfilePageView = ({
-  user,
+  userInitials,
+  userPhotoUrl,
+  userDisplayName,
+  userEmail,
   homeAddress,
   addressSearch,
   setAddressSearch,
   addressData,
   addressLoading,
-  saveHomeAddress,
+  onSaveHomeAddress,
   routines,
-  saveRoutines,
+  onUpdateRoutine,
+  onRemoveRoutine,
+  onCreateRoutine,
+  newRoutineName,
+  setNewRoutineName,
+  newRoutineError,
+  setNewRoutineError,
 }: ProfilePageViewProps) => {
   const [opened, { open, close }] = useDisclosure(false)
-
-  const [newRoutineName, setNewRoutineName] = useState<string>('')
-  const [newRoutineError, setNewRoutineError] = useState<string>('')
-
-  const initials = user?.user.displayName
-    ? user.user.displayName
-        .split(' ')
-        .map((name) => name[0])
-        .join('')
-        .slice(0, 2)
-    : 'UU'
-
-  const userPhotoUrl = user?.user.photoURL ?? ''
-  const displayName = user?.user.displayName ?? ''
-  const email = user?.user.email ?? ''
-
-  const onCreateRoutine = () => {
-    if (!newRoutineName) {
-      setNewRoutineError('Name is required')
-      return
-    }
-    const newRoutine = {
-      name: newRoutineName,
-      activities: [],
-    }
-    const newRoutines = routines ? [...routines, newRoutine] : [newRoutine]
-    setNewRoutineName('')
-    setNewRoutineError('')
-    saveRoutines(newRoutines)
-    close()
-  }
-
-  const onUpdate = (index: number, activities: Activity[]) => {
-    const newRoutines = routines ? [...routines] : []
-    newRoutines[index].activities = activities
-    saveRoutines(newRoutines)
-  }
-
-  const onRemoveRoutine = (index: number) => {
-    const newRoutines = routines ? [...routines] : []
-    newRoutines.splice(index, 1)
-    saveRoutines(newRoutines)
-  }
-
   return (
     <Box w='100%'>
       <Container px={0} size='sm'>
         <Paper p='xl' withBorder>
           <Stack spacing='xs'>
             <Group>
-              <Avatar alt={initials} src={userPhotoUrl}>
-                {initials}
+              <Avatar alt={userInitials} src={userPhotoUrl}>
+                {userInitials}
               </Avatar>
               <Stack spacing={0}>
-                <Text>{displayName}</Text>
+                <Text>{userDisplayName}</Text>
                 <Text size='sm' color='dimmed'>
-                  &nbsp;{email}
+                  &nbsp;{userEmail}
                 </Text>
               </Stack>
             </Group>
@@ -120,9 +93,9 @@ const ProfilePageView = ({
                       <Loader size='1rem' />
                     ) : (
                       <Center sx={{ visibility: addressSearch ? 'visible' : 'hidden' }}>
-                        <UnstyledButton onClick={() => setAddressSearch('')}>
-                          <IconX size='1rem' />
-                        </UnstyledButton>
+                        <ActionIcon onClick={() => setAddressSearch('')}>
+                          <MdCancel size='1rem' />
+                        </ActionIcon>
                       </Center>
                     )
                   }
@@ -136,7 +109,7 @@ const ProfilePageView = ({
                 variant='light'
                 color='blue'
                 size='sm'
-                onClick={saveHomeAddress}
+                onClick={onSaveHomeAddress}
                 disabled={homeAddress === addressSearch}
               >
                 Save
@@ -156,15 +129,14 @@ const ProfilePageView = ({
                 <RoutineDisplayComponent
                   key={index}
                   index={index}
-                  onUpdateActivities={onUpdate}
-                  onRemoveRoutine={onRemoveRoutine}
+                  onUpdateActivities={onUpdateRoutine}
+                  onRemoveRoutine={() => onRemoveRoutine(index)}
                   name={routine.name ?? 'NO NAME'}
                   activities={routine.activities}
                 />
               ))}
               <UnstyledButton onClick={open}>
                 <Text
-                  // px='xl'
                   color='blue.6'
                   sx={{
                     '&:hover': {
@@ -193,7 +165,7 @@ const ProfilePageView = ({
             }}
           />
           <Group position='right'>
-            <Button onClick={onCreateRoutine} variant='light'>
+            <Button onClick={() => onCreateRoutine(close)} variant='light'>
               Create
             </Button>
           </Group>
