@@ -21,7 +21,7 @@ const MainPagePresenter = observer(({ model }: MainPagePresenterProps) => {
     <>
       <FormPresenter
         homeAddress={model.homeAddress}
-        saveHomeAddress={model.saveHomeAddress}
+        setSavedHomeAddress={model.setSavedHomeAddress}
         searchInProgress={model.searchInProgress}
         doSearch={model.doSearch}
         routines={model.routines ?? []}

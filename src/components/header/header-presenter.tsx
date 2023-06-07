@@ -1,25 +1,23 @@
-import { UserCredential } from '@firebase/auth'
 import { observer } from 'mobx-react'
 import { ColorScheme } from '@mantine/core'
-import Model from '../../model'
 import HeaderView from './header-view'
 import { useNavigate } from 'react-router-dom'
+import Auth from '../../auth'
 
 interface HeaderPresenterProps {
-  model: Model
+  auth: Auth
   colorScheme: ColorScheme
   toggleColorScheme: () => void
 }
 
 const HeaderPresenter = observer(
-  ({ model, colorScheme, toggleColorScheme }: HeaderPresenterProps) => {
-    const user: UserCredential | null = model.user
+  ({ auth, colorScheme, toggleColorScheme }: HeaderPresenterProps) => {
     const navigate = useNavigate()
 
-    if (!user) return null
+    if (!auth.user) return null
 
-    const initials = user?.user.displayName
-      ? user.user.displayName
+    const initials = auth.user?.user.displayName
+      ? auth.user.user.displayName
           .split(' ')
           .map((name) => name[0])
           .join('')
@@ -27,14 +25,14 @@ const HeaderPresenter = observer(
       : 'UU'
 
     const logout = () => {
-      model.signOut()
+      auth.signOut()
       navigate('/login')
     }
 
     return (
       <HeaderView
         initials={initials}
-        userPhotoUrl={user.user.photoURL ?? ''}
+        userPhotoUrl={auth.user.user.photoURL ?? ''}
         colorScheme={colorScheme}
         toggleColorScheme={toggleColorScheme}
         logoutFunction={logout}

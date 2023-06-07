@@ -8,7 +8,7 @@ import { Routine } from '../../model'
 interface FormPresenterProps {
   homeAddress: string | undefined
   routines: Routine[]
-  saveHomeAddress: (value: string) => void
+  setSavedHomeAddress: (value: string) => void
   searchInProgress: boolean
   setSelectedRoutine: (routine: Routine | undefined) => void
   doSearch: (
@@ -22,7 +22,7 @@ interface FormPresenterProps {
 const FormPresenter = ({
   homeAddress,
   routines,
-  saveHomeAddress,
+  setSavedHomeAddress,
   searchInProgress,
   setSelectedRoutine,
   doSearch,
@@ -103,7 +103,7 @@ const FormPresenter = ({
     setSearchError('')
     try {
       await doSearch(originAddress, destinationAddress, date, arriveTime)
-      if (shouldSaveHomeAddress) saveHomeAddress(originAddress)
+      if (shouldSaveHomeAddress) setSavedHomeAddress(originAddress)
     } catch (error) {
       if (error instanceof AddressError) {
         if (error.address === originAddress)
