@@ -4,13 +4,15 @@ import { useDebouncedValue } from '@mantine/hooks'
 import { getAutocompleteSuggestions } from '../../maps-source'
 import { observer } from 'mobx-react'
 import Model, { Activity } from '../../model'
+import Auth from '../../auth'
 
 interface ProfilePagePresenterProps {
   model: Model
+  auth: Auth
 }
 
-const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => {
-  const { user, savedHomeAddress, saveHomeAddress, setHomeAddress, routines, setRoutines } = model
+const ProfilePagePresenter = observer(({ model, auth }: ProfilePagePresenterProps) => {
+  const { savedHomeAddress, setSavedHomeAddress, setHomeAddress, routines, setRoutines } = model
   const [addressSearch, setAddressSearch] = useState(savedHomeAddress ?? '')
   const [debouncedAddressSearch] = useDebouncedValue(addressSearch, 500)
   const [suggestions, setSuggestions] = useState<string[]>([])
@@ -18,17 +20,17 @@ const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => 
   const [newRoutineName, setNewRoutineName] = useState<string>('')
   const [newRoutineError, setNewRoutineError] = useState<string>('')
 
-  const userInitials = user?.user.displayName
-    ? user.user.displayName
+  const userInitials = auth.user?.user.displayName
+    ? auth.user.user.displayName
         .split(' ')
         .map((name) => name[0])
         .join('')
         .slice(0, 2)
     : 'UU'
 
-  const userPhotoUrl = user?.user.photoURL ?? ''
-  const userDisplayName = user?.user.displayName ?? ''
-  const userEmail = user?.user.email ?? ''
+  const userPhotoUrl = auth.user?.user.photoURL ?? ''
+  const userDisplayName = auth.user?.user.displayName ?? ''
+  const userEmail = auth.user?.user.email ?? ''
 
   const debouncedGetSuggestions = useCallback(async (value: string) => {
     setAddressLoading(true)
@@ -92,7 +94,7 @@ const ProfilePagePresenter = observer(({ model }: ProfilePagePresenterProps) => 
       addressLoading={addressLoading}
       onSaveHomeAddress={() => {
         setHomeAddress(addressSearch)
-        saveHomeAddress(addressSearch)
+        setSavedHomeAddress(addressSearch)
       }}
       routines={routines}
       onCreateRoutine={createRoutine}

@@ -1,5 +1,3 @@
-import { UserCredential } from '@firebase/auth'
-import { signInWithGoogle, loadData, saveRoutineData, saveHomeAddress } from './firebase'
 import { makeAutoObservable } from 'mobx'
 import { CoordsObj, Trip, getTrafficInfo } from './trip-source'
 import { addressToCoords } from './maps-source'
@@ -12,11 +10,10 @@ interface Routine {
 interface Activity {
   name: string
   description: string
-  duration: number // minutes
+  duration: number
 }
 
 class Model {
-  user: UserCredential | null
   homeAddress: string | undefined
   savedHomeAddress: string | undefined
   routines: Routine[] | undefined
@@ -28,20 +25,14 @@ class Model {
 
   constructor() {
     makeAutoObservable(this)
-    this.signIn = this.signIn.bind(this)
-    this.signOut = this.signOut.bind(this)
-    this.setUser = this.setUser.bind(this)
     this.setHomeAddress = this.setHomeAddress.bind(this)
     this.setRoutines = this.setRoutines.bind(this)
     this.setSelectedRoutine = this.setSelectedRoutine.bind(this)
-    this.saveHomeAddress = this.saveHomeAddress.bind(this)
     this.setSavedHomeAddress = this.setSavedHomeAddress.bind(this)
+    this.clear = this.clear.bind(this)
     this.doSearch = this.doSearch.bind(this)
     this.setRoute = this.setRoute.bind(this)
     this.setSearchInProgress = this.setSearchInProgress.bind(this)
-
-    const user = localStorage.getItem('user')
-    this.user = user ? (JSON.parse(user) as UserCredential) : null
     this.homeAddress = undefined
     this.savedHomeAddress = undefined
     this.routines = undefined
@@ -50,50 +41,6 @@ class Model {
     this.arriveTime = undefined
     this.searchInProgress = false
     this.trips = undefined
-
-    if (this.user) this.loadData()
-  }
-
-  async signIn() {
-    try {
-      const user = await signInWithGoogle()
-      this.setUser(user)
-      this.loadData()
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  async loadData() {
-    if (this.user) {
-      try {
-        const data = await loadData(this.user)
-        if (data) {
-          this.setHomeAddress(data.homeAddress)
-          this.setSavedHomeAddress(data.homeAddress)
-          this.setRoutines(data.routines)
-        }
-      } catch (error) {
-        console.error(error)
-      }
-    }
-  }
-
-  signOut() {
-    localStorage.removeItem('user')
-    this.user = null
-    this.homeAddress = undefined
-    this.routines = undefined
-    this.selectedRoutine = undefined
-    this.destinationAddress = undefined
-    this.arriveTime = undefined
-    this.searchInProgress = false
-    this.trips = undefined
-  }
-
-  setUser(user: UserCredential) {
-    this.user = user
-    localStorage.setItem('user', JSON.stringify(user))
   }
 
   setHomeAddress(address: string) {
@@ -102,22 +49,25 @@ class Model {
 
   setRoutines(routines: Routine[]) {
     this.routines = routines
-    if (this.user) saveRoutineData(this.user, routines)
   }
 
   setSelectedRoutine(selectedRoutine: Routine | undefined) {
     this.selectedRoutine = selectedRoutine
   }
 
-  saveHomeAddress(address: string) {
-    if (this.user) {
-      saveHomeAddress(this.user, address)
-      this.setSavedHomeAddress(address)
-    }
-  }
-
   setSavedHomeAddress(address: string) {
     this.savedHomeAddress = address
+  }
+
+  clear() {
+    this.homeAddress = undefined
+    this.savedHomeAddress = undefined
+    this.routines = undefined
+    this.selectedRoutine = undefined
+    this.destinationAddress = undefined
+    this.arriveTime = undefined
+    this.searchInProgress = false
+    this.trips = undefined
   }
 
   async doSearch(
@@ -165,5 +115,5 @@ class Model {
   }
 }
 
-export type { Routine, Activity }
+export type { Routine, Activity, Model }
 export default Model

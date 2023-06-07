@@ -3,8 +3,10 @@ import { useColorScheme, useLocalStorage } from '@mantine/hooks'
 import Model from './model'
 import Navigator from './components/navigator/navigator'
 import HeaderPresenter from './components/header/header-presenter'
+import Auth from './auth'
 
 const model = new Model()
+const auth = new Auth(model)
 
 const App = () => {
   const preferredColorScheme = useColorScheme()
@@ -23,7 +25,7 @@ const App = () => {
           padding='md'
           header={
             <HeaderPresenter
-              model={model}
+              auth={auth}
               colorScheme={colorScheme}
               toggleColorScheme={toggleColorScheme}
             />
@@ -35,7 +37,7 @@ const App = () => {
             },
           })}
         >
-          <Navigator model={model} />
+          <Navigator model={model} auth={auth} />
         </AppShell>
       </MantineProvider>
     </ColorSchemeProvider>
