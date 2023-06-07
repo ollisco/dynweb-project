@@ -1,20 +1,13 @@
 import { useState } from 'react'
-import { Button, Alert, Menu, Anchor } from '@mantine/core'
-import { IconAlertCircle, IconChevronDown } from '@tabler/icons-react'
-import {
-  MdOutlineNotifications,
-  MdOutlineNotificationsActive,
-  MdOutlineNotificationsOff,
-} from 'react-icons/md'
-import { FcGoogle } from 'react-icons/fc'
-import { Routine } from '../../model'
 import {
   calIsAuthed,
   calAuth,
-  addTripToCalendar,
   addPreActivityToCalendar,
+  addTripToCalendar,
 } from '../../calendar-source'
+import { Routine } from '../../model'
 import { Trip } from '../../trip-source'
+import AddToCalButtonView from './add-to-cal-button-view'
 
 interface AddToCalButtonProps {
   originAddress: string | undefined
@@ -58,66 +51,15 @@ const AddToCalButton = ({
   }
 
   return (
-    <div>
-      <Menu position='top-end'>
-        <Menu.Target>
-          <Button
-            disabled={!(originAddress && destinationAddress)}
-            loading={loading}
-            leftIcon={<FcGoogle />}
-            variant='light'
-            rightIcon={<IconChevronDown size='1.05rem' stroke={1.5} />}
-          >
-            Add to Google Calendar
-          </Button>
-        </Menu.Target>
-        <Menu.Dropdown>
-          <Menu.Item icon={<MdOutlineNotifications />} onClick={() => addTrip(-1)}>
-            Default reminders
-          </Menu.Item>
-          <Menu.Item icon={<MdOutlineNotificationsOff />} onClick={() => addTrip(0)}>
-            No reminder
-          </Menu.Item>
-          <Menu.Item icon={<MdOutlineNotificationsActive />} onClick={() => addTrip(5)}>
-            5 min before
-          </Menu.Item>
-          <Menu.Item icon={<MdOutlineNotificationsActive />} onClick={() => addTrip(15)}>
-            15 min before
-          </Menu.Item>
-          <Menu.Item icon={<MdOutlineNotificationsActive />} onClick={() => addTrip(30)}>
-            30 min before
-          </Menu.Item>
-        </Menu.Dropdown>
-      </Menu>
-      {error ? (
-        <Alert
-          icon={<IconAlertCircle size='1rem' />}
-          title='Bummer!'
-          color='red'
-          withCloseButton
-          onClose={() => {
-            setError('')
-          }}
-        >
-          {error}
-        </Alert>
-      ) : null}
-      {eventLink ? (
-        <Alert
-          icon={<IconAlertCircle size='1rem' />}
-          title='Event added!'
-          color='blue'
-          withCloseButton
-          onClose={() => {
-            setEventLink('')
-          }}
-        >
-          <Anchor href={eventLink} target='_blank'>
-            View Event
-          </Anchor>
-        </Alert>
-      ) : null}
-    </div>
+    <AddToCalButtonView
+      disabled={!(originAddress && destinationAddress)}
+      loading={loading}
+      error={error}
+      setError={setError}
+      eventLink={eventLink}
+      setEventLink={setEventLink}
+      onButtonPress={addTrip}
+    />
   )
 }
 

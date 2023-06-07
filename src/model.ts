@@ -18,6 +18,7 @@ interface Activity {
 class Model {
   user: UserCredential | null
   homeAddress: string | undefined
+  savedHomeAddress: string | undefined
   routines: Routine[] | undefined
   selectedRoutine: Routine | undefined
   destinationAddress: string | undefined
@@ -34,7 +35,7 @@ class Model {
     this.setRoutines = this.setRoutines.bind(this)
     this.setSelectedRoutine = this.setSelectedRoutine.bind(this)
     this.saveHomeAddress = this.saveHomeAddress.bind(this)
-    this.saveRoutines = this.saveRoutines.bind(this)
+    this.setSavedHomeAddress = this.setSavedHomeAddress.bind(this)
     this.doSearch = this.doSearch.bind(this)
     this.setRoute = this.setRoute.bind(this)
     this.setSearchInProgress = this.setSearchInProgress.bind(this)
@@ -42,6 +43,7 @@ class Model {
     const user = localStorage.getItem('user')
     this.user = user ? (JSON.parse(user) as UserCredential) : null
     this.homeAddress = undefined
+    this.savedHomeAddress = undefined
     this.routines = undefined
     this.selectedRoutine = undefined
     this.destinationAddress = undefined
@@ -68,6 +70,7 @@ class Model {
         const data = await loadData(this.user)
         if (data) {
           this.setHomeAddress(data.homeAddress)
+          this.setSavedHomeAddress(data.homeAddress)
           this.setRoutines(data.routines)
         }
       } catch (error) {
@@ -79,6 +82,13 @@ class Model {
   signOut() {
     localStorage.removeItem('user')
     this.user = null
+    this.homeAddress = undefined
+    this.routines = undefined
+    this.selectedRoutine = undefined
+    this.destinationAddress = undefined
+    this.arriveTime = undefined
+    this.searchInProgress = false
+    this.trips = undefined
   }
 
   setUser(user: UserCredential) {
@@ -92,6 +102,7 @@ class Model {
 
   setRoutines(routines: Routine[]) {
     this.routines = routines
+    if (this.user) saveRoutineData(this.user, routines)
   }
 
   setSelectedRoutine(selectedRoutine: Routine | undefined) {
@@ -99,11 +110,14 @@ class Model {
   }
 
   saveHomeAddress(address: string) {
-    if (this.user) saveHomeAddress(this.user, address)
+    if (this.user) {
+      saveHomeAddress(this.user, address)
+      this.setSavedHomeAddress(address)
+    }
   }
 
-  saveRoutines(routines: Routine[]) {
-    if (this.user) saveRoutineData(this.user, routines)
+  setSavedHomeAddress(address: string) {
+    this.savedHomeAddress = address
   }
 
   async doSearch(

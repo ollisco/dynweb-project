@@ -1,4 +1,4 @@
-import React, { Fragment, forwardRef } from 'react'
+import { Fragment, forwardRef } from 'react'
 import {
   Alert,
   Autocomplete,
@@ -16,13 +16,33 @@ import {
 } from '@mantine/core'
 import { DateInput, TimeInput } from '@mantine/dates'
 import { IconAlertCircle } from '@tabler/icons-react'
-import { ItemProps } from './form-presenter'
 import UseCalButton from '../calendar-buttons/use-cal-button'
 import { Routine, Activity } from '../../model'
 
-type CustomItemProps = SelectItemProps & { routine: Routine }
+type AddressItemProps = SelectItemProps & { street: string; postcodeAndCity: string }
 
-const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ routine, ...others }, ref) => {
+const AddressItem = forwardRef<HTMLDivElement, AddressItemProps>(
+  ({ street, postcodeAndCity, ...others }: AddressItemProps, ref) => {
+    return (
+      <div ref={ref} {...others}>
+        <Group noWrap>
+          <Text size='sm' style={{ whiteSpace: 'nowrap' }}>
+            {street}
+          </Text>
+          <Text size='xs' color='dimmed' truncate>
+            {postcodeAndCity}
+          </Text>
+        </Group>
+      </div>
+    )
+  },
+)
+
+AddressItem.displayName = 'AddressItem'
+
+type RoutineItemProps = SelectItemProps & { routine: Routine }
+
+const RoutineItem = forwardRef<HTMLDivElement, RoutineItemProps>(({ routine, ...others }, ref) => {
   const totalDuration = routine.activities.reduce((prev, curr) => prev + curr.duration, 0)
 
   return (
@@ -52,7 +72,7 @@ const CustomItem = forwardRef<HTMLDivElement, CustomItemProps>(({ routine, ...ot
   )
 })
 
-CustomItem.displayName = 'CustomItem'
+RoutineItem.displayName = 'RoutineItem'
 
 interface FormViewProps {
   originAddress: string
@@ -70,7 +90,6 @@ interface FormViewProps {
   arriveTime: string
   setArriveTime: (value: string) => void
   searchClicked: React.MouseEventHandler<HTMLButtonElement>
-  itemComponent: React.ForwardRefExoticComponent<ItemProps & React.RefAttributes<HTMLDivElement>>
   searchInProgress: boolean
   searchError: string
   setSearchError: (value: string) => void
@@ -96,7 +115,6 @@ const FormView = ({
   arriveTime,
   setArriveTime,
   searchClicked,
-  itemComponent,
   searchInProgress,
   searchError,
   setSearchError,
@@ -120,7 +138,7 @@ const FormView = ({
               name='address'
               required
               filter={() => true} // API filters the data instead of this component
-              itemComponent={itemComponent}
+              itemComponent={AddressItem}
               error={originAddressError}
             />
             <Checkbox
@@ -151,7 +169,7 @@ const FormView = ({
               name='address'
               required
               filter={() => true} // API filters the data instead of this component
-              itemComponent={itemComponent}
+              itemComponent={AddressItem}
               error={destinationAddressError}
             />
             <TimeInput
@@ -182,7 +200,7 @@ const FormView = ({
                 const routine = routines[parseInt(value.split(' ')[0])]
                 setSelectedRoutine(routine)
               }}
-              itemComponent={CustomItem}
+              itemComponent={RoutineItem}
               filter={(value, item) =>
                 item.routine.name.toLowerCase().includes(value.toLowerCase().trim()) ||
                 item.routine.activities.some((item: Activity) =>
@@ -216,4 +234,5 @@ const FormView = ({
   )
 }
 
+export { AddressItem }
 export default FormView
